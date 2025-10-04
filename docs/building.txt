@@ -1,40 +1,42 @@
+Metasiberia Build Instructions
+==============================
+
 Prerequisites
 =============
 git (used to check out source)
-ruby (used by substrata build scripts)
-cmake (used for substrata build)
+ruby (used by Metasiberia build scripts)
+cmake (used for Metasiberia build)
 Python (used by LLVM build)
 Visual Studio 2022 (v17) with "Desktop Development with C++" Workload (Used by LLVM Build)
 7-Zip (If on Windows - for extracting LLVM source code)
 
-
-Check out source
-================
+Check out Metasiberia source
+============================
 Pick a directory to check out the source to (e.g. c:/programming or ~/programming on Mac/Linux).
 Change into that directory, then
 
-	git clone https://github.com/glaretechnologies/glare-core.git
-	git clone https://github.com/glaretechnologies/winter.git
-	git clone https://github.com/glaretechnologies/substrata.git
+	git clone https://github.com/shipilovden/metasiberia.git
+	cd metasiberia
+	git checkout metasiberia
 
-Build libraries that Substrata uses
-===================================
+Build libraries that Metasiberia uses
+======================================
 
 Set needed env vars:
 GLARE_CORE_LIBS is where library build scripts will build libraries: Qt, LLVM, Libjpegturbo etc.
 WINTER_DIR just has the path to the checked out Winter repo.
 GLARE_CORE_TRUNK_DIR just has the path to the checked out Glare-core repo.
-CYBERSPACE_OUTPUT is where the built executables will be placed.
+METASIBERIA_OUTPUT is where the built executables will be placed.
 For example on Mac:
 	export GLARE_CORE_LIBS=/Users/XX/programming
 	export WINTER_DIR=/Users/XX/programming/winter
 	export GLARE_CORE_TRUNK_DIR=/Users/XX/programming/glare-core
-	export CYBERSPACE_OUTPUT=/Users/XX/programming/substrata_output
+	export METASIBERIA_OUTPUT=/Users/XX/programming/metasiberia_output
 Or on windows:
 Set GLARE_CORE_LIBS to c:/programming
 Set WINTER_DIR to c:/programming/winter
 Set GLARE_CORE_TRUNK_DIR to c:/programming/glare-core
-Set CYBERSPACE_OUTPUT to c:/programming/substrata_output
+Set METASIBERIA_OUTPUT to c:/programming/metasiberia_output
 
 In your programming dir (e.g. c:/programming or ~/programming on Mac/Linux):
 
@@ -45,7 +47,7 @@ In your programming dir (e.g. c:/programming or ~/programming on Mac/Linux):
 
 In your programming dir
 
-	cd substrata/scripts
+	cd metasiberia/scripts
 	ruby get_libs.rb
 
 If you want to build with Qt for the user interface (you can make a SDL build instead, which is easier but doesn't have the full UI):
@@ -56,21 +58,21 @@ If you want to build with Qt for the user interface (you can make a SDL build in
 Optionally build Chromium Embedded Framework (CEF) as described below.  The following build instructions will assume we are building without CEF support.
 CEF is used for web-views. (embedded browser widgets)
 
-Build Substrata
-================
+Build Metasiberia
+=================
 In your programming dir (e.g. c:/programming or ~/programming on Mac/Linux):
 
-	mkdir substrata_build
-	cd substrata_build
+	mkdir metasiberia_build
+	cd metasiberia_build
 
 On Windows:
-	cmake ../substrata -DCEF_SUPPORT=OFF
+	cmake ../metasiberia -DCEF_SUPPORT=OFF
 
 On Mac/linux, x64 architecture:
-	cmake ../substrata -DCEF_SUPPORT=OFF -DCMAKE_BUILD_TYPE=Debug
+	cmake ../metasiberia -DCEF_SUPPORT=OFF -DCMAKE_BUILD_TYPE=Debug
 
 On Mac, ARM64 architecture:
-	cmake ../substrata -DCEF_SUPPORT=OFF -DCMAKE_BUILD_TYPE=Debug -DTARGET_ARM64=ON
+	cmake ../metasiberia -DCEF_SUPPORT=OFF -DCMAKE_BUILD_TYPE=Debug -DTARGET_ARM64=ON
 
 
 To build with SDL instead of with Qt, add the -DUSE_SDL=ON option to the above cmake command line.
@@ -89,12 +91,12 @@ To build with e.g. 8 threads:
 	make gui_client -j 8
 
 
-Running Substrata
-=================
+Running Metasiberia
+====================
 
 In your programming dir (e.g. c:/programming or ~/programming on Mac/Linux):
 
-	cd substrata/scripts
+	cd metasiberia/scripts
 	ruby copy_files_to_output.rb --no_cef
 
 
