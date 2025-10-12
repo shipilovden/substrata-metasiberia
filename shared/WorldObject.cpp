@@ -150,7 +150,7 @@ WorldObject::~WorldObject()
 URLString WorldObject::makeOptimisedMeshURL(const URLString& base_model_url, int lod_level, bool get_optimised_mesh, int opt_mesh_version, glare::ArenaAllocator* arena_allocator)
 {
 	glare::STLArenaAllocator<char> stl_arena_allocator(arena_allocator);
-	URLString new_url(stl_arena_allocator);
+	URLString new_url;
 
 	new_url.reserve(base_model_url.size() + 16);
 
@@ -185,10 +185,10 @@ URLString WorldObject::makeOptimisedMeshURL(const URLString& base_model_url, int
 URLString WorldObject::getLODModelURLForLevel(const URLString& base_model_url, int lod_level, const GetLODModelURLOptions& options)
 {
 	if((lod_level == 0) && !options.get_optimised_mesh)
-		return URLString(base_model_url, glare::STLArenaAllocator<char>(options.allocator));
+		return base_model_url;
 
 	if(hasPrefix(base_model_url, "http:") || hasPrefix(base_model_url, "https:"))
-		return URLString(base_model_url, glare::STLArenaAllocator<char>(options.allocator));
+		return base_model_url;
 
 	return makeOptimisedMeshURL(base_model_url, lod_level, /*get_optimised_mesh=*/options.get_optimised_mesh, options.opt_mesh_version, options.allocator);
 }
@@ -245,7 +245,7 @@ URLString WorldObject::getLODModelURL(const Vec3d& campos, const GetLODModelURLO
 		if(options.get_optimised_mesh)
 			return makeOptimisedMeshURL(this->model_url, /*lod_level=*/0, /*get_optimised_mesh=*/true, options.opt_mesh_version);
 		else
-			return URLString(this->model_url, glare::STLArenaAllocator<char>(options.allocator));
+			return this->model_url;
 	}
 
 	const int ob_lod_level = getLODLevel(campos);
@@ -254,15 +254,14 @@ URLString WorldObject::getLODModelURL(const Vec3d& campos, const GetLODModelURLO
 }
 
 
-URLString WorldObject::getLODLightmapURLForLevel(const URLString& base_lightmap_url, int level, glare::ArenaAllocator* allocator)
+URLString WorldObject::getLODLightmapURLForLevel(const URLString& base_lightmap_url, int level)
 {
 	assert(level >= -1 && level <= 2);
 	if(level <= 0)
-		return URLString(base_lightmap_url, glare::STLArenaAllocator<char>(allocator));
+		return base_lightmap_url;
 	else if(level == 1)
 	{
-		glare::STLArenaAllocator<char> stl_allocator(allocator);
-		URLString res(stl_allocator);
+		URLString res;
 		res.reserve(base_lightmap_url.size() + 8);
 		res.append(removeDotAndExtension(base_lightmap_url));
 		res.append("_lod1.");
@@ -271,8 +270,7 @@ URLString WorldObject::getLODLightmapURLForLevel(const URLString& base_lightmap_
 	}
 	else
 	{
-		glare::STLArenaAllocator<char> stl_allocator(allocator);
-		URLString res(stl_allocator);
+		URLString res;
 		res.reserve(base_lightmap_url.size() + 8);
 		res.append(removeDotAndExtension(base_lightmap_url));
 		res.append("_lod2.");
@@ -321,7 +319,7 @@ void WorldObject::appendDependencyURLs(int ob_lod_level, const GetDependencyOpti
 
 	if(options.include_lightmaps && !lightmap_url.empty())
 	{
-		DependencyURL dependency_url(getLODLightmapURLForLevel(lightmap_url, ob_lod_level, options.allocator));
+		DependencyURL dependency_url(getLODLightmapURLForLevel(lightmap_url, ob_lod_level));
 		dependency_url.is_lightmap = true;
 		URLs_out.push_back(dependency_url);
 	}
@@ -333,7 +331,12 @@ void WorldObject::appendDependencyURLs(int ob_lod_level, const GetDependencyOpti
 		materials[i]->appendDependencyURLs(mat_get_url_options, ob_lod_level, URLs_out);
 
 	if(!audio_source_url.empty())
-		URLs_out.push_back(DependencyURL(URLString(audio_source_url, glare::STLArenaAllocator<char>(options.allocator))));
+	{
+		glare::STLArenaAllocator<char> stl_allocator(options.allocator);
+		URLs_out.push_back(DependencyURL(URLString(audio_source_url)));
+		
+		//URLs_out.push_back(DependencyURL(audio_source_url));
+	}
 }
 
 
@@ -354,7 +357,7 @@ void WorldObject::appendDependencyURLsForAllLODLevels(const GetDependencyOptions
 	if(!lightmap_url.empty())
 		for(int lvl=0; lvl<=2; ++lvl)
 		{
-			DependencyURL dependency_url(getLODLightmapURLForLevel(lightmap_url, lvl, options.allocator));
+			DependencyURL dependency_url(getLODLightmapURLForLevel(lightmap_url, lvl));
 			dependency_url.is_lightmap = true;
 			URLs_out.push_back(dependency_url);
 		}
@@ -365,7 +368,7 @@ void WorldObject::appendDependencyURLsForAllLODLevels(const GetDependencyOptions
 		materials[i]->appendDependencyURLsAllLODLevels(mat_get_url_options, URLs_out);
 
 	if(!audio_source_url.empty())
-		URLs_out.push_back(DependencyURL(URLString(audio_source_url, glare::STLArenaAllocator<char>(options.allocator))));
+		URLs_out.push_back(DependencyURL(audio_source_url));
 }
 
 
@@ -1865,7 +1868,7 @@ void WorldObject::test()
 		glare::ArenaAllocator arena_allocator(1024 * 1024);
 
 
-		const std::string xml_path = "C:\\code\\substrata\\testfiles\\world_objects\\sandbox_parcel_objects.xml";
+		const std::string xml_path = "C:\\programming\\substrata\\testfiles\\world_objects\\sandbox_parcel_objects.xml";
 		IndigoXMLDoc doc(xml_path);
 
 		std::vector<WorldObjectRef> obs;
@@ -1884,15 +1887,15 @@ void WorldObject::test()
 			for(int z=0; z<10000; ++z)
 			{
 				Timer timer;
-				glare::ArenaFrame frame(arena_allocator);
-				glare::STLArenaAllocator<DependencyURL> stl_arena_allocator(&arena_allocator);
+				glare::ArenaAllocator use_arena(1024 * 1024); // 1MB arena
+				glare::STLArenaAllocator<DependencyURL> stl_arena_allocator(&use_arena);
 				DependencyURLSet URLs(std::less<DependencyURL>(), stl_arena_allocator);
 
 				for(size_t i=0; i<obs.size(); ++i)
 				{
 					WorldObject::GetDependencyOptions options;
 					options.use_basis = true;
-					options.allocator = &arena_allocator;
+					options.allocator = &use_arena;
 					obs[i]->getDependencyURLSet(/*ob lod level=*/1, options, URLs);
 				}
 				smallest_time = myMin(smallest_time, timer.elapsed());
@@ -1928,14 +1931,14 @@ void WorldObject::test()
 				for(int q=0; q<num_inner_iters; ++q)
 				{
 					{
-						glare::ArenaFrame arena_frame(arena_allocator);
-						glare::STLArenaAllocator<DependencyURL> stl_arena_allocator(&arena_allocator);
+						glare::ArenaAllocator use_arena(1024 * 1024); // 1MB arena
+						glare::STLArenaAllocator<DependencyURL> stl_arena_allocator(&use_arena);
 						DependencyURLVector URL_vector(stl_arena_allocator);
 						for(size_t i=0; i<obs.size(); ++i)
 						{
 							WorldObject::GetDependencyOptions options;
 							options.use_basis = true;
-							options.allocator = &arena_allocator;
+							options.allocator = &use_arena;
 							obs[i]->appendDependencyURLs(/*ob lod level=*/1, options, URL_vector);
 						}
 					}
