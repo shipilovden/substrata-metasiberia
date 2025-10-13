@@ -1,0 +1,12 @@
+name: (disabled) Sync metasiberia/master to metasiberia-sync-master-lab
+
+on:
+  workflow_dispatch:
+
+jobs:
+  noop:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Workflow отключен по запросу."
+
+
