@@ -144,6 +144,18 @@ void WebServerRequestHandler::handleRequest(const web::RequestInfo& request, web
 			AuctionHandlers::handleBuyParcelWithCoinbasePost(*this->world_state, request, reply_info);
 		}
 #endif
+		else if(request.path == "/admin_add_new_parcel_post")
+		{
+			AdminHandlers::handleAdminAddNewParcelPost(*this->world_state, request, reply_info);
+		}
+		else if(request.path == "/admin_edit_parcel_post")
+		{
+			AdminHandlers::handleAdminEditParcelPost(*this->world_state, request, reply_info);
+		}
+		else if(request.path == "/admin_remove_parcel_post")
+		{
+			AdminHandlers::handleAdminRemoveParcelPost(*this->world_state, request, reply_info);
+		}
 		else if(request.path == "/admin_create_parcel_auction_post")
 		{
 			AdminHandlers::createParcelAuctionPost(*this->world_state, request, reply_info);
@@ -418,6 +430,14 @@ void WebServerRequestHandler::handleRequest(const web::RequestInfo& request, web
 		else if(request.path == "/admin_parcels")
 		{
 			AdminHandlers::renderParcelsPage(*this->world_state, request, reply_info);
+		}
+		else if(request.path == "/admin_add_new_parcel")
+		{
+			AdminHandlers::renderAdminAddNewParcel(*this->world_state, request, reply_info);
+		}
+		else if(::hasPrefix(request.path, "/admin_edit_parcel/"))
+		{
+			AdminHandlers::renderAdminEditParcel(*this->world_state, request, reply_info);
 		}
 		else if(request.path == "/admin_parcel_auctions")
 		{

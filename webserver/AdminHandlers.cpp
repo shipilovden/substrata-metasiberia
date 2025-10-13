@@ -37,6 +37,191 @@ std::string sharedAdminHeader(ServerAllWorldsState& world_state, const web::Requ
 	return page_out;
 }
 
+void renderAdminAddNewParcel(ServerAllWorldsState& world_state, const web::RequestInfo& request, web::ReplyInfo& reply_info) {
+	if(!LoginHandlers::loggedInUserHasAdminPrivs(world_state, request))
+	{
+		web::ResponseUtils::writeHTTPOKHeaderAndData(reply_info, "Access denied sorry.");
+		return;
+	}
+
+	std::string page = sharedAdminHeader(world_state, request);
+
+	// std::string page = WebServerResponseUtils::standardHeader(world_state, request, "Добавить новый парсель");
+	page += "<div class=\"main\">   \n";
+
+	page += "Чтобы добавить новый парсель, введите координаты и его ширину и высоту.";
+
+	{ // Lock scope
+
+		Lock lock(world_state.mutex);
+
+		const User* logged_in_user = LoginHandlers::getLoggedInUser(world_state, request);
+		if(logged_in_user)
+		{
+			const std::string msg = world_state.getAndRemoveUserWebMessage(logged_in_user->id);
+			if(!msg.empty())
+				page += "<div class=\"msg\">" + web::Escaping::HTMLEscape(msg) + "</div>  \n";
+		}
+
+		// Lookup parcel
+		// const auto res = world_state.getRootWorldState()->parcels.find(ParcelID(parcel_id));
+		// if(res != world_state.getRootWorldState()->parcels.end())
+		// {
+		page += "<form action=\"/admin_add_new_parcel_post\" method=\"post\" id=\"usrform\">";
+		page += "X: <input type=\"number\" step=\"0.01\" name=\"x\" value=\"\"><br>";
+		page += "Y: <input type=\"number\" step=\"0.01\" name=\"y\" value=\"\"><br>";
+		page += "Z: <input type=\"number\" step=\"0.01\" name=\"z\" value=\"\"><br>";
+		page += "Ширина: <input type=\"number\" step=\"0.01\" name=\"width\" value=\"\"><br>";
+		page += "Длина: <input type=\"number\" step=\"0.01\" name=\"height\" value=\"\"><br>";
+		page += "Высота: <input type=\"number\" step=\"0.01\" name=\"zheight\" value=\"\"><br>";
+		page += "<input type=\"submit\" value=\"Добавить парсель\">";
+		page += "</form>";
+		// }
+	} // End lock scope
+
+	page += "</div>   \n"; // end main div
+	page += WebServerResponseUtils::standardFooter(request, true);
+
+	web::ResponseUtils::writeHTTPOKHeaderAndData(reply_info, page);
+}
+
+void renderAdminEditParcel(ServerAllWorldsState& world_state, const web::RequestInfo& request, web::ReplyInfo& reply_info) {
+	if(!LoginHandlers::loggedInUserHasAdminPrivs(world_state, request))
+	{
+		web::ResponseUtils::writeHTTPOKHeaderAndData(reply_info, "Access denied sorry.");
+		return;
+	}
+
+	// Parse parcel auction id from request path
+	Parser parser(request.path);
+	if(!parser.parseString("/admin_edit_parcel/"))
+		throw glare::Exception("Failed to parse /admin_edit_parcel/");
+
+	uint32 parcel_id;
+	if(!parser.parseUnsignedInt(parcel_id))
+		throw glare::Exception("Failed to parse parcel id");
+
+	std::string page_out = sharedAdminHeader(world_state, request);
+
+	std::string page = sharedAdminHeader(world_state, request);
+
+	// std::string page = WebServerResponseUtils::standardHeader(world_state, request, "Добавить новый парсель");
+	page += "<div class=\"main\">   \n";
+
+	auto parcelId = ParcelID(parcel_id);
+	auto res = world_state.getRootWorldState()->parcels.find(parcelId);
+
+	if (res != world_state.getRootWorldState()->parcels.end()) {
+		page += "Редактирование параметров парсела №" + uInt32ToString(parcelId.v);
+
+		{ // Lock scope
+
+			Lock lock(world_state.mutex);
+
+			auto parcel = res->second.ptr();
+			auto parcelOrigin = parcel->verts[0];
+			auto topRight = parcel->verts[2];
+
+			auto width_and_height_vec = topRight - parcelOrigin;
+			auto width = width_and_height_vec.x;
+			auto height = width_and_height_vec.y;
+			auto zheight = (parcel->zbounds.y) - (parcel->zbounds.x);
+
+			const User* logged_in_user = LoginHandlers::getLoggedInUser(world_state, request);
+			if(logged_in_user)
+			{
+				const std::string msg = world_state.getAndRemoveUserWebMessage(logged_in_user->id);
+				if(!msg.empty())
+					page += "<div class=\"msg\">" + web::Escaping::HTMLEscape(msg) + "</div>  \n";
+			}
+
+			// Lookup parcel
+			page += "<form action=\"/admin_edit_parcel_post\" method=\"post\" id=\"usrform\">";
+			page += "X: <input type=\"number\" step=\"0.01\" name=\"x\" value=\"" + doubleToString(parcelOrigin.x) + "\"><br>";
+			page += "Y: <input type=\"number\" step=\"0.01\" name=\"y\" value=\"" + doubleToString(parcelOrigin.y) + "\"><br>";
+			page += "Z: <input type=\"number\" step=\"0.01\" name=\"z\" value=\"" + doubleToString(parcel->zbounds.x) + "\"><br>";
+			page += "Ширина: <input type=\"number\" step=\"0.01\" name=\"width\" value=\"" + doubleToString(width) + "\"><br>";
+			page += "Длина: <input type=\"number\" step=\"0.01\" name=\"height\" value=\"" + doubleToString(height) + "\"><br>";
+			page += "Высота: <input type=\"number\" step=\"0.01\" name=\"zheight\" value=\"" + doubleToString(zheight) + "\"><br>";
+			page += "<input type=\"hidden\" name=\"parcel_id\" value=\"" + uInt32ToString(parcelId.v) + "\">";
+			page += "<input type=\"submit\" value=\"Сохранить изменения\">";
+			page += "</form>";
+		} // End lock scope
+	} else {
+		page += "Парсель не найден";
+	}
+
+	page += "</div>   \n"; // end main div
+	page += WebServerResponseUtils::standardFooter(request, true);
+
+	web::ResponseUtils::writeHTTPOKHeaderAndData(reply_info, page);
+}
+
+void handleAdminAddNewParcelPost(ServerAllWorldsState& world_state, const web::RequestInfo& request, web::ReplyInfo& reply_info) {
+	if(!LoginHandlers::loggedInUserHasAdminPrivs(world_state, request))
+	{
+		web::ResponseUtils::writeHTTPOKHeaderAndData(reply_info, "Access denied sorry.");
+		return;
+	}
+
+	// Получение данных из формы
+	const double x = stringToDouble(request.getPostField("x").str());
+	const double y = stringToDouble(request.getPostField("y").str());
+	const double z = stringToDouble(request.getPostField("z").str());
+	const double width = stringToDouble(request.getPostField("width").str());
+	const double height = stringToDouble(request.getPostField("height").str());
+	const double zheight = stringToDouble(request.getPostField("zheight").str());
+
+	// Создание нового парселя
+	// TODO: Implement parcel creation logic
+	conPrint("Creating new parcel at (" + doubleToString(x) + ", " + doubleToString(y) + ", " + doubleToString(z) + ") with size (" + doubleToString(width) + ", " + doubleToString(height) + ", " + doubleToString(zheight) + ")");
+
+	// Redirect back to admin parcels page
+	web::ResponseUtils::writeRedirectTo(reply_info, "/admin_parcels");
+}
+
+void handleAdminEditParcelPost(ServerAllWorldsState& world_state, const web::RequestInfo& request, web::ReplyInfo& reply_info) {
+	if(!LoginHandlers::loggedInUserHasAdminPrivs(world_state, request))
+	{
+		web::ResponseUtils::writeHTTPOKHeaderAndData(reply_info, "Access denied sorry.");
+		return;
+	}
+
+	// Получение данных из формы
+	const uint32 parcel_id = stringToUInt32(request.getPostField("parcel_id").str());
+	const double x = stringToDouble(request.getPostField("x").str());
+	const double y = stringToDouble(request.getPostField("y").str());
+	const double z = stringToDouble(request.getPostField("z").str());
+	const double width = stringToDouble(request.getPostField("width").str());
+	const double height = stringToDouble(request.getPostField("height").str());
+	const double zheight = stringToDouble(request.getPostField("zheight").str());
+
+	// Редактирование парселя
+	// TODO: Implement parcel editing logic
+	conPrint("Editing parcel " + uInt32ToString(parcel_id) + " to (" + doubleToString(x) + ", " + doubleToString(y) + ", " + doubleToString(z) + ") with size (" + doubleToString(width) + ", " + doubleToString(height) + ", " + doubleToString(zheight) + ")");
+
+	// Redirect back to admin parcels page
+	web::ResponseUtils::writeRedirectTo(reply_info, "/admin_parcels");
+}
+
+void handleAdminRemoveParcelPost(ServerAllWorldsState& world_state, const web::RequestInfo& request, web::ReplyInfo& reply_info) {
+	if(!LoginHandlers::loggedInUserHasAdminPrivs(world_state, request))
+	{
+		web::ResponseUtils::writeHTTPOKHeaderAndData(reply_info, "Access denied sorry.");
+		return;
+	}
+
+	// Получение ID парселя для удаления
+	const uint32 parcel_id = stringToUInt32(request.getPostField("parcel_id").str());
+
+	// Удаление парселя
+	// TODO: Implement parcel removal logic
+	conPrint("Removing parcel " + uInt32ToString(parcel_id));
+
+	// Redirect back to admin parcels page
+	web::ResponseUtils::writeRedirectTo(reply_info, "/admin_parcels");
+}
+
 
 void renderMainAdminPage(ServerAllWorldsState& world_state, const web::RequestInfo& request_info, web::ReplyInfo& reply_info)
 {
@@ -259,6 +444,7 @@ void renderParcelsPage(ServerAllWorldsState& world_state, const web::RequestInfo
 		Lock lock(world_state.mutex);
 
 		page_out += "<h2>Root world Parcels</h2>\n";
+		page_out += "<p><a href=\"/admin_add_new_parcel\">Add new parcel</a></p>\n";
 
 		//-----------------------
 		page_out += "<hr/>";
