@@ -15023,8 +15023,8 @@ void GUIClient::keyPressed(KeyEvent& e)
 		{
 			// Мягкое обновление: перегенерируем землю и принудительно перерисуем без смены сессии
 			updateGroundPlane();
-			if(opengl_engine)
-				opengl_engine->requestRedraw();
+		if(opengl_engine)
+			opengl_engine->draw();
 		}
 	}
 }
