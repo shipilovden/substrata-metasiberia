@@ -49,7 +49,8 @@ const std::string standardHTMLHeader(WebDataStore& data_store, const web::Reques
 		"		<meta http-equiv=\"Content-Security-Policy\" content=\"frame-src youtube.com www.youtube.com player.vimeo.com vimeocdn.com; img-src 'self' i.ytimg.com i.vimeocdn.com; default-src 'self';\" />	\n" 
 		"		<title>" + web::Escaping::HTMLEscape(page_title) + "</title>												\n"
 		"		<link href=\"/files/main.css?hash=" + data_store.main_css_hash + "\" rel=\"stylesheet\" />														\n"
-		"		<link rel=\"icon\" type=\"image/png\" href=\"/files/favicon.png\">											\n"
+		"		<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css\">	\n"
+		"		<link rel=\"icon\" type=\"image/x-icon\" href=\"/files/substrata.ico\">											\n"
 		+ extra_header_tags + 
 		"		</head>																										\n";
 }
@@ -60,6 +61,7 @@ const std::string standardHeader(ServerAllWorldsState& world_state, const web::R
 	std::string page_out = standardHTMLHeader(*world_state.web_data_store, request_info, page_title, extra_header_tags);
 	page_out +=
 		"	<body class=\"standard-body\">\n"
+		"	<div class=\"site-banner\">❄️ Metasiberia ❄️</div>\n"
 		"	<div id=\"login\">\n"; // Start login div
 	
 	web::UnsafeString logged_in_username;
@@ -83,12 +85,13 @@ const std::string standardHeader(ServerAllWorldsState& world_state, const web::R
 		page_out += "<a href=\"/login\">log in</a> <br/>\n";
 	}
 	page_out += 
-	"	</div>																									\n" // End login div
-	"	<a href=\"/\"><img src=\"/files/logo_small.png\" alt=\"substrata logo\" class=\"substrata-logo-top-small\"/></a>											\n"
+	"	</div>\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n" // End login div
+	"	<a href=\"/\"><img src=\"/files/icon_512x512.png\" alt=\"Metasiberia\" class=\"substrata-logo-top-small\"/></a>\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n"
+	"	<div class=\"site-banner site-banner-bottom\">❄️ Metasiberia ❄️</div>\n"
 	
-	"	<header>																								\n"
-	"		<h1>" + web::Escaping::HTMLEscape(page_title) + "</h1>												\n"
-	"	</header>																								\n";
+	"	<header>\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n"
+	"		<h1>" + web::Escaping::HTMLEscape(page_title) + "</h1>\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n"
+	"	</header>\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n";
 		
 	return page_out;
 }
@@ -98,13 +101,11 @@ const std::string standardFooter(const web::RequestInfo& request_info, bool incl
 {
 	std::string page_out;
 	page_out +=
-		"	<hr/>																						\n"
-		"	<div class=\"footer\">Substrata is made by <a href=\"http://glaretechnologies.com\">Glare Technologies</a>.		\n"
-		"	Contact us at contact@glaretechnologies.com<br/>											\n"
-		"	</div>																						\n"
-		"	<div class=\"footer\"><a href=\"/faq\">F.A.Q.</a> | <a href=\"/terms\">Terms of use</a> | <a href=\"/bot_status\">Bot status</a> | <a href=\"/map\">Map</a></div>				\n"
-		"	</body>																						\n"
-		"</html>																						\n";
+		"\t<hr/>\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n"
+		"\t<div class=\"footer\">Metasiberia is based on Substrata</div>\n"
+		"\t<div class=\"footer\"><a href=\"/map\">Map</a></div>\n"
+		"\t</body>\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n"
+		"</html>\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n";
 
 	return page_out;
 }

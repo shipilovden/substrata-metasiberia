@@ -9,6 +9,7 @@ Copyright Glare Technologies Limited 2025 -
 #include "UserID.h"
 #include <utils/TimeStamp.h>
 #include <string>
+#include <vector>
 class RandomAccessInStream;
 class RandomAccessOutStream;
 

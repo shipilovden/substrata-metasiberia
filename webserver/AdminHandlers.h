@@ -49,6 +49,16 @@ namespace AdminHandlers
 
 	void renderAdminWorldsPage(ServerAllWorldsState& world_state, const web::RequestInfo& request_info, web::ReplyInfo& reply_info);
 
+	void renderAdminAddNewParcel(ServerAllWorldsState& world_state, const web::RequestInfo& request, web::ReplyInfo& reply_info);
+
+	void renderAdminEditParcel(ServerAllWorldsState& world_state, const web::RequestInfo& request, web::ReplyInfo& reply_info);
+
+	void handleAdminAddNewParcelPost(ServerAllWorldsState& world_state, const web::RequestInfo& request, web::ReplyInfo& reply_info);
+
+	void handleAdminEditParcelPost(ServerAllWorldsState& world_state, const web::RequestInfo& request, web::ReplyInfo& reply_info);
+
+	void handleAdminRemoveParcelPost(ServerAllWorldsState& world_state, const web::RequestInfo& request, web::ReplyInfo& reply_info);
+
 
 
 	void renderCreateParcelAuction(ServerAllWorldsState& world_state, const web::RequestInfo& request_info, web::ReplyInfo& reply_info);
@@ -104,4 +114,8 @@ namespace AdminHandlers
 	void handleNewNewsPostPost(ServerAllWorldsState& world_state, const web::RequestInfo& request_info, web::ReplyInfo& reply_info);
 
 	void handleRebuildWorldLODChunks(ServerAllWorldsState& world_state, const web::RequestInfo& request_info, web::ReplyInfo& reply_info);
+
+	void handleBanUserPost(ServerAllWorldsState& world_state, const web::RequestInfo& request, web::ReplyInfo& reply_info);
+	void handleUnbanUserPost(ServerAllWorldsState& world_state, const web::RequestInfo& request, web::ReplyInfo& reply_info);
+	void handleBanUserByNamePost(ServerAllWorldsState& world_state, const web::RequestInfo& request, web::ReplyInfo& reply_info);
 } 

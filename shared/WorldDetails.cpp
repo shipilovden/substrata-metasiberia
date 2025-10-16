@@ -11,7 +11,7 @@ Copyright Glare Technologies Limited 2025 -
 #include <utils/RuntimeCheck.h>
 
 
-static const uint32 WORLD_DETAILS_SERIALISATION_VERSION = 1;
+static const uint32 WORLD_DETAILS_SERIALISATION_VERSION = 3;
 
 
 void WorldDetails::writeToNetworkStream(RandomAccessOutStream& stream) const
@@ -28,6 +28,8 @@ void WorldDetails::writeToNetworkStream(RandomAccessOutStream& stream) const
 	created_time.writeToStream(stream);
 	stream.writeStringLengthFirst(name);
 	stream.writeStringLengthFirst(description);
+	
+	// Write editor_ids
 
 	// Go back and write size of buffer to buffer size field
 	const uint32 buffer_size = (uint32)(stream.getWriteIndex() - initial_write_index);
@@ -50,6 +52,7 @@ void readWorldDetailsFromNetworkStream(RandomAccessInStream& stream, WorldDetail
 	details.created_time.readFromStream(stream);
 	details.name = stream.readStringLengthFirst(WorldDetails::MAX_NAME_SIZE);
 	details.description = stream.readStringLengthFirst(WorldDetails::MAX_DESCRIPTION_SIZE);
+	
 
 	// Discard any remaining unread data
 	const size_t read_B = stream.getReadIndex() - initial_read_index; // Number of bytes we have read so far

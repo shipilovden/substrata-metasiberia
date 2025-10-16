@@ -118,6 +118,18 @@ void WebServerRequestHandler::handleRequest(const web::RequestInfo& request, web
 		{
 			LoginHandlers::handleSetNewPasswordPost(*this->world_state, request, reply_info);
 		}
+		else if(request.path == "/admin_add_new_parcel_post")
+		{
+			AdminHandlers::handleAdminAddNewParcelPost(*this->world_state, request, reply_info);
+		}
+		else if(request.path == "/admin_edit_parcel_post")
+		{
+			AdminHandlers::handleAdminEditParcelPost(*this->world_state, request, reply_info);
+		}
+		else if(request.path == "/admin_remove_parcel_post")
+		{
+			AdminHandlers::handleAdminRemoveParcelPost(*this->world_state, request, reply_info);
+		}
 #if USE_GLARE_PARCEL_AUCTION_CODE
 		else if(request.path == "/ipn_listener")
 		{
@@ -308,9 +320,41 @@ void WebServerRequestHandler::handleRequest(const web::RequestInfo& request, web
 		{
 			WorldHandlers::handleEditWorldPost(*this->world_state, request, reply_info);
 		}
+		else if(request.path == "/grant_world_edit_post")
+		{
+			WorldHandlers::handleGrantWorldEditPost(*this->world_state, request, reply_info);
+		}
+		else if(request.path == "/revoke_world_edit_post")
+		{
+			WorldHandlers::handleRevokeWorldEditPost(*this->world_state, request, reply_info);
+		}
 		else if(request.path == "/delete_photo_post")
 		{
 			PhotoHandlers::handleDeletePhotoPost(*this->world_state, request, reply_info);
+		}
+		else if(request.path == "/world_add_parcel_post")
+		{
+			WorldHandlers::handleWorldAddParcelPost(*this->world_state, request, reply_info);
+		}
+		else if(request.path == "/world_delete_parcel_post")
+		{
+			WorldHandlers::handleWorldDeleteParcelPost(*this->world_state, request, reply_info);
+		}
+		else if(request.path == "/world_grant_parcel_writer_post")
+		{
+			WorldHandlers::handleWorldGrantParcelWriterPost(*this->world_state, request, reply_info);
+		}
+		else if(request.path == "/world_revoke_parcel_writer_post")
+		{
+			WorldHandlers::handleWorldRevokeParcelWriterPost(*this->world_state, request, reply_info);
+		}
+		else if(request.path == "/world_delete_post")
+		{
+			WorldHandlers::handleWorldDeletePost(*this->world_state, request, reply_info);
+		}
+		else if(request.path == "/world_update_parcel_size_post")
+		{
+			WorldHandlers::handleWorldUpdateParcelSizePost(*this->world_state, request, reply_info);
 		}
 		else
 		{
@@ -324,6 +368,12 @@ void WebServerRequestHandler::handleRequest(const web::RequestInfo& request, web
 		if(request.path == "/")
 		{
 			MainPageHandlers::renderRootPage(*this->world_state, *this->data_store, request, reply_info);
+		}
+		else if(request.path == "/admin_add_new_parcel") {
+			AdminHandlers::renderAdminAddNewParcel(*this->world_state, request, reply_info);
+		}
+		else if(::hasPrefix(request.path, "/admin_edit_parcel/")) {
+			AdminHandlers::renderAdminEditParcel(*this->world_state, request, reply_info);
 		}
 		else if(request.path == "/terms")
 		{
@@ -340,6 +390,14 @@ void WebServerRequestHandler::handleRequest(const web::RequestInfo& request, web
 		else if(request.path == "/about_substrata")
 		{
 			MainPageHandlers::renderAboutSubstrataPage(*this->world_state, *this->data_store, request, reply_info);
+		}
+		else if(::hasPrefix(request.path, "/world_add_parcel/"))
+		{
+			WorldHandlers::renderWorldAddParcel(*this->world_state, request, reply_info);
+		}
+		else if(::hasPrefix(request.path, "/world_edit_parcel/"))
+		{
+			WorldHandlers::renderWorldEditParcel(*this->world_state, request, reply_info);
 		}
 		else if(request.path == "/running_your_own_server")
 		{
@@ -410,6 +468,18 @@ void WebServerRequestHandler::handleRequest(const web::RequestInfo& request, web
 		else if(request.path == "/admin_users")
 		{
 			AdminHandlers::renderUsersPage(*this->world_state, request, reply_info);
+		}
+		else if(request.path == "/admin_ban_user_post")
+		{
+			AdminHandlers::handleBanUserPost(*this->world_state, request, reply_info);
+		}
+		else if(request.path == "/admin_unban_user_post")
+		{
+			AdminHandlers::handleUnbanUserPost(*this->world_state, request, reply_info);
+		}
+		else if(request.path == "/admin_ban_user_by_name_post")
+		{
+			AdminHandlers::handleBanUserByNamePost(*this->world_state, request, reply_info);
 		}
 		else if(::hasPrefix(request.path, "/admin_user/")) // user ID follows in URL
 		{
