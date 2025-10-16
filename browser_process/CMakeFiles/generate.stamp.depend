@@ -1,0 +1,5 @@
+# CMake generation dependency list for this directory.
+C:/programming/glare-core/OpenEXR/openexr.cmake
+C:/programming/substrata/browser_process/CMakeLists.txt
+C:/programming/substrata/cmake/shared_cxx_settings.cmake
+C:/programming/substrata/cmake/shared_settings.cmake

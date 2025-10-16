@@ -1,0 +1,10 @@
+^C:\PROGRAMMING\SUBSTRATA\CMAKEFILES\35E94E2AFFCA09B64A8138C0BD9D9200\GENERATE.STAMP.RULE
+setlocal
+C:\Strawberry\c\bin\cmake.exe -SC:/programming/substrata -BC:/programming/substrata --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/programming/substrata/substrata.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
