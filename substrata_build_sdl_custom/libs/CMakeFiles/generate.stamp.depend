@@ -1,0 +1,6 @@
+# CMake generation dependency list for this directory.
+C:/Strawberry/c/share/cmake-3.29/Modules/CMakeASMInformation.cmake
+C:/Strawberry/c/share/cmake-3.29/Modules/Compiler/MSVC-ASM.cmake
+C:/programming/glare-core/OpenEXR/openexr.cmake
+C:/programming/substrata/cmake/shared_cxx_settings.cmake
+C:/programming/substrata/libs/CMakeLists.txt

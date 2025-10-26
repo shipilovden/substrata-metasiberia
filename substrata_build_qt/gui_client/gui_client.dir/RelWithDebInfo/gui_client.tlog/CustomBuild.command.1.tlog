@@ -1,0 +1,650 @@
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_MAINWINDOW.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/MainWindow.h > C:/programming/substrata/gui_client/moc_MainWindow.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_GUICLIENTAPPLICATION.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/GuiClientApplication.h > C:/programming/substrata/gui_client/moc_GuiClientApplication.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_GLWIDGET.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/GlWidget.h > C:/programming/substrata/gui_client/moc_GlWidget.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_AVATARSETTINGSDIALOG.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/AvatarSettingsDialog.h > C:/programming/substrata/gui_client/moc_AvatarSettingsDialog.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_AVATARPREVIEWWIDGET.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/AvatarPreviewWidget.h > C:/programming/substrata/gui_client/moc_AvatarPreviewWidget.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_ADDOBJECTDIALOG.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/AddObjectDialog.h > C:/programming/substrata/gui_client/moc_AddObjectDialog.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_ADDVIDEODIALOG.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/AddVideoDialog.h > C:/programming/substrata/gui_client/moc_AddVideoDialog.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_ADDOBJECTPREVIEWWIDGET.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/AddObjectPreviewWidget.h > C:/programming/substrata/gui_client/moc_AddObjectPreviewWidget.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_OBJECTEDITOR.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/ObjectEditor.h > C:/programming/substrata/gui_client/moc_ObjectEditor.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_ENVIRONMENTOPTIONSWIDGET.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/EnvironmentOptionsWidget.h > C:/programming/substrata/gui_client/moc_EnvironmentOptionsWidget.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_MATERIALEDITOR.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/MaterialEditor.h > C:/programming/substrata/gui_client/moc_MaterialEditor.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_PARCELEDITOR.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/ParcelEditor.h > C:/programming/substrata/gui_client/moc_ParcelEditor.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_LOGINDIALOG.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/LoginDialog.h > C:/programming/substrata/gui_client/moc_LoginDialog.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_SIGNUPDIALOG.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/SignUpDialog.h > C:/programming/substrata/gui_client/moc_SignUpDialog.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_USERDETAILSWIDGET.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/UserDetailsWidget.h > C:/programming/substrata/gui_client/moc_UserDetailsWidget.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_URLWIDGET.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/URLWidget.h > C:/programming/substrata/gui_client/moc_URLWidget.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_RESETPASSWORDDIALOG.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/ResetPasswordDialog.h > C:/programming/substrata/gui_client/moc_ResetPasswordDialog.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_CHANGEPASSWORDDIALOG.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/ChangePasswordDialog.h > C:/programming/substrata/gui_client/moc_ChangePasswordDialog.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_MATERIALBROWSER.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/MaterialBrowser.h > C:/programming/substrata/gui_client/moc_MaterialBrowser.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_INDIGOVIEW.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/IndigoView.h > C:/programming/substrata/gui_client/moc_IndigoView.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_SHADEREDITORDIALOG.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/ShaderEditorDialog.h > C:/programming/substrata/gui_client/moc_ShaderEditorDialog.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_ABOUTDIALOG.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/AboutDialog.h > C:/programming/substrata/gui_client/moc_AboutDialog.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_MAINOPTIONSDIALOG.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/MainOptionsDialog.h > C:/programming/substrata/gui_client/moc_MainOptionsDialog.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_GOTOPARCELDIALOG.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/GoToParcelDialog.h > C:/programming/substrata/gui_client/moc_GoToParcelDialog.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_GOTOPOSITIONDIALOG.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/GoToPositionDialog.h > C:/programming/substrata/gui_client/moc_GoToPositionDialog.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_FINDOBJECTDIALOG.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/FindObjectDialog.h > C:/programming/substrata/gui_client/moc_FindObjectDialog.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_LISTOBJECTSNEARBYDIALOG.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/ListObjectsNearbyDialog.h > C:/programming/substrata/gui_client/moc_ListObjectsNearbyDialog.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_LOGWINDOW.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/LogWindow.h > C:/programming/substrata/gui_client/moc_LogWindow.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_DIAGNOSTICSWIDGET.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/DiagnosticsWidget.h > C:/programming/substrata/gui_client/moc_DiagnosticsWidget.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_TERRAINSPECSECTIONWIDGET.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/TerrainSpecSectionWidget.h > C:/programming/substrata/gui_client/moc_TerrainSpecSectionWidget.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_WORLDSETTINGSWIDGET.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/WorldSettingsWidget.h > C:/programming/substrata/gui_client/moc_WorldSettingsWidget.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\MOC_CREATEOBJECTSDIALOG.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/gui_client/CreateObjectsDialog.h > C:/programming/substrata/gui_client/moc_CreateObjectsDialog.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\UI_ADDOBJECTDIALOG.H.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\uic C:/programming/substrata/gui_client/AddObjectDialog.ui --output C:/programming/substrata/gui_client/ui_AddObjectDialog.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\UI_ADDVIDEODIALOG.H.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\uic C:/programming/substrata/gui_client/AddVideoDialog.ui --output C:/programming/substrata/gui_client/ui_AddVideoDialog.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\UI_AVATARSETTINGSDIALOG.H.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\uic C:/programming/substrata/gui_client/AvatarSettingsDialog.ui --output C:/programming/substrata/gui_client/ui_AvatarSettingsDialog.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\UI_OBJECTEDITOR.H.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\uic C:/programming/substrata/gui_client/ObjectEditor.ui --output C:/programming/substrata/gui_client/ui_ObjectEditor.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\UI_ENVIRONMENTOPTIONSWIDGET.H.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\uic C:/programming/substrata/gui_client/EnvironmentOptionsWidget.ui --output C:/programming/substrata/gui_client/ui_EnvironmentOptionsWidget.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\UI_PARCELEDITOR.H.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\uic C:/programming/substrata/gui_client/ParcelEditor.ui --output C:/programming/substrata/gui_client/ui_ParcelEditor.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\UI_MATERIALEDITOR.H.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\uic C:/programming/substrata/gui_client/MaterialEditor.ui --output C:/programming/substrata/gui_client/ui_MaterialEditor.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\UI_LOGINDIALOG.H.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\uic C:/programming/substrata/gui_client/LoginDialog.ui --output C:/programming/substrata/gui_client/ui_LoginDialog.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\UI_SIGNUPDIALOG.H.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\uic C:/programming/substrata/gui_client/SignUpDialog.ui --output C:/programming/substrata/gui_client/ui_SignUpDialog.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\UI_MAINWINDOW.H.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\uic C:/programming/substrata/gui_client/MainWindow.ui --output C:/programming/substrata/gui_client/ui_MainWindow.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\UI_USERDETAILSWIDGET.H.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\uic C:/programming/substrata/gui_client/UserDetailsWidget.ui --output C:/programming/substrata/gui_client/ui_UserDetailsWidget.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\UI_URLWIDGET.H.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\uic C:/programming/substrata/gui_client/URLWidget.ui --output C:/programming/substrata/gui_client/ui_URLWidget.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\UI_RESETPASSWORDDIALOG.H.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\uic C:/programming/substrata/gui_client/ResetPasswordDialog.ui --output C:/programming/substrata/gui_client/ui_ResetPasswordDialog.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\UI_CHANGEPASSWORDDIALOG.H.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\uic C:/programming/substrata/gui_client/ChangePasswordDialog.ui --output C:/programming/substrata/gui_client/ui_ChangePasswordDialog.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\UI_MATERIALBROWSER.H.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\uic C:/programming/substrata/gui_client/MaterialBrowser.ui --output C:/programming/substrata/gui_client/ui_MaterialBrowser.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\UI_SHADEREDITORDIALOG.H.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\uic C:/programming/substrata/gui_client/ShaderEditorDialog.ui --output C:/programming/substrata/gui_client/ui_ShaderEditorDialog.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\UI_ABOUTDIALOG.H.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\uic C:/programming/substrata/gui_client/AboutDialog.ui --output C:/programming/substrata/gui_client/ui_AboutDialog.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\UI_MAINOPTIONSDIALOG.H.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\uic C:/programming/substrata/gui_client/MainOptionsDialog.ui --output C:/programming/substrata/gui_client/ui_MainOptionsDialog.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\UI_GOTOPARCELDIALOG.H.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\uic C:/programming/substrata/gui_client/GoToParcelDialog.ui --output C:/programming/substrata/gui_client/ui_GoToParcelDialog.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\UI_GOTOPOSITIONDIALOG.H.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\uic C:/programming/substrata/gui_client/GoToPositionDialog.ui --output C:/programming/substrata/gui_client/ui_GoToPositionDialog.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\UI_FINDOBJECTDIALOG.H.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\uic C:/programming/substrata/gui_client/FindObjectDialog.ui --output C:/programming/substrata/gui_client/ui_FindObjectDialog.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\UI_LISTOBJECTSNEARBYDIALOG.H.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\uic C:/programming/substrata/gui_client/ListObjectsNearbyDialog.ui --output C:/programming/substrata/gui_client/ui_ListObjectsNearbyDialog.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\UI_LOGWINDOW.H.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\uic C:/programming/substrata/gui_client/LogWindow.ui --output C:/programming/substrata/gui_client/ui_LogWindow.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\UI_DIAGNOSTICSWIDGET.H.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\uic C:/programming/substrata/gui_client/DiagnosticsWidget.ui --output C:/programming/substrata/gui_client/ui_DiagnosticsWidget.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\UI_TERRAINSPECSECTIONWIDGET.H.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\uic C:/programming/substrata/gui_client/TerrainSpecSectionWidget.ui --output C:/programming/substrata/gui_client/ui_TerrainSpecSectionWidget.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\UI_WORLDSETTINGSWIDGET.H.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\uic C:/programming/substrata/gui_client/WorldSettingsWidget.ui --output C:/programming/substrata/gui_client/ui_WorldSettingsWidget.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\3F142C001404DA6415C8147C2B726881\UI_CREATEOBJECTSDIALOG.H.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\uic C:/programming/substrata/gui_client/CreateObjectsDialog.ui --output C:/programming/substrata/gui_client/ui_CreateObjectsDialog.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\0CD4CDBB36D0B91F38939EC980601D95\MOC_FILESELECTWIDGET.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/qt/FileSelectWidget.h > C:/programming/substrata/qt/moc_FileSelectWidget.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\0CD4CDBB36D0B91F38939EC980601D95\UI_FILESELECTWIDGET.H.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\uic C:/programming/substrata/qt/FileSelectWidget.ui --output C:/programming/substrata/qt/ui_FileSelectWidget.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\0CD4CDBB36D0B91F38939EC980601D95\MOC_REALCONTROL.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/qt/RealControl.h > C:/programming/substrata/qt/moc_RealControl.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\0CD4CDBB36D0B91F38939EC980601D95\UI_REALCONTROL.H.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\uic C:/programming/substrata/qt/RealControl.ui --output C:/programming/substrata/qt/ui_RealControl.h
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_QT\CMAKEFILES\0CD4CDBB36D0B91F38939EC980601D95\MOC_INDIGODOUBLESPINBOX.CPP.RULE
+setlocal
+C:\programming\glare-core\Qt\5.15.16-vs2022-64\bin\moc C:/programming/substrata/qt/IndigoDoubleSpinBox.h > C:/programming/substrata/qt/moc_IndigoDoubleSpinBox.cpp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\PROGRAMMING\SUBSTRATA\GUI_CLIENT\CMAKELISTS.TXT
+setlocal
+C:\Strawberry\c\bin\cmake.exe -SC:/programming/substrata -BC:/programming/substrata/substrata_build_qt --check-stamp-file C:/programming/substrata/substrata_build_qt/gui_client/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
