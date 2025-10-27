@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ResolveNugetPackages>false</ResolveNugetPackages>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{A9DD6CD9-68BC-3D90-9BF3-3AE9AF1AC052}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
+    <Platform>x64</Platform>
+    <ProjectName>ALL_BUILD</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\programming\substrata\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/programming/substrata/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+C:\Strawberry\c\bin\cmake.exe -SC:/programming/substrata -BC:/programming/substrata/substrata_build_sdl --check-stamp-file C:/programming/substrata/substrata_build_sdl/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Strawberry\c\share\cmake-3.29\Modules\CMakeASMInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCXXInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCommonLanguageInclude.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeGenericSystem.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeInitializeConfigs.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeLanguageInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeRCInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeSystemSpecificInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeSystemSpecificInitialize.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\MSVC-ASM.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\MSVC-C.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\MSVC-CXX.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\MSVC.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\Windows-Initialize.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\Windows-MSVC-C.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\Windows-MSVC.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\Windows.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\WindowsPaths.cmake;C:\programming\substrata\functions.cmake;C:\programming\substrata\substrata_build_sdl\CMakeFiles\3.29.2\CMakeASMCompiler.cmake;C:\programming\substrata\substrata_build_sdl\CMakeFiles\3.29.2\CMakeCCompiler.cmake;C:\programming\substrata\substrata_build_sdl\CMakeFiles\3.29.2\CMakeCXXCompiler.cmake;C:\programming\substrata\substrata_build_sdl\CMakeFiles\3.29.2\CMakeRCCompiler.cmake;C:\programming\substrata\substrata_build_sdl\CMakeFiles\3.29.2\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\programming\substrata\substrata_build_sdl\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/programming/substrata/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+C:\Strawberry\c\bin\cmake.exe -SC:/programming/substrata -BC:/programming/substrata/substrata_build_sdl --check-stamp-file C:/programming/substrata/substrata_build_sdl/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Strawberry\c\share\cmake-3.29\Modules\CMakeASMInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCXXInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCommonLanguageInclude.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeGenericSystem.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeInitializeConfigs.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeLanguageInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeRCInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeSystemSpecificInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeSystemSpecificInitialize.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\MSVC-ASM.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\MSVC-C.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\MSVC-CXX.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\MSVC.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\Windows-Initialize.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\Windows-MSVC-C.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\Windows-MSVC.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\Windows.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\WindowsPaths.cmake;C:\programming\substrata\functions.cmake;C:\programming\substrata\substrata_build_sdl\CMakeFiles\3.29.2\CMakeASMCompiler.cmake;C:\programming\substrata\substrata_build_sdl\CMakeFiles\3.29.2\CMakeCCompiler.cmake;C:\programming\substrata\substrata_build_sdl\CMakeFiles\3.29.2\CMakeCXXCompiler.cmake;C:\programming\substrata\substrata_build_sdl\CMakeFiles\3.29.2\CMakeRCCompiler.cmake;C:\programming\substrata\substrata_build_sdl\CMakeFiles\3.29.2\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\programming\substrata\substrata_build_sdl\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/programming/substrata/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+C:\Strawberry\c\bin\cmake.exe -SC:/programming/substrata -BC:/programming/substrata/substrata_build_sdl --check-stamp-file C:/programming/substrata/substrata_build_sdl/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Strawberry\c\share\cmake-3.29\Modules\CMakeASMInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCXXInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeCommonLanguageInclude.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeGenericSystem.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeInitializeConfigs.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeLanguageInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeRCInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeSystemSpecificInformation.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\CMakeSystemSpecificInitialize.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\MSVC-ASM.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\MSVC-C.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\MSVC-CXX.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Compiler\MSVC.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\Windows-Initialize.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\Windows-MSVC-C.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\Windows-MSVC.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\Windows.cmake;C:\Strawberry\c\share\cmake-3.29\Modules\Platform\WindowsPaths.cmake;C:\programming\substrata\functions.cmake;C:\programming\substrata\substrata_build_sdl\CMakeFiles\3.29.2\CMakeASMCompiler.cmake;C:\programming\substrata\substrata_build_sdl\CMakeFiles\3.29.2\CMakeCCompiler.cmake;C:\programming\substrata\substrata_build_sdl\CMakeFiles\3.29.2\CMakeCXXCompiler.cmake;C:\programming\substrata\substrata_build_sdl\CMakeFiles\3.29.2\CMakeRCCompiler.cmake;C:\programming\substrata\substrata_build_sdl\CMakeFiles\3.29.2\CMakeSystem.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\programming\substrata\substrata_build_sdl\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:\programming\substrata\substrata_build_sdl\ZERO_CHECK.vcxproj">
+      <Project>{40E40224-F54C-3B4C-BF6B-AC0A25C16025}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="C:\programming\substrata\substrata_build_sdl\gui_client\Jolt.vcxproj">
+      <Project>{454EDB4B-8EFC-33D8-82B6-C5913CB60A5F}</Project>
+      <Name>Jolt</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\programming\substrata\substrata_build_sdl\gui_client\Opus.vcxproj">
+      <Project>{A85B0A27-D685-38E1-AB29-21F4AE3E356B}</Project>
+      <Name>Opus</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\programming\substrata\substrata_build_sdl\gui_client\gui_client.vcxproj">
+      <Project>{49101B2D-1E37-3A40-8028-752D69A71F34}</Project>
+      <Name>gui_client</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\programming\substrata\substrata_build_sdl\libs\libs.vcxproj">
+      <Project>{D8D558C0-988B-3717-BB36-C8B0395F58D5}</Project>
+      <Name>libs</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\programming\substrata\substrata_build_sdl\server\server.vcxproj">
+      <Project>{BC6EA7FC-640A-3B01-9F5B-C8121D9B1CC1}</Project>
+      <Name>server</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

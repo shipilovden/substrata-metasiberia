@@ -1,0 +1,7 @@
+# CMake generation dependency list for this directory.
+C:/programming/glare-core/OpenEXR/openexr.cmake
+C:/programming/substrata/cmake/libressl.cmake
+C:/programming/substrata/cmake/shared_cxx_settings.cmake
+C:/programming/substrata/cmake/shared_settings.cmake
+C:/programming/substrata/cmake/ssl.cmake
+C:/programming/substrata/server/CMakeLists.txt

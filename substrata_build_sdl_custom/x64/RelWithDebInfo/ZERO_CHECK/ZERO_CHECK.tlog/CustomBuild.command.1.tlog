@@ -1,0 +1,10 @@
+^C:\PROGRAMMING\SUBSTRATA\SUBSTRATA_BUILD_SDL_CUSTOM\CMAKEFILES\DB3BABDE6852A1CA30E2D567925AC0BB\GENERATE.STAMP.RULE
+setlocal
+C:\Strawberry\c\bin\cmake.exe -SC:/programming/substrata -BC:/programming/substrata/substrata_build_sdl_custom --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/programming/substrata/substrata_build_sdl_custom/substrata.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

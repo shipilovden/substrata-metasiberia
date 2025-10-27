@@ -1,0 +1,7 @@
+C:/programming/substrata/substrata_build_sdl_custom/CMakeFiles/ALL_BUILD.dir
+C:/programming/substrata/substrata_build_sdl_custom/CMakeFiles/ZERO_CHECK.dir
+C:/programming/substrata/substrata_build_sdl_custom/libs/CMakeFiles/libs.dir
+C:/programming/substrata/substrata_build_sdl_custom/gui_client/CMakeFiles/Jolt.dir
+C:/programming/substrata/substrata_build_sdl_custom/gui_client/CMakeFiles/Opus.dir
+C:/programming/substrata/substrata_build_sdl_custom/gui_client/CMakeFiles/gui_client.dir
+C:/programming/substrata/substrata_build_sdl_custom/server/CMakeFiles/server.dir

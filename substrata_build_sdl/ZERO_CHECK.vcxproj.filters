@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\programming\substrata\substrata_build_sdl\CMakeFiles\feb7d058950ec573544a2b8226a2a5bf\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{26ED2E16-2980-36B7-89BB-5FFBDC82E1A0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
