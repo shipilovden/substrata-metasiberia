@@ -823,60 +823,6 @@
     <ClCompile Include="C:\programming\substrata\gui_client\SDLUIInterface.cpp">
       <Filter>gui_client</Filter>
     </ClCompile>
-    <ClCompile Include="C:\programming\substrata\shared\Avatar.cpp">
-      <Filter>shared_files</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\programming\substrata\shared\ImageDecoding.cpp">
-      <Filter>shared_files</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\programming\substrata\shared\FileTypes.cpp">
-      <Filter>shared_files</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\programming\substrata\shared\GroundPatch.cpp">
-      <Filter>shared_files</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\programming\substrata\shared\LODGeneration.cpp">
-      <Filter>shared_files</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\programming\substrata\shared\Parcel.cpp">
-      <Filter>shared_files</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\programming\substrata\shared\Resource.cpp">
-      <Filter>shared_files</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\programming\substrata\shared\ResourceManager.cpp">
-      <Filter>shared_files</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\programming\substrata\shared\WorldObject.cpp">
-      <Filter>shared_files</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\programming\substrata\shared\WorldMaterial.cpp">
-      <Filter>shared_files</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\programming\substrata\shared\WorldSettings.cpp">
-      <Filter>shared_files</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\programming\substrata\shared\VoxelMeshBuilding.cpp">
-      <Filter>shared_files</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\programming\substrata\shared\LuaScriptEvaluator.cpp">
-      <Filter>shared_files</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\programming\substrata\shared\SubstrataLuaVM.cpp">
-      <Filter>shared_files</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\programming\substrata\shared\TimerQueue.cpp">
-      <Filter>shared_files</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\programming\substrata\shared\ObjectEventHandlers.cpp">
-      <Filter>shared_files</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\programming\substrata\shared\LODChunk.cpp">
-      <Filter>shared_files</Filter>
-    </ClCompile>
-    <ClCompile Include="C:\programming\substrata\shared\WorldDetails.cpp">
-      <Filter>shared_files</Filter>
-    </ClCompile>
     <ClCompile Include="C:\programming\glare-core\double-conversion\bignum-dtoa.cc">
       <Filter>double_conversion</Filter>
     </ClCompile>
@@ -1074,6 +1020,63 @@
     </ClCompile>
     <ClCompile Include="C:\programming\substrata\rtaudio\RtAudio.cpp">
       <Filter>rtaudio</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\programming\substrata\shared\Resource.cpp">
+      <Filter>shared_files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\programming\substrata\shared\ResourceManager.cpp">
+      <Filter>shared_files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\programming\substrata\shared\WorldObject.cpp">
+      <Filter>shared_files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\programming\substrata\shared\WorldMaterial.cpp">
+      <Filter>shared_files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\programming\substrata\shared\Avatar.cpp">
+      <Filter>shared_files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\programming\substrata\shared\Parcel.cpp">
+      <Filter>shared_files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\programming\substrata\shared\LODChunk.cpp">
+      <Filter>shared_files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\programming\substrata\shared\WorldSettings.cpp">
+      <Filter>shared_files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\programming\substrata\shared\SubstrataLuaVM.cpp">
+      <Filter>shared_files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\programming\substrata\shared\ObjectEventHandlers.cpp">
+      <Filter>shared_files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\programming\substrata\shared\LODGeneration.cpp">
+      <Filter>shared_files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\programming\substrata\shared\VoxelMeshBuilding.cpp">
+      <Filter>shared_files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\programming\substrata\shared\ImageDecoding.cpp">
+      <Filter>shared_files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\programming\substrata\shared\FileTypes.cpp">
+      <Filter>shared_files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\programming\substrata\shared\GroundPatch.cpp">
+      <Filter>shared_files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\programming\substrata\shared\LuaScriptEvaluator.cpp">
+      <Filter>shared_files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\programming\substrata\shared\RateLimiter.cpp">
+      <Filter>shared_files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\programming\substrata\shared\TimerQueue.cpp">
+      <Filter>shared_files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\programming\substrata\shared\WorldDetails.cpp">
+      <Filter>shared_files</Filter>
     </ClCompile>
     <ClCompile Include="C:\programming\substrata\audio\AudioEngine.cpp">
       <Filter>audio</Filter>
@@ -2589,75 +2592,6 @@
     <ClInclude Include="C:\programming\substrata\gui_client\SDLUIInterface.h">
       <Filter>gui_client</Filter>
     </ClInclude>
-    <ClInclude Include="C:\programming\substrata\shared\Avatar.h">
-      <Filter>shared_files</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\programming\substrata\shared\ImageDecoding.h">
-      <Filter>shared_files</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\programming\substrata\shared\FileTypes.h">
-      <Filter>shared_files</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\programming\substrata\shared\GroundPatch.h">
-      <Filter>shared_files</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\programming\substrata\shared\LODGeneration.h">
-      <Filter>shared_files</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\programming\substrata\shared\Parcel.h">
-      <Filter>shared_files</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\programming\substrata\shared\ParcelID.h">
-      <Filter>shared_files</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\programming\substrata\shared\Protocol.h">
-      <Filter>shared_files</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\programming\substrata\shared\Resource.h">
-      <Filter>shared_files</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\programming\substrata\shared\ResourceManager.h">
-      <Filter>shared_files</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\programming\substrata\shared\UID.h">
-      <Filter>shared_files</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\programming\substrata\shared\UserID.h">
-      <Filter>shared_files</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\programming\substrata\shared\Version.h">
-      <Filter>shared_files</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\programming\substrata\shared\WorldObject.h">
-      <Filter>shared_files</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\programming\substrata\shared\WorldMaterial.h">
-      <Filter>shared_files</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\programming\substrata\shared\WorldSettings.h">
-      <Filter>shared_files</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\programming\substrata\shared\VoxelMeshBuilding.h">
-      <Filter>shared_files</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\programming\substrata\shared\LuaScriptEvaluator.h">
-      <Filter>shared_files</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\programming\substrata\shared\SubstrataLuaVM.h">
-      <Filter>shared_files</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\programming\substrata\shared\TimerQueue.h">
-      <Filter>shared_files</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\programming\substrata\shared\ObjectEventHandlers.h">
-      <Filter>shared_files</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\programming\substrata\shared\LODChunk.h">
-      <Filter>shared_files</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\programming\substrata\shared\WorldDetails.h">
-      <Filter>shared_files</Filter>
-    </ClInclude>
     <ClInclude Include="C:\programming\glare-core\double-conversion\bignum-dtoa.h">
       <Filter>double_conversion</Filter>
     </ClInclude>
@@ -2867,6 +2801,63 @@
     </ClInclude>
     <ClInclude Include="C:\programming\substrata\rtaudio\RtAudio.h">
       <Filter>rtaudio</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\programming\substrata\shared\Resource.h">
+      <Filter>shared_files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\programming\substrata\shared\ResourceManager.h">
+      <Filter>shared_files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\programming\substrata\shared\WorldObject.h">
+      <Filter>shared_files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\programming\substrata\shared\WorldMaterial.h">
+      <Filter>shared_files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\programming\substrata\shared\Avatar.h">
+      <Filter>shared_files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\programming\substrata\shared\Parcel.h">
+      <Filter>shared_files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\programming\substrata\shared\LODChunk.h">
+      <Filter>shared_files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\programming\substrata\shared\WorldSettings.h">
+      <Filter>shared_files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\programming\substrata\shared\SubstrataLuaVM.h">
+      <Filter>shared_files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\programming\substrata\shared\ObjectEventHandlers.h">
+      <Filter>shared_files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\programming\substrata\shared\LODGeneration.h">
+      <Filter>shared_files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\programming\substrata\shared\VoxelMeshBuilding.h">
+      <Filter>shared_files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\programming\substrata\shared\ImageDecoding.h">
+      <Filter>shared_files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\programming\substrata\shared\FileTypes.h">
+      <Filter>shared_files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\programming\substrata\shared\GroundPatch.h">
+      <Filter>shared_files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\programming\substrata\shared\LuaScriptEvaluator.h">
+      <Filter>shared_files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\programming\substrata\shared\RateLimiter.h">
+      <Filter>shared_files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\programming\substrata\shared\TimerQueue.h">
+      <Filter>shared_files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\programming\substrata\shared\WorldDetails.h">
+      <Filter>shared_files</Filter>
     </ClInclude>
     <ClInclude Include="C:\programming\substrata\audio\AudioEngine.h">
       <Filter>audio</Filter>
