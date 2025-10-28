@@ -1,7 +1,7 @@
 # CMake generation dependency list for this directory.
 C:/programming/glare-core/OpenEXR/openexr.cmake
-C:/programming/glare-core/jolt/5.3.0/Jolt/Jolt.cmake
 C:/programming/glare-core/opengl/opengl.cmake
+C:/programming/jolt/5.3.0/Jolt/Jolt.cmake
 C:/programming/substrata/cmake/libressl.cmake
 C:/programming/substrata/cmake/llvm.cmake
 C:/programming/substrata/cmake/shared_cxx_settings.cmake
