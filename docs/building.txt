@@ -239,8 +239,8 @@ Example for a local Windows setup:
 Notes:
 - XR support is not intended for Emscripten/web builds.
 - The basic integration scaffolding is present, while the full OpenXR backend is still being implemented.
-- Regular Windows desktop builds should keep XR disabled by default.
-- `C:\programming\qt_build.ps1` now configures `XR_SUPPORT=OFF` unless you pass `-EnableXR`.
+- Windows Qt builds in Metasiberia should be produced with XR support enabled by default.
+- `C:\programming\qt_build.ps1` now configures `XR_SUPPORT=ON` by default; pass `-DisableXR` only when you explicitly need a desktop-only build.
 - XR-enabled binaries now default to `auto` runtime launch mode: they will try to start OpenXR, and fall back to desktop mode if the headset/runtime are unavailable.
 - You can override launch mode with `--vr`, `--desktop`, or by changing the `XR / VR launch mode` option in the client settings.
 - `SUBSTRATA_ENABLE_XR=true/false` still works as a legacy environment override.

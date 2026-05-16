@@ -152,7 +152,7 @@
 - Go to Main World
 - Go to Personal World (использует username залогиненного пользователя)
 - Go to Cryptovoxels world
-- Go to Substrata / Metasiberia / Shki-nvkz server
+- Go to Substrata / Metasiberia / Shki-nvkz / Map server
 - Go to Favorites (submenu)
 - Set current location as start location
 

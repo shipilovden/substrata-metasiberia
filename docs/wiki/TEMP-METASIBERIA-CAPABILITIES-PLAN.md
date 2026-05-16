@@ -152,7 +152,7 @@ Goal: capture all major user/admin capabilities in order, from installation and 
 - Go to Main World
 - Go to Personal World (uses logged-in username)
 - Go to Cryptovoxels world
-- Go to Substrata / Metasiberia / Shki-nvkz server
+- Go to Substrata / Metasiberia / Shki-nvkz / Map server
 - Go to Favorites (submenu)
 - Set current location as start location
 
