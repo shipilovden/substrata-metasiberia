@@ -1,6 +1,6 @@
 # Серверы Metasiberia и обмен между ними
 
-Документ описывает текущую инфраструктуру (факт), рекомендуемый план перехода с IP-адреса на доменное имя, TLS (Let's Encrypt) без остановки сервера, отправку писем и минимальные улучшения аутентификации.  
+Документ описывает текущую инфраструктуру после переезда на новый сервер: домены, Caddy reverse proxy/TLS, Metasiberia C++ backend, TheRift Hyperfy, отправку писем и минимальные улучшения аутентификации.
 Секреты (пароли/токены/ключи) здесь не храним: см. `C:\programming\AGENTS_SECRETS.local.md`.
 
 ## 1) Узлы и роли
@@ -8,12 +8,20 @@
 ## 1.0 Публичные данные доступа (без секретов)
 Секреты (пароли/токены) см. `C:\programming\AGENTS_SECRETS.local.md`.
 
-Metasiberia v2:
+Новый основной сервер:
+- SSH login: `denshipilov`
+- SSH alias (локально): `metasiberia-server` (в `C:\Users\densh\.ssh\config`)
+- LAN IP: `192.168.0.30`
+- Public IP: `87.103.196.229`
+
+Metasiberia v2 (старый fallback/архив):
 - SSH login: `root`
 - SSH alias (локально): `metasiberia-v2` (в `C:\Users\densh\.ssh\config`)
+- IP: `185.182.110.184`
 
-TheRift:
+TheRift (старый источник/архив):
 - SSH login: `root`
+- IP: `130.49.151.103`
 
 DNS-панель:
 - URL: `https://dnsadmin.hosting.reg.ru/manager/ispmgr`
@@ -23,65 +31,87 @@ REG.RU hosting metasiberia.com (ISPmanager):
 - URL: `https://server263.hosting.reg.ru:1500/`
 - Логин: `u2978374`
 
-### 1.1 Metasiberia v2 (основной)
-- IP: `89.104.70.23`
-- Роль: основной Substrata server + встроенный C++ webserver (сайт/админка/регистрация).
-- Публичный домен (основной): `https://vr.metasiberia.com/`
-- Текущие URL (по IP):
-  - `https://89.104.70.23/`
-  - `https://89.104.70.23/signup`
+### 1.1 Новый основной Metasiberia server
+- LAN IP: `192.168.0.30`
+- Public IP: `87.103.196.229`
+- Роль: основной Substrata game server + Caddy public TLS/reverse proxy + встроенный C++ webserver backend (сайт/админка/регистрация) + TheRift Hyperfy.
+- Публичные production-домены:
+  - `https://vr.metasiberia.com/` -> Caddy -> Metasiberia C++ webserver
+  - `https://rift.metasiberia.com/` -> Caddy -> TheRift Hyperfy
+- Текущие URL по IP:
+  - `http://87.103.196.229/` -> 301 на `https://vr.metasiberia.com/`
+  - `http://87.103.196.229:3002/` закрыт UFW; backend Hyperfy проверять с сервера через `http://127.0.0.1:3002/`
 - Слушаемые порты (факт):
-  - `server`: `80`, `443`, `7600`
-  - `nginx`: `3443` (не является обязательной частью web/админки, но присутствует)
-- Server state dir: `/root/cyberspace_server_state`
-  - Конфиг: `/root/cyberspace_server_state/substrata_server_config.xml`
-  - Credentials: `/root/cyberspace_server_state/substrata_server_credentials.txt`
-  - TLS по умолчанию: `MyCertificate.crt`, `MyKey.key` (обычно в state dir, возможно symlink на `/etc/letsencrypt/...`)
+  - `caddy`: `80/tcp`, `443/tcp`
+  - `metasiberia-server.service`: `8080/tcp`, `8443/tcp`, `7600/tcp`, `7601/udp`
+  - `therift-hyperfy.service`: `3002/tcp` только локально/за UFW
+- Router/NAT: `192.168.0.1`, правило `SubstrataServer` -> `192.168.0.30` для `80/tcp`, `443/tcp`, `7600/tcp`, `7601/udp`. Если `3002/tcp` ещё есть в NAT роутера, серверный UFW его блокирует.
+- Caddy config: `/etc/caddy/Caddyfile`
+- Server state dir: `/home/denshipilov/cyberspace_server_state` -> `/srv/metasiberia/data/state/cyberspace_server_state.candidate-20260621`
+  - Конфиг: `/home/denshipilov/cyberspace_server_state/substrata_server_config.xml`
+  - Credentials: `/home/denshipilov/cyberspace_server_state/substrata_server_credentials.txt`
+  - В production-конфиге web ports: `web_http_port=8080`, `web_https_port=8443`
+  - Публичный TLS выпускает и обновляет Caddy; backend TLS Metasiberia остаётся внутренним за Caddy.
 
-### 1.2 TheRift (второй сервер)
-- IP: `95.163.227.206`
-- Роль: отдельный сервер/площадка (назначение уточняется).
-- Рекомендуемое использование (чтобы не рисковать продом):
-  - staging/тестовый сервер для проверки новых сборок `server` и web-изменений перед выкатыванием на `Metasiberia v2`;
-  - площадка для нагрузочных/интеграционных тестов, чтобы не влиять на пользователей.
+### 1.2 TheRift / Hyperfy / Sniper
+- Старый IP TheRift: `130.49.151.103`.
+- Hyperfy перенесен на новый основной сервер:
+  - путь: `/srv/metasiberia/data/services/therift/hyperfy`
+  - symlink: `/var/www/hyperfy`
+  - сервис: `therift-hyperfy.service`
+  - production URL: `https://rift.metasiberia.com/`
+  - backend/diagnostic URL: `http://127.0.0.1:3002/` с самого сервера; внешний `http://87.103.196.229:3002/` закрыт UFW
+  - public env: `PUBLIC_WS_URL=wss://rift.metasiberia.com/ws`, `PUBLIC_API_URL=https://rift.metasiberia.com/api`, `PUBLIC_ASSETS_URL=https://rift.metasiberia.com/assets`
+- Sniper перенесен на новый основной сервер:
+  - путь: `/srv/metasiberia/data/services/therift/sniper-bot`
+  - symlink: `/opt/sniper-bot`
+  - сервисы: `sniper-bot.service`, `sniper-dryrun.service`
+- `metasiberia-walk-bot` и `openclaw` не нужны, не переносить и не запускать.
+- `riftworld.duckdns.org` устарел и не используется; попытка обновления старым найденным token дала `KO`, нужен актуальный DuckDNS token только если решим возвращать DuckDNS.
 - Доступ: SSH (пароль в `C:\programming\AGENTS_SECRETS.local.md`).
 - Примечание: если SSH ругается на host key mismatch, сначала проверить отпечаток ключа и обновить `known_hosts` осознанно.
 
 ### 1.3 Hosting/DNS metasiberia.com (REG.RU)
 - Управление DNS/хостингом ведется через REG.RU (см. URL/логины выше).
-- Важно: `metasiberia.com` сейчас может быть занят внешним лендингом/прокси; нельзя “просто” перевести A-record корня на `89.104.70.23` без риска сломать лендинг.
+- Важно: `metasiberia.com` сейчас может быть занят внешним лендингом/прокси; нельзя “просто” перевести A-record корня на `87.103.196.229` без риска сломать лендинг.
 
-## 2) Цель: уйти с IP на домен, не ломая текущее
+## 2) Доменная схема
 
-Требования:
-- Текущее по IP должно продолжать работать на время миграции.
-- Новый “правильный” адрес должен быть доменным (`https://<host>/`).
-- TLS: валидный сертификат на домен.
+Требования после cutover:
+- Основные пользовательские адреса должны быть доменными.
+- TLS на публичных доменах обслуживает Caddy.
+- IP-адреса допускаются только для диагностики/legacy.
 - Письма (reset password и др.) должны содержать доменную ссылку, а не IP.
 
-### 2.1 Рекомендуемая стратегия (без ломания корня домена)
-1. Выбрать поддомен под основной сервер (пример: `vr.metasiberia.com` или `app.metasiberia.com`).
-2. В DNS создать `A` запись поддомена -> `89.104.70.23`.
-3. Выпустить Let's Encrypt сертификат на этот поддомен.
-4. Включить “канонический хост” в конфиге сервера, чтобы:
-   - запросы на `https://89.104.70.23/...` 301 редиректились на `https://<поддомен>/...`
-   - запросы на `http://<поддомен>/...` редиректились на `https://<поддомен>/...`
+### 2.1 Реализованная стратегия (без ломания корня домена)
+1. Корень `metasiberia.com` и `www.metasiberia.com` оставлены на REG.RU shared hosting.
+2. `vr.metasiberia.com` указывает на новый основной сервер и обслуживает Metasiberia web/admin/game.
+3. `rift.metasiberia.com` указывает на новый основной сервер и обслуживает TheRift Hyperfy.
+4. Caddy занимает публичные `80/443`, выпускает Let's Encrypt сертификаты и проксирует backend-сервисы.
+5. Metasiberia C++ webserver слушает внутренние `8080/8443`, чтобы не конфликтовать с Caddy.
 
 Если корневой домен `metasiberia.com` нужно использовать именно как основной webserver Substrata, это отдельное решение (и, вероятно, потребует переноса/изменения текущего лендинга).
 
-### 2.2 Факт по DNS (снимок на 2026-02-15)
-- `metasiberia.com` -> `176.57.65.17`
-- `www.metasiberia.com` -> `176.57.65.17`
-- `vr.metasiberia.com` -> `89.104.70.23`
-- `89.104.70.23` reverse: `89-104-70-23.cloudvps.regruhosting.ru`
+### 2.2 Факт по DNS (обновлено 2026-06-21)
+- `metasiberia.com` -> `37.140.192.242` (REG.RU хостинг, лендинг)
+- `www.metasiberia.com` -> `37.140.192.242` (REG.RU хостинг)
+- `vr.metasiberia.com` -> `87.103.196.229` (новый основной игровой сервер)
+- `www.vr.metasiberia.com` -> `87.103.196.229`
+- `rift.metasiberia.com` -> `87.103.196.229` (TheRift Hyperfy на новом сервере)
+- `riftworld.duckdns.org` -> `95.163.227.206` (устаревшая запись, не использовать как текущую)
 
-### 2.3 Текущее состояние миграции (2026-02-15)
-- `https://vr.metasiberia.com/` считается основным публичным адресом сервера/сайта.
-- Прямой доступ по IP (`https://89.104.70.23/`) сохраняем как fallback/диагностику.
+### 2.3 Текущее состояние (2026-06-21)
+- `https://vr.metasiberia.com/` — основной публичный адрес сервера/сайта.
+- `https://rift.metasiberia.com/` — основной публичный адрес TheRift Hyperfy.
+- `http://87.103.196.229/` редиректит на `https://vr.metasiberia.com/`.
+- Старый Metasiberia v2 `185.182.110.184` остановлен как production (`substrata.service inactive`) и оставлен как fallback/архив.
+- TheRift Hyperfy снаружи доступен только через `https://rift.metasiberia.com/`; прямой `http://87.103.196.229:3002/` закрыт UFW.
 
-## 3) TLS (Let's Encrypt) без остановки сервера
+## 3) TLS (Let's Encrypt) и Caddy
 
-В код добавлена поддержка http-01 challenge (файлы вида `/.well-known/acme-challenge/<token>`), чтобы можно было выпускать сертификат через `certbot --webroot` без необходимости временно останавливать сервер.
+Текущий production TLS обслуживает Caddy. Сертификаты на `vr.metasiberia.com`, `www.vr.metasiberia.com` и `rift.metasiberia.com` автоматически выпущены через Let's Encrypt и хранятся в storage Caddy (`/var/lib/caddy/...`).
+
+В коде Metasiberia также есть поддержка http-01 challenge (файлы вида `/.well-known/acme-challenge/<token>`), но после перехода на Caddy это fallback/legacy-возможность, а не основной production-путь.
 
 ### 3.1 Настройка webroot для ACME
 В `/root/cyberspace_server_state/substrata_server_config.xml` нужно задать:
@@ -116,7 +146,7 @@ REG.RU hosting metasiberia.com (ISPmanager):
 ```
 
 ### 4.1 Факт по текущему TLS на Metasiberia v2 (снимок на 2026-02-15)
-В state dir обычно лежат `MyCertificate.crt` и `MyKey.key`. На основном сервере они сейчас указывают на Let's Encrypt cert для `vr.metasiberia.com` (через symlink в `/etc/letsencrypt/live/...`).
+В state dir обычно лежат `MyCertificate.crt` и `MyKey.key`. После перехода на Caddy публичный сертификат обслуживает Caddy, а TLS Metasiberia на `8443` считается внутренним backend TLS за reverse proxy.
 
 ## 5) Почта: отправка писем и “почтовая аутентификация” домена
 
@@ -154,18 +184,20 @@ REG.RU hosting metasiberia.com (ISPmanager):
 ## 7) Обмен между серверами (текущее состояние и намерение)
 
 Текущее (факт):
-- Основная логика мира/аккаунтов/веба живет на `89.104.70.23`.
-- TheRift существует как отдельный сервер, но схема обмена/репликации данных не зафиксирована в коде и должна быть явно описана перед внедрением (чтобы не сломать совместимость и не получить рассинхрон).
+- Основная логика мира/аккаунтов/веба живет на новом основном сервере `metasiberia-server` (`192.168.0.30` LAN / `87.103.196.229` public).
+- TheRift Hyperfy и Sniper физически перенесены на тот же новый сервер, но остаются отдельными сервисами и каталогами данных.
+- Схема обмена/репликации данных между Substrata и Hyperfy/Sniper не зафиксирована в коде и должна быть явно описана перед внедрением (чтобы не сломать совместимость и не получить рассинхрон).
 
 Рекомендуемое правило:
 - Пока нет формализованного протокола/репликации, считать сервера независимыми.
 - Если понадобится обмен (например, общие аккаунты/SSO/общий каталог worlds), нужно проектировать как отдельный слой с явными контрактами и документацией (и с учетом `SERVER_PROTOCOL.md`).
 
-## 8) Что менять в первую очередь (миграция “без боли”)
-1. DNS: завести поддомен под основной сервер -> `89.104.70.23`.
-2. Выпустить TLS сертификат на поддомен через ACME http-01 webroot.
-3. Обновить credentials: `email_sending_reset_webserver_hostname=<поддомен>`.
-4. Включить `canonical_web_hostname=<поддомен>` (после проверки, что DNS+TLS готовы).
+## 8) Что уже сделано и что держать в голове
+1. DNS для `vr.metasiberia.com`, `www.vr.metasiberia.com` и `rift.metasiberia.com` указывает на `87.103.196.229`.
+2. Caddy запущен и включен в автозагрузку; `metasiberia-server.service` больше не занимает публичные `80/443`.
+3. В production-конфиг Metasiberia добавлены `web_http_port=8080` и `web_https_port=8443`.
+4. TheRift Hyperfy `.env` переведен на `https://rift.metasiberia.com/` и `wss://rift.metasiberia.com/ws`.
+5. Прямой внешний доступ `:3002` закрыт через UFW; TheRift public flow должен идти через Caddy/443.
 
 ## 9) Данные сайта, пользователи и “база”
 
@@ -174,9 +206,9 @@ REG.RU hosting metasiberia.com (ISPmanager):
 Это не “отдельный сайт”, а часть сервера: страницы собираются из C++ обработчиков + этих шаблонов/фрагментов.
 
 ### 9.1 Где лежат данные сайта на основном сервере
-Факт по `89.104.70.23`:
-- Public files (CSS/JS/PNG) используются из: `/root/cyberspace_server_state/webserver_public_files`
-- Webclient (wasm/html) используется из: `/root/cyberspace_server_state/webclient`
+Факт по новому серверу `metasiberia-server`:
+- Public files (CSS/JS/PNG) используются из: `/home/denshipilov/cyberspace_server_state/webserver_public_files`
+- Webclient (wasm/html) используется из: `/home/denshipilov/cyberspace_server_state/webclient`
 - HTML fragments: сейчас `webserver_fragments_dir` в конфиге закомментирован; фактически фрагменты берутся из дефолтного пути (см. `AGENTS.md`), либо из дистрибутива сервера. Если нужно удобно редактировать фрагменты, рекомендуется явно задать `webserver_fragments_dir` в `/root/cyberspace_server_state/substrata_server_config.xml` и держать их рядом со state dir.
 
 ### 9.2 Быстрое редактирование сайта (рекомендуемый workflow)
@@ -216,8 +248,9 @@ Figma MCP (Talk To Figma MCP) — это локальный dev-инструме
 
 Данные подключения (file key / channel / порт) см. `C:\programming\AGENTS.md`.
 
-Полезные операции (на сервере, под root):
+Полезные операции (на сервере):
 - Сделать быстрый backup базы перед выкатыванием изменений:
-  - `cp -a /root/cyberspace_server_state/server_state.bin /root/cyberspace_server_state/server_state.bin.bak_$(date +%Y%m%d_%H%M%S)`
+  - `sudo cp -a /home/denshipilov/cyberspace_server_state/server_state.bin /home/denshipilov/cyberspace_server_state/server_state.bin.bak_$(date +%Y%m%d_%H%M%S)`
 - Проверить, что сервер жив и слушает порты:
-  - `ss -lntp | egrep ':(80|443|7600)\\s'`
+  - `sudo ss -lntup | egrep ':(80|443|7600|8080|8443|3002)\\s'`
+  - `sudo ss -lnup | egrep ':7601\\s'`
