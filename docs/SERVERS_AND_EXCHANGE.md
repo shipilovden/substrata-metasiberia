@@ -45,6 +45,11 @@ REG.RU hosting metasiberia.com (ISPmanager):
   - `caddy`: `80/tcp`, `443/tcp`
   - `metasiberia-server.service`: `8080/tcp`, `8443/tcp`, `7600/tcp`, `7601/udp`
   - `therift-hyperfy.service`: `3002/tcp` только локально/за UFW
+- Вспомогательные сервисы:
+  - `metasiberia-bot.service`: `/srv/metasiberia/data/services/metasiberia-bot`, symlink `/opt/metasiberia-bot`, подключается к `127.0.0.1:7600`
+  - `metasiberia-map-progress.timer`: каждые 15 минут запускает `/usr/local/bin/metasiberia_map_maintenance.py sample`
+  - `metasiberia-map-refresh.timer`: ежедневный low-cost refresh через `/usr/local/bin/metasiberia_map_maintenance.py regen`
+  - map maintenance использует `METASIBERIA_BASE_URL=https://127.0.0.1:8443`, так как с самого сервера публичный `https://vr.metasiberia.com` может не открываться через router hairpin/NAT loopback
 - Router/NAT: `192.168.0.1`, правило `SubstrataServer` -> `192.168.0.30` для `80/tcp`, `443/tcp`, `7600/tcp`, `7601/udp`. Если `3002/tcp` ещё есть в NAT роутера, серверный UFW его блокирует.
 - Caddy config: `/etc/caddy/Caddyfile`
 - Server state dir: `/home/denshipilov/cyberspace_server_state` -> `/srv/metasiberia/data/state/cyberspace_server_state.candidate-20260621`
@@ -67,6 +72,8 @@ REG.RU hosting metasiberia.com (ISPmanager):
   - symlink: `/opt/sniper-bot`
   - сервисы: `sniper-bot.service`, `sniper-dryrun.service`
 - `metasiberia-walk-bot` и `openclaw` не нужны, не переносить и не запускать.
+- Старый TheRift `130.49.151.103` после переноса погашен как runtime: Hyperfy удален из PM2, `pm2-root.service` выключен, `caddy.service` выключен. Старый сервер оставлен только как SSH-архив.
+- Снимок старой Hyperfy DB сохранен на новом сервере как архив миграции: `/srv/metasiberia/data/migration-archive/therift-old-20260621/db.sqlite`. Рабочую новую DB им не перетирать без отдельного решения.
 - `riftworld.duckdns.org` устарел и не используется; попытка обновления старым найденным token дала `KO`, нужен актуальный DuckDNS token только если решим возвращать DuckDNS.
 - Доступ: SSH (пароль в `C:\programming\AGENTS_SECRETS.local.md`).
 - Примечание: если SSH ругается на host key mismatch, сначала проверить отпечаток ключа и обновить `known_hosts` осознанно.
@@ -198,6 +205,10 @@ REG.RU hosting metasiberia.com (ISPmanager):
 3. В production-конфиг Metasiberia добавлены `web_http_port=8080` и `web_https_port=8443`.
 4. TheRift Hyperfy `.env` переведен на `https://rift.metasiberia.com/` и `wss://rift.metasiberia.com/ws`.
 5. Прямой внешний доступ `:3002` закрыт через UFW; TheRift public flow должен идти через Caddy/443.
+6. `webserver_fragments` восстановлены с Metasiberia v2 на новом сервере.
+7. `metasiberia-bot.service` перенесен на новый сервер и подключается локально к `127.0.0.1:7600`.
+8. `metasiberia-map-progress.timer` и `metasiberia-map-refresh.timer` перенесены на новый сервер и используют локальный backend `https://127.0.0.1:8443`.
+9. Старые runtime-сервисы Metasiberia v2 и TheRift выключены; старые серверы оставлены как архивы/источники.
 
 ## 9) Данные сайта, пользователи и “база”
 
@@ -209,7 +220,7 @@ REG.RU hosting metasiberia.com (ISPmanager):
 Факт по новому серверу `metasiberia-server`:
 - Public files (CSS/JS/PNG) используются из: `/home/denshipilov/cyberspace_server_state/webserver_public_files`
 - Webclient (wasm/html) используется из: `/home/denshipilov/cyberspace_server_state/webclient`
-- HTML fragments: сейчас `webserver_fragments_dir` в конфиге закомментирован; фактически фрагменты берутся из дефолтного пути (см. `AGENTS.md`), либо из дистрибутива сервера. Если нужно удобно редактировать фрагменты, рекомендуется явно задать `webserver_fragments_dir` в `/root/cyberspace_server_state/substrata_server_config.xml` и держать их рядом со state dir.
+- HTML fragments восстановлены из старого Metasiberia v2 и лежат в `/var/www/cyberspace/webserver_fragments` (10 файлов). Сейчас `webserver_fragments_dir` в конфиге может оставаться закомментированным, если backend использует дефолтный путь; если нужно удобно редактировать фрагменты рядом со state dir, задавать путь явно в `/home/denshipilov/cyberspace_server_state/substrata_server_config.xml`.
 
 ### 9.2 Быстрое редактирование сайта (рекомендуемый workflow)
 Рекомендация: исходники web-части держим в git (в этом репозитории), а на сервер выкатываем синхронизацией.
