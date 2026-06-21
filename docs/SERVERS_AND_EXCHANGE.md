@@ -50,6 +50,12 @@ REG.RU hosting metasiberia.com (ISPmanager):
   - `metasiberia-map-progress.timer`: каждые 15 минут запускает `/usr/local/bin/metasiberia_map_maintenance.py sample`
   - `metasiberia-map-refresh.timer`: ежедневный low-cost refresh через `/usr/local/bin/metasiberia_map_maintenance.py regen`
   - map maintenance использует `METASIBERIA_BASE_URL=https://127.0.0.1:8443`, так как с самого сервера публичный `https://vr.metasiberia.com` может не открываться через router hairpin/NAT loopback
+- Backup:
+  - `metasiberia-backup.timer`: ежедневно запускает `/srv/metasiberia/bin/backup_server_state.sh`
+  - source: `/home/denshipilov/cyberspace_server_state` -> `/srv/metasiberia/data/state/cyberspace_server_state.candidate-20260621`
+  - destination: `/srv/metasiberia/data/backups`
+  - retention: 7 дней
+  - первый полный архив активного state создан 2026-06-21: `metasiberia-server_cyberspace_server_state_20260621_152746.tar.gz` (~20 GiB)
 - Router/NAT: `192.168.0.1`, правило `SubstrataServer` -> `192.168.0.30` для `80/tcp`, `443/tcp`, `7600/tcp`, `7601/udp`. Если `3002/tcp` ещё есть в NAT роутера, серверный UFW его блокирует.
 - Caddy config: `/etc/caddy/Caddyfile`
 - Server state dir: `/home/denshipilov/cyberspace_server_state` -> `/srv/metasiberia/data/state/cyberspace_server_state.candidate-20260621`
@@ -207,7 +213,7 @@ REG.RU hosting metasiberia.com (ISPmanager):
 5. Прямой внешний доступ `:3002` закрыт через UFW; TheRift public flow должен идти через Caddy/443.
 6. `webserver_fragments` восстановлены с Metasiberia v2 на новом сервере.
 7. `metasiberia-bot.service` перенесен на новый сервер и подключается локально к `127.0.0.1:7600`.
-8. `metasiberia-map-progress.timer` и `metasiberia-map-refresh.timer` перенесены на новый сервер и используют локальный backend `https://127.0.0.1:8443`.
+8. `metasiberia-map-progress.timer` и `metasiberia-map-refresh.timer` перенесены на новый сервер и используют локальный backend `https://127.0.0.1:8443`; публичные JSON доступны через встроенный webserver как `/files/map_progress.json` и `/files/map_refresh_status.json`.
 9. Старые runtime-сервисы Metasiberia v2 и TheRift выключены; старые серверы оставлены как архивы/источники.
 
 ## 9) Данные сайта, пользователи и “база”
