@@ -56,6 +56,14 @@ REG.RU hosting metasiberia.com (ISPmanager):
   - destination: `/srv/metasiberia/data/backups`
   - retention: 7 дней
   - первый полный архив активного state создан 2026-06-21: `metasiberia-server_cyberspace_server_state_20260621_152746.tar.gz` (~20 GiB)
+- Service backup / health:
+  - `metasiberia-services-backup.timer`: отдельный ежедневный backup TheRift Hyperfy + Sniper в `/srv/metasiberia/data/backups/services`, retention 14 дней
+  - `metasiberia-healthcheck.timer`: каждые 5 минут проверяет systemd-сервисы, локальные HTTP endpoints, backup age, map JSON, UFW, disk usage и SMART; статус: `/srv/metasiberia/data/health/health.json`
+  - `metasiberia-restore-check.timer`: еженедельный smoke-check восстановления backup; быстрый service-restore check 2026-06-22 прошёл успешно
+  - Windows external pull-backup: `C:\programming\ops\metasiberia_backup_pull.ps1`, destination `E:\MetasiberiaBackups`, scheduled task `MetasiberiaBackupPull` в 12:30 локального времени
+- Laptop/server settings:
+  - `enp2s0f0` статически настроен через netplan на `192.168.0.30/24`, gateway `192.168.0.1`
+  - lid close игнорируется; `sleep.target`, `suspend.target`, `hibernate.target`, `hybrid-sleep.target` замаскированы
 - Router/NAT: `192.168.0.1`, правило `SubstrataServer` -> `192.168.0.30` для `80/tcp`, `443/tcp`, `7600/tcp`, `7601/udp`. Если `3002/tcp` ещё есть в NAT роутера, серверный UFW его блокирует.
 - Caddy config: `/etc/caddy/Caddyfile`
 - Server state dir: `/home/denshipilov/cyberspace_server_state` -> `/srv/metasiberia/data/state/cyberspace_server_state.candidate-20260621`
