@@ -47,9 +47,17 @@ REG.RU hosting metasiberia.com (ISPmanager):
   - `therift-hyperfy.service`: `3002/tcp` только локально/за UFW
 - Вспомогательные сервисы:
   - `metasiberia-bot.service`: `/srv/metasiberia/data/services/metasiberia-bot`, symlink `/opt/metasiberia-bot`, подключается к `127.0.0.1:7600`
+  - `metasiberia-screenshot-gui.service`: headless `gui_client --screenshotslave` под Xvfb, локально слушает `34534` для screenshot commands
+  - `metasiberia-screenshot-bot.service`: подключается к `127.0.0.1:7600`, получает screenshot/map tile requests и отдаёт JPEG обратно в game server
+  - перед стартом `metasiberia-screenshot-bot.service` выполняется `/usr/local/bin/metasiberia_restart_screenshot_gui_and_wait.sh`, который перезапускает GUI slave и ждёт локальный порт `34534`; это важно, потому что GUI slave принимает одно socket-соединение на процесс
+  - runtime для screenshot GUI/bot: `/srv/metasiberia/output/test_builds`; обязательные runtime resources находятся рядом в `/srv/metasiberia/output/test_builds/data`
+  - config screenshot bot: `/home/denshipilov/.glare_technologies/Cyberspace/screenshot_bot_config.xml`
+  - screenshot GUI профиль: `/home/denshipilov/.config/Glare Technologies/Cyberspace.conf` должен содержать QSettings credentials для `127.0.0.1` / `screenshot_bot` и `LoginDialog\auto_login=true`, иначе GUI slave подключится анонимно и bot не будет вести себя как старый screenshot user
+  - для Xvfb/llvmpipe держать в screenshot GUI профиле `setting/MSAA=false`, `setting/bloom=false`, `setting/shadows=false`, `setting/SSAO=false`; тяжёлая графика может подвешивать map tile rendering на software OpenGL
   - `metasiberia-map-progress.timer`: каждые 15 минут запускает `/usr/local/bin/metasiberia_map_maintenance.py sample`
   - `metasiberia-map-refresh.timer`: ежедневный low-cost refresh через `/usr/local/bin/metasiberia_map_maintenance.py regen`
   - map maintenance использует `METASIBERIA_BASE_URL=https://127.0.0.1:8443`, так как с самого сервера публичный `https://vr.metasiberia.com` может не открываться через router hairpin/NAT loopback
+  - `metasiberia-map-progress.timer` и `metasiberia-map-refresh.timer` только проверяют/помечают tiles; фактический рендер тайлов делает `metasiberia-screenshot-bot.service`
 - Backup:
   - `metasiberia-backup.timer`: ежедневно запускает `/srv/metasiberia/bin/backup_server_state.sh`
   - source: `/home/denshipilov/cyberspace_server_state` -> `/srv/metasiberia/data/state/cyberspace_server_state.candidate-20260621`
@@ -64,13 +72,22 @@ REG.RU hosting metasiberia.com (ISPmanager):
 - Laptop/server settings:
   - `enp2s0f0` статически настроен через netplan на `192.168.0.30/24`, gateway `192.168.0.1`
   - lid close игнорируется; `sleep.target`, `suspend.target`, `hibernate.target`, `hybrid-sleep.target` замаскированы
+- GUI/admin:
+  - Cockpit установлен и включён через `cockpit.socket`
+  - LAN URL: `https://192.168.0.30:9090/`
+  - UFW rule: `9090/tcp` разрешён только из `192.168.0.0/24`
 - Router/NAT: `192.168.0.1`, правило `SubstrataServer` -> `192.168.0.30` для `80/tcp`, `443/tcp`, `7600/tcp`, `7601/udp`. Если `3002/tcp` ещё есть в NAT роутера, серверный UFW его блокирует.
 - Caddy config: `/etc/caddy/Caddyfile`
 - Server state dir: `/home/denshipilov/cyberspace_server_state` -> `/srv/metasiberia/data/state/cyberspace_server_state.candidate-20260621`
   - Конфиг: `/home/denshipilov/cyberspace_server_state/substrata_server_config.xml`
   - Credentials: `/home/denshipilov/cyberspace_server_state/substrata_server_credentials.txt`
+  - Web fragments: `/home/denshipilov/cyberspace_server_state/webserver_fragments`
+  - Public web files: `/home/denshipilov/cyberspace_server_state/webserver_public_files`
   - В production-конфиге web ports: `web_http_port=8080`, `web_https_port=8443`
+  - В production-конфиге должен быть `webserver_fragments_dir`, иначе главная админки теряет HTML-фрагмент с логотипом/названием
   - Публичный TLS выпускает и обновляет Caddy; backend TLS Metasiberia остаётся внутренним за Caddy.
+  - Ожидаемое оформление главной: центральный логотип/название, фотоплёнка screenshots над footer, footer внизу страницы.
+  - Telegram screenshot publishing: Telegram credentials присутствуют в server credentials; на 2026-06-22 DNS давал недоступный Telegram IP, поэтому в `/etc/hosts` добавлен override `api.telegram.org -> 149.154.167.220`. `getMe/getChat` проходят для `metasiberia_bot` и канала `metasiberia_channel`.
 
 ### 1.2 TheRift / Hyperfy / Sniper
 - Старый IP TheRift: `130.49.151.103`.
@@ -221,8 +238,11 @@ REG.RU hosting metasiberia.com (ISPmanager):
 5. Прямой внешний доступ `:3002` закрыт через UFW; TheRift public flow должен идти через Caddy/443.
 6. `webserver_fragments` восстановлены с Metasiberia v2 на новом сервере.
 7. `metasiberia-bot.service` перенесен на новый сервер и подключается локально к `127.0.0.1:7600`.
-8. `metasiberia-map-progress.timer` и `metasiberia-map-refresh.timer` перенесены на новый сервер и используют локальный backend `https://127.0.0.1:8443`; публичные JSON доступны через встроенный webserver как `/files/map_progress.json` и `/files/map_refresh_status.json`.
-9. Старые runtime-сервисы Metasiberia v2 и TheRift выключены; старые серверы оставлены как архивы/источники.
+8. `metasiberia-screenshot-gui.service` и `metasiberia-screenshot-bot.service` подняты на новом сервере; бот успешно рендерит map tiles и обычные screenshots через headless GUI.
+9. `metasiberia-map-progress.timer` и `metasiberia-map-refresh.timer` перенесены на новый сервер и используют локальный backend `https://127.0.0.1:8443`; публичные JSON доступны через встроенный webserver как `/files/map_progress.json` и `/files/map_refresh_status.json`.
+10. Главная `https://vr.metasiberia.com/` проверена: центральный логотип/название, фотоплёнка над footer, footer внизу; `/map` отдаёт готовые JPEG tiles через `/tile`.
+11. Telegram credentials найдены и сохранены на новом сервере; `api.telegram.org` закреплён в `/etc/hosts` на рабочий IP `149.154.167.220`, `getMe/getChat` проверены без отправки тестового сообщения.
+12. Старые runtime-сервисы Metasiberia v2 и TheRift выключены; старые серверы оставлены как архивы/источники.
 
 ## 9) Данные сайта, пользователи и “база”
 
