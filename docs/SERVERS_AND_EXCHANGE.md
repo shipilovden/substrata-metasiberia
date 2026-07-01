@@ -58,17 +58,20 @@ REG.RU hosting metasiberia.com (ISPmanager):
   - `metasiberia-map-refresh.timer`: ежедневный low-cost refresh через `/usr/local/bin/metasiberia_map_maintenance.py regen`
   - map maintenance использует `METASIBERIA_BASE_URL=https://127.0.0.1:8443`, так как с самого сервера публичный `https://vr.metasiberia.com` может не открываться через router hairpin/NAT loopback
   - `metasiberia-map-progress.timer` и `metasiberia-map-refresh.timer` только проверяют/помечают tiles; фактический рендер тайлов делает `metasiberia-screenshot-bot.service`
+  - real-map ground/minimap tiles мира `sub://vr.metasiberia.com/map` идут через `/osm_tile/<namespace>/<z>/<x>/<y>.png`; актуальный namespace клиента и webserver default — `metasiberia_raster_v4`, чтобы не переиспользовать старый кэш с `OpenStreetMap 403 Access blocked`
 - Backup:
   - `metasiberia-backup.timer`: ежедневно запускает `/srv/metasiberia/bin/backup_server_state.sh`
   - source: `/home/denshipilov/cyberspace_server_state` -> `/srv/metasiberia/data/state/cyberspace_server_state.candidate-20260621`
   - destination: `/srv/metasiberia/data/backups`
   - retention: 7 дней
   - первый полный архив активного state создан 2026-06-21: `metasiberia-server_cyberspace_server_state_20260621_152746.tar.gz` (~20 GiB)
+  - state backup включает весь активный каталог state, а не только `server_state.bin`; архивы около 20 GiB допустимы после миграции, но 35+ GiB считать аномалией и проверять `du -sh`/состав архива перед внешним pull
 - Service backup / health:
   - `metasiberia-services-backup.timer`: отдельный ежедневный backup TheRift Hyperfy + Sniper в `/srv/metasiberia/data/backups/services`, retention 14 дней
   - `metasiberia-healthcheck.timer`: каждые 5 минут проверяет systemd-сервисы, локальные HTTP endpoints, backup age, map JSON, UFW, disk usage и SMART; статус: `/srv/metasiberia/data/health/health.json`
   - `metasiberia-restore-check.timer`: еженедельный smoke-check восстановления backup; полный smoke-check service+state archive 2026-06-22 прошёл успешно
   - Windows external pull-backup: `C:\programming\substrata\scripts\metasiberia_backup_pull.ps1`, destination `E:\MetasiberiaBackups`, scheduled task `MetasiberiaBackupPull` в 12:30 локального времени
+  - Windows pull-скрипт имеет предохранитель `MaxStateArchiveGB` и по умолчанию не качает state-архивы больше 35 GiB без ручной проверки
 - Laptop/server settings:
   - `enp2s0f0` статически настроен через netplan на `192.168.0.30/24`, gateway `192.168.0.1`
   - lid close игнорируется; `sleep.target`, `suspend.target`, `hibernate.target`, `hybrid-sleep.target` замаскированы
@@ -88,6 +91,71 @@ REG.RU hosting metasiberia.com (ISPmanager):
   - Публичный TLS выпускает и обновляет Caddy; backend TLS Metasiberia остаётся внутренним за Caddy.
   - Ожидаемое оформление главной: центральный логотип/название, фотоплёнка screenshots над footer, footer внизу страницы.
   - Telegram screenshot publishing: Telegram credentials присутствуют в server credentials; на 2026-06-22 DNS давал недоступный Telegram IP, поэтому в `/etc/hosts` добавлен override `api.telegram.org -> 149.154.167.220`. `getMe/getChat` проходят для `metasiberia_bot` и канала `metasiberia_channel`.
+
+#### Быстрая сборка и выкладка C++ server на `metasiberia-server`
+
+Обычный быстрый путь не требует пересборки всего проекта и раньше работал именно так:
+
+```bash
+ssh metasiberia-server
+cd /srv/metasiberia/src/sub-metasiberia
+cmake --build /srv/metasiberia/build/master --target server -j 4
+ts=$(date +%Y%m%d_%H%M%S)
+rel=/srv/metasiberia/releases/master-<short-commit-or-note>-$ts
+mkdir -p "$rel"
+cp -a /srv/metasiberia/output/test_builds/server "$rel/server"
+chmod 755 "$rel/server"
+ln -sfn "$rel" /srv/metasiberia/releases/current.next
+ln -sfn "$rel" /srv/metasiberia/releases/current
+sudo systemctl restart metasiberia-server.service
+```
+
+После рестарта проверять:
+
+```bash
+systemctl is-active metasiberia-server.service
+ss -ltn | grep ':7600'
+ss -ltn | grep ':8080'
+ss -ltn | grep ':8443'
+curl -k -sS --max-time 10 https://127.0.0.1:8443/world/map | head
+```
+
+Важно: `ExecStart` unit-файла смотрит на `/srv/metasiberia/releases/current/server`, а рабочая директория сервиса — `/srv/metasiberia/src/sub-metasiberia`. Не копировать Windows `server.exe`: production binary всегда Linux ELF `server`.
+
+Рабочий режим проекта: изменения часто идут одновременно в Qt-клиент, C++ game server, webserver/resource pipeline, карту и чат. После правок протокола, вложений, личных сообщений, карты или ресурсообмена проверять оба конца: локальную Windows Qt-сборку клиента и Linux production/server build path. Не считать баг карты или чата “только UI”, пока не проверены protocol messages, resource upload/download, webserver endpoints и systemd-сервисы.
+
+Если MiniMap показывает “Загрузка карты...”, проверять отдельно:
+
+```bash
+curl -k -I https://127.0.0.1:8443/osm_tile/metasiberia_raster_v4/6/37/22.png
+systemctl is-active metasiberia-screenshot-gui.service metasiberia-screenshot-bot.service
+journalctl -u metasiberia-server.service --since '20 minutes ago' | grep -Ei 'QueryMapTiles|osm|tile|resource|error|exception'
+```
+
+`/osm_tile/...` должен отдавать PNG 200 через встроенный webserver. `metasiberia-screenshot-bot.service` нужен для render/map-tile screenshots и обновления server-world tiles; отключённый screenshot-bot не должен ломать прямой `/osm_tile`, но может оставлять карту/тайлы неактуальными.
+
+Перед выкладкой server-бинаря проверять размер и читаемость state:
+
+```bash
+ls -lh /home/denshipilov/cyberspace_server_state/server_state.bin
+systemctl show metasiberia-server.service -p ActiveState -p SubState -p NRestarts --no-pager
+```
+
+Если `server_state.bin` уже аномально большой или сервис в цикле `Read past end of file`, это не проблема rebuild/restart. Сначала надо остановить restart-loop и восстановить state из последнего рабочего snapshot/backup, сохранив битый файл под `server_state.bin.bad-*` для анализа.
+
+Инцидент 2026-06-29/30:
+- после попытки выкладки chat attachment server-патча обнаружен уже раздувшийся/битый state;
+- сохранены проблемные файлы:
+  - `/home/denshipilov/cyberspace_server_state/server_state.bin.bad-after-chatdeploy-20260629_134610` (~101 GiB);
+  - `/home/denshipilov/cyberspace_server_state/server_state.bin.bad-after-new-binary-corrupt-20260629_135745` (~88 MiB);
+  - `/home/denshipilov/cyberspace_server_state/server_state.bin.bad-after-save-20260627_034900` (~77 MiB);
+- рабочий fallback snapshot:
+  - `/home/denshipilov/cyberspace_server_state/server_state.bin.bak_20260627_065809_before_map_world_fix` (~84 MiB);
+- на 2026-06-30 00:04 UTC production был в restart-loop: `Read past end of file`, `NRestarts=4224`, активный `server_state.bin` ~1.2 GiB;
+- восстановлено 2026-06-30 00:08 UTC из `/home/denshipilov/cyberspace_server_state/server_state.bin.bak_20260627_065809_before_map_world_fix`; битый файл сохранён как `/home/denshipilov/cyberspace_server_state/server_state.bin.bad-restore-20260630_000456`; после восстановления `metasiberia-server.service`, `metasiberia-bot.service`, `metasiberia-screenshot-gui.service`, `metasiberia-screenshot-bot.service`, `caddy.service` были `active`, порты `7600/8080/8443` слушали, `server_state.bin` был ~89 MiB.
+- на 2026-06-30 01:10 UTC после reboot production снова ушёл в restart-loop с `Read past end of file`; активный state (~133 MiB) сохранён как `/home/denshipilov/cyberspace_server_state/server_state.bin.bad-restore-noconnect-20260630_011123`;
+- восстановлено 2026-06-30 01:13 UTC из того же fallback snapshot; перед стартом остановлены `metasiberia-map-progress.timer`, `metasiberia-map-refresh.timer`, `metasiberia-screenshot-bot.service`, чтобы screenshot/map writers не спровоцировали повторную порчу state до отдельной диагностики. После восстановления `metasiberia-server.service`, `metasiberia-bot.service`, `caddy.service` `active`, порты `7600/8080/8443` слушают, проверка с Windows до `vr.metasiberia.com:7600` проходит.
+- 2026-06-30 01:57 UTC `metasiberia-screenshot-bot.service` включён обратно точечно для восстановления server-world MiniMap tiles; bot подключился к `127.0.0.1:7600`, получает `map tile screenshot request`, GUI slave делает screenshots, сервер сохраняет `map_tile_screenshot_*.jpg` как resources. `metasiberia-map-progress.timer` и `metasiberia-map-refresh.timer` пока оставлены выключенными до отдельной проверки admin-token/map-maintenance, чтобы не плодить лишние state changes.
 
 ### 1.2 TheRift / Hyperfy / Sniper
 - Старый IP TheRift: `130.49.151.103`.
