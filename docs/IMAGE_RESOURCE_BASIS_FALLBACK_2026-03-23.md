@@ -2,6 +2,8 @@
 
 Дата: 2026-03-23
 
+> **Историческая заметка (проверено 2026-07-10):** описанный host-specific workaround удалён. Текущий клиент не отключает Basis по имени Metasiberia-host; выбор зависит от server capability и наличия resources. Не возвращать этот workaround без проверки client/server resource pipeline, desktop и XR.
+
 ## Что произошло
 
 На `vr.metasiberia.com` и связанных Metasiberia-host'ах клиент получал capability-флаг поддержки basis-текстур, но в runtime-логе фиксировались массовые ответы сервера вида:

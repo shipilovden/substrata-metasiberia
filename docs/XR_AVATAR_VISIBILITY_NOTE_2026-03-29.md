@@ -1,4 +1,6 @@
-## XR Avatar Visibility Note
+# XR Avatar Visibility Note
+
+> **Superseded (checked 2026-07-10):** this incident note is preserved as history. Current protected behaviour hides the local avatar/model while first-person XR is active and keeps it visible in normal desktop mode. Do not reapply the old recommendation to remove the XR visibility guard; use the current XR plan and `XR_POSE_TRACE_ANALYSIS.md`.
 
 Date: 2026-03-29
 

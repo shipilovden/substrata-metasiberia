@@ -1,5 +1,7 @@
 # Map World OSM Ground Layer (2026-04-22)
 
+> **Superseded implementation note (checked 2026-07-10):** the direct `tile.openstreetmap.org` flow described below is historical. The current client requests the server endpoint `/osm_tile/metasiberia_raster_v4/<z>/<x>/<y>.png`; the embedded webserver owns upstream retrieval and cache. The map surface remains in world-space Mercator coordinates, and MiniMap zoom or avatar altitude must not rescale the physical layer. See `gui_client/MapWorldUtils.h` and `webserver/WebServerRequestHandler.cpp`.
+
 Scope: special world `sub://vr.metasiberia.com/map`
 
 ## Goal

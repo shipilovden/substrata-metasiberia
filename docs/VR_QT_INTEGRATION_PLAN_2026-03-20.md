@@ -3,6 +3,8 @@
 Дата: 2026-03-20  
 Область: Qt-native клиент (`USE_SDL=OFF`), без WebXR.
 
+> **Текущий статус по коду на 2026-07-10:** native OpenXR session/swapchains/projection submit, companion mirror, diagnostics/pose trace, teleport и `move2d` smooth locomotion реализованы. `XR_SUPPORT` остаётся default `OFF`, SDK внешний, а отдельные ранние формулировки этапов ниже сохранены как история плана и могут противоречить поздним status blocks.
+
 ## 1. Цель
 
 Интегрировать desktop VR в существующий Qt-клиент Metasiberia так, чтобы:

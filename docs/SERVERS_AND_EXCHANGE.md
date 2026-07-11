@@ -3,6 +3,8 @@
 Документ описывает текущую инфраструктуру после переезда на новый сервер: домены, Caddy reverse proxy/TLS, Metasiberia C++ backend, TheRift Hyperfy, отправку писем и минимальные улучшения аутентификации.
 Секреты (пароли/токены/ключи) здесь не храним: см. `C:\programming\AGENTS_SECRETS.local.md`.
 
+> **Статус проверки 2026-07-10:** архитектура и repo paths сверены с кодом и документацией. Состояния services, DNS, symlink targets и датированные incident snapshots не проверялись на production в рамках documentation-only аудита; перед любой операцией их нужно подтвердить заново. Никакая команда из этого файла сама по себе не является разрешением на deploy/restart/restore.
+
 ## 1) Узлы и роли
 
 ## 1.0 Публичные данные доступа (без секретов)
@@ -101,7 +103,8 @@ ssh metasiberia-server
 cd /srv/metasiberia/src/sub-metasiberia
 cmake --build /srv/metasiberia/build/master --target server -j 4
 ts=$(date +%Y%m%d_%H%M%S)
-rel=/srv/metasiberia/releases/master-<short-commit-or-note>-$ts
+short=$(git rev-parse --short HEAD)
+rel=/srv/metasiberia/releases/master-$short-$ts
 mkdir -p "$rel"
 cp -a /srv/metasiberia/output/test_builds/server "$rel/server"
 chmod 755 "$rel/server"
@@ -219,8 +222,9 @@ systemctl show metasiberia-server.service -p ActiveState -p SubState -p NRestart
 
 В коде Metasiberia также есть поддержка http-01 challenge (файлы вида `/.well-known/acme-challenge/<token>`), но после перехода на Caddy это fallback/legacy-возможность, а не основной production-путь.
 
-### 3.1 Настройка webroot для ACME
-В `/root/cyberspace_server_state/substrata_server_config.xml` нужно задать:
+### 3.1 Legacy fallback: webroot для ACME
+
+Основной production TLS обслуживает Caddy, поэтому этот раздел нужен только при явном возврате к встроенному http-01 fallback. В active `/home/denshipilov/cyberspace_server_state/substrata_server_config.xml` тогда задаётся:
 - `letsencrypt_webroot_dir` (директория webroot)
 
 Ожидаемый путь файла challenge:
@@ -229,7 +233,7 @@ systemctl show metasiberia-server.service -p ActiveState -p SubState -p NRestart
 Пример (концептуально):
 ```xml
 <config>
-  <letsencrypt_webroot_dir>/root/cyberspace_server_state/letsencrypt_webroot</letsencrypt_webroot_dir>
+  <letsencrypt_webroot_dir>/home/denshipilov/cyberspace_server_state/letsencrypt_webroot</letsencrypt_webroot_dir>
 </config>
 ```
 
@@ -287,9 +291,9 @@ systemctl show metasiberia-server.service -p ActiveState -p SubState -p NRestart
 
 Это снижает риск CSRF и утечек cookie, при этом не ломает dev HTTP-сценарии.
 
-## 7) Обмен между серверами (текущее состояние и намерение)
+## 7) Обмен между серверами (документированный снимок и намерение)
 
-Текущее (факт):
+Снимок, записанный 2026-06-21/22 и не проверенный live 2026-07-10; перед использованием требуется read-only readback:
 - Основная логика мира/аккаунтов/веба живет на новом основном сервере `metasiberia-server` (`192.168.0.30` LAN / `87.103.196.229` public).
 - TheRift Hyperfy и Sniper физически перенесены на тот же новый сервер, но остаются отдельными сервисами и каталогами данных.
 - Схема обмена/репликации данных между Substrata и Hyperfy/Sniper не зафиксирована в коде и должна быть явно описана перед внедрением (чтобы не сломать совместимость и не получить рассинхрон).
@@ -298,7 +302,10 @@ systemctl show metasiberia-server.service -p ActiveState -p SubState -p NRestart
 - Пока нет формализованного протокола/репликации, считать сервера независимыми.
 - Если понадобится обмен (например, общие аккаунты/SSO/общий каталог worlds), нужно проектировать как отдельный слой с явными контрактами и документацией (и с учетом `SERVER_PROTOCOL.md`).
 
-## 8) Что уже сделано и что держать в голове
+## 8) Что было зафиксировано как сделанное
+
+Следующий список — operational snapshot на 2026-06-21/22, дополненный датированными incident notes ниже/выше. Он не является live health report на 2026-07-10.
+
 1. DNS для `vr.metasiberia.com`, `www.vr.metasiberia.com` и `rift.metasiberia.com` указывает на `87.103.196.229`.
 2. Caddy запущен и включен в автозагрузку; `metasiberia-server.service` больше не занимает публичные `80/443`.
 3. В production-конфиг Metasiberia добавлены `web_http_port=8080` и `web_https_port=8443`.
@@ -319,27 +326,25 @@ systemctl show metasiberia-server.service -p ActiveState -p SubState -p NRestart
 Это не “отдельный сайт”, а часть сервера: страницы собираются из C++ обработчиков + этих шаблонов/фрагментов.
 
 ### 9.1 Где лежат данные сайта на основном сервере
-Факт по новому серверу `metasiberia-server`:
-- Public files (CSS/JS/PNG) используются из: `/home/denshipilov/cyberspace_server_state/webserver_public_files`
-- Webclient (wasm/html) используется из: `/home/denshipilov/cyberspace_server_state/webclient`
-- HTML fragments восстановлены из старого Metasiberia v2 и лежат в `/var/www/cyberspace/webserver_fragments` (10 файлов). Сейчас `webserver_fragments_dir` в конфиге может оставаться закомментированным, если backend использует дефолтный путь; если нужно удобно редактировать фрагменты рядом со state dir, задавать путь явно в `/home/denshipilov/cyberspace_server_state/substrata_server_config.xml`.
+По operational snapshot 2026-06-21/22, не перепроверенному live 2026-07-10:
+- Public files (CSS/JS/PNG) были настроены из: `/home/denshipilov/cyberspace_server_state/webserver_public_files`
+- Webclient (wasm/html) был настроен из: `/home/denshipilov/cyberspace_server_state/webclient`
+- HTML fragments были настроены из: `/home/denshipilov/cyberspace_server_state/webserver_fragments`.
+- `/home/denshipilov/cyberspace_server_state` был записан как active state symlink; фактический target и config readback проверять непосредственно перед state/backup/web operation.
+- Production config должен явно задавать `webserver_fragments_dir`, `webserver_public_files_dir` и `webclient_dir`. Linux defaults в коде указывают на `/var/www/cyberspace/...` и не доказывают фактический production path.
 
-### 9.2 Быстрое редактирование сайта (рекомендуемый workflow)
-Рекомендация: исходники web-части держим в git (в этом репозитории), а на сервер выкатываем синхронизацией.
-Добавлен скрипт деплоя статики/фрагментов на основной сервер:
-- `scripts/deploy_web_to_metasiberia_v2.ps1`
+### 9.2 Редактирование сайта и historical scripts
+Исходники web-части хранятся в git в этом репозитории. Способ синхронизации с новым production server должен быть подтверждён отдельно перед каждой выкладкой.
 
-Перед первой выкладкой (чтобы ничего не потерять), можно снять snapshot текущих серверных директорий:
-- `scripts/snapshot_web_from_metasiberia_v2.ps1`
+Скрипты `scripts/deploy_web_to_metasiberia_v2.ps1` и `scripts/snapshot_web_from_metasiberia_v2.ps1` содержат paths/assumptions старого Metasiberia v2 и сохраняются только как historical helpers. Они не являются текущим deployment workflow нового сервера.
 
 Важно:
-- На сервере сейчас `webserver_public_files_dir` и `webclient_dir` уже переопределены в `/root/cyberspace_server_state/...` (через `substrata_server_config.xml`).
-- `webserver_fragments_dir` пока НЕ переопределен, значит на Linux по умолчанию используется `/var/www/cyberspace/webserver_fragments`.
-- На Linux сервер использует inotify-watcher. Поэтому выкладка должна обновлять содержимое директорий *in-place* (без `mv`/rename самой директории), иначе watcher “теряет” обновления. Скрипт деплоя учитывает это (rsync).
+- Текущие production overrides должны указывать в active `/home/denshipilov/cyberspace_server_state/...`, а не в старый `/root/cyberspace_server_state/...`.
+- На Linux сервер использует inotify-watcher. Поэтому будущая подтверждённая синхронизация должна обновлять содержимое директорий *in-place* (без `mv`/rename самой директории), иначе watcher “теряет” обновления. Historical v2 script использовал для этого `rsync`, но от этого не становится current production workflow.
 
 ### 9.3 Пользователи и “БД” (как сейчас устроено)
 Сервер хранит состояние (включая пользователей, парсели, сессии и т.п.) в файле базы:
-- `/root/cyberspace_server_state/server_state.bin`
+- `/home/denshipilov/cyberspace_server_state/server_state.bin`
 
 Суперадмин (god user):
 - `UserID == 0` (`shared/UserID.h`).
@@ -359,7 +364,7 @@ Figma MCP (Talk To Figma MCP) — это локальный dev-инструме
 Скрипт запуска локального сокет-сервера:
 - `scripts/start_figma_mcp_socket.ps1`
 
-Данные подключения (file key / channel / порт) см. `C:\programming\AGENTS.md`.
+File key хранится в `docs/FIGMA_SITE_SYNC.md`; актуальный channel всегда брать из UI подключённого Figma plugin. Channel не фиксируется в `AGENTS.md` и не переиспользуется после reconnect.
 
 Полезные операции (на сервере):
 - Сделать быстрый backup базы перед выкатыванием изменений:

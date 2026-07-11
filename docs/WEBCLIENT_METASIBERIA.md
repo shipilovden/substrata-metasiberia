@@ -1,5 +1,7 @@
 # Metasiberia WebClient: Build, Deploy, Android Readiness
 
+> **Статус проверки 2026-07-10:** описание Emscripten source/build flow остаётся полезным. Разделы про `Metasiberia v2`, `/root/cyberspace_server_state` и `scripts/deploy_web_to_metasiberia_v2.ps1` являются историческими и не должны использоваться для текущего production. Актуальную границу сборки и опасные команды см. в [`codex/build-and-test.md`](codex/build-and-test.md) и [`SERVERS_AND_EXCHANGE.md`](SERVERS_AND_EXCHANGE.md).
+
 ## 1. Что где лежит
 
 - HTML-шаблон webclient: `webclient/webclient.html`
@@ -30,7 +32,9 @@
   - `$CYBERSPACE_OUTPUT/data/resources/buttons`
   - `$CYBERSPACE_OUTPUT/test_builds/data/resources/buttons`
 
-## 4. Деплой на Metasiberia v2
+## 4. Исторический деплой на Metasiberia v2
+
+Ниже сохранён старый workflow для аудита истории. Он не является инструкцией для нового основного сервера.
 
 Используется:
 - `scripts/deploy_web_to_metasiberia_v2.ps1`

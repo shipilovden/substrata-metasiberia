@@ -7,7 +7,7 @@
 [![Releases](https://img.shields.io/badge/releases-GitHub-181717?logo=github&logoColor=white&style=flat-square)](https://github.com/shipilovden/sub-metasiberia/releases)
 [![Signup](https://img.shields.io/website?url=https%3A%2F%2Fvr.metasiberia.com%2Fsignup&up_message=online&down_message=offline&label=signup&logo=googlechrome&style=flat-square)](https://vr.metasiberia.com/signup)
 [![WebClient](https://img.shields.io/website?url=https%3A%2F%2Fvr.metasiberia.com%2Fwebclient&up_message=online&down_message=offline&label=webclient&logo=googlechrome&style=flat-square)](https://vr.metasiberia.com/webclient)
-[![Admin](https://img.shields.io/website?url=https%3A%2F%2Fvr.metasiberia.com%2F&up_message=online&down_message=offline&label=admin&logo=googlechrome&style=flat-square)](https://vr.metasiberia.com/)
+[![Admin](https://img.shields.io/website?url=https%3A%2F%2Fvr.metasiberia.com%2Fadmin&up_message=online&down_message=offline&label=admin&logo=googlechrome&style=flat-square)](https://vr.metasiberia.com/admin)
 [![Website](https://img.shields.io/website?url=https%3A%2F%2Fmetasiberia.com%2F&up_message=online&down_message=offline&label=website&logo=googlechrome&style=flat-square)](https://metasiberia.com/)
 [![Telegram](https://img.shields.io/badge/Telegram-metasiberia__channel-26A5E4?logo=telegram&logoColor=white&style=flat-square)](https://t.me/metasiberia_channel)
 [![VK](https://img.shields.io/badge/VK-metasiberia__official-0077FF?logo=vk&logoColor=white&style=flat-square)](https://vk.com/metasiberia_official)

@@ -1,5 +1,7 @@
 # XR Local Avatar Visibility Fix
 
+> **Superseded (checked 2026-07-10):** this document records an earlier incident; historical line anchors were replaced with portable file-level links. Current behaviour intentionally hides the local model in active first-person XR while preserving desktop visibility. Do not restore the historical guard removal as a fix.
+
 Дата: 2026-03-27
 
 ## Симптом
@@ -45,14 +47,11 @@
 
 В `v0.0.19` automatic XR startup устроен не как "жёстко проверить USB-кабель", а как "попробовать поднять OpenXR для текущего runtime и, если это удалось, стартовать в XR".
 
-Связанные места:
+Связанные файлы (historical line anchors удалены, поскольку текущий код сдвинулся):
 
-- [GUIClient.cpp](C:/programming/substrata/gui_client/GUIClient.cpp#L150)
-- [GUIClient.cpp](C:/programming/substrata/gui_client/GUIClient.cpp#L1044)
-- [GUIClient.cpp](C:/programming/substrata/gui_client/GUIClient.cpp#L1056)
-- [GUIClient.cpp](C:/programming/substrata/gui_client/GUIClient.cpp#L1074)
-- [MainOptionsDialog.cpp](C:/programming/substrata/gui_client/MainOptionsDialog.cpp#L172)
-- [MainOptionsDialog.h](C:/programming/substrata/gui_client/MainOptionsDialog.h#L48)
+- [GUIClient.cpp](../gui_client/GUIClient.cpp)
+- [MainOptionsDialog.cpp](../gui_client/MainOptionsDialog.cpp)
+- [MainOptionsDialog.h](../gui_client/MainOptionsDialog.h)
 
 То есть семантика режима `Automatic` такая:
 
@@ -79,12 +78,7 @@
 
 Именно это и давало практический симптом "успел появиться и сразу исчез".
 
-Проблемные места до фикса были в тех же областях, где сейчас стоит исправленная логика:
-
-- [GUIClient.cpp](C:/programming/substrata/gui_client/GUIClient.cpp#L5738)
-- [GUIClient.cpp](C:/programming/substrata/gui_client/GUIClient.cpp#L5739)
-- [GUIClient.cpp](C:/programming/substrata/gui_client/GUIClient.cpp#L9461)
-- [GUIClient.cpp](C:/programming/substrata/gui_client/GUIClient.cpp#L9485)
+Проблемные места до фикса были в тех же XR/avatar областях [GUIClient.cpp](../gui_client/GUIClient.cpp), где сейчас стоит исправленная логика.
 
 Смысл ошибки:
 
@@ -118,12 +112,7 @@
    - Metasiberia basis fallback path;
    - world object visibility / load distance logic.
 
-Связанные места после фикса:
-
-- [GUIClient.cpp](C:/programming/substrata/gui_client/GUIClient.cpp#L5738)
-- [GUIClient.cpp](C:/programming/substrata/gui_client/GUIClient.cpp#L5739)
-- [GUIClient.cpp](C:/programming/substrata/gui_client/GUIClient.cpp#L9461)
-- [GUIClient.cpp](C:/programming/substrata/gui_client/GUIClient.cpp#L9485)
+Связанные XR/avatar места после фикса находятся в [GUIClient.cpp](../gui_client/GUIClient.cpp).
 
 ## Почему это исправление безопаснее предыдущих попыток
 

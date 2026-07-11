@@ -1,12 +1,14 @@
 # Figma: Синхронизация Макетов Сайта Metasiberia
 
-Цель: чтобы в Figma-файле **Metasiberia** было отражено текущее состояние веб-сайта (root, auth, account, admin и т.д.), и далее дизайн в Figma стал источником требований для правок `webserver_public_files/` и `webserver_fragments/`.
+Цель: чтобы в Figma-файле **Metasiberia** было отражено текущее состояние server site/портала `vr.metasiberia.com` (root, auth, account, admin и т.д.), и далее дизайн в Figma стал источником требований для правок `webserver_public_files/` и `webserver_fragments/`.
 
 Важно: на 2026-02-15 MCP-интеграция Figma может упираться в лимит вызовов. Если автоматическое создание слоёв недоступно, используем один из fallback-подходов ниже.
 
 ## Источник истины
-- Production сайт: `https://vr.metasiberia.com/`
+- Production server site: `https://vr.metasiberia.com/`
 - Сервер: `metasiberia-server`, public IP `87.103.196.229`, LAN IP `192.168.0.30` (обновлено 2026-06-21)
+
+Публичный маркетинговый сайт `https://metasiberia.com/` размещён отдельно; его исходники в этом репозитории не подтверждены. Не смешивать его макеты с C++ server site и отдельными `/admin*` routes.
 
 ## Что должно быть в Figma (минимум)
 Одна страница Figma = один “раздел” сайта. На каждом фрейме сверху подпись URL.
@@ -61,10 +63,10 @@ Admin:
 Минусы: сначала это референс-скриншоты (дальше поверх них собираем живые компоненты и дизайн-систему).
 
 ### Вариант A3 (через TalkToFigma MCP, без отдельного плагина-импортера)
-Если у тебя уже настроен TalkToFigma (socket на `3055`) и есть channel (например `0xfhnf3f`), можно импортировать PNG прямо через него.
+Если настроен TalkToFigma (socket на `3055`) и есть актуальный channel из интерфейса плагина, можно импортировать PNG прямо через него. Channel меняется после переподключения; старые значения не переиспользовать.
 
-1. Убедиться, что запущен сокет-сервер:
-   - `bunx cursor-talk-to-figma-socket`
+1. Запустить локальный socket helper:
+   - `powershell -ExecutionPolicy Bypass -File C:\programming\substrata\scripts\start_figma_mcp_socket.ps1`
 2. В Figma открыть файл, куда импортируем (например Metasiberia-Lab) и подключить TalkToFigma плагин к каналу.
    - Канал берём из строки в плагине: `Connected to server in channel: XXXXXXXX`
 3. Снять скриншоты сайта в папку `out_...`:
@@ -72,7 +74,7 @@ Admin:
 4. Импортировать в открытый Figma-файл:
    - `powershell -ExecutionPolicy Bypass -File C:\programming\substrata\scripts\import_site_capture_to_figma_via_talk_to_figma.ps1 -Channel <CHANNEL_FROM_PLUGIN> -InDir <out_dir>`
 
-Примечание: для A3 я расширил локальный Figma dev-плагин TalkToFigma командой `create_image_rect` (в `_tmp_talk_to_figma/src/cursor_mcp_plugin/code.js`). После обновления файла может потребоваться перезагрузить/переимпортировать dev plugin в Figma.
+Примечание: исторически A3 использовал локально изменённый TalkToFigma dev-plugin с командой `create_image_rect`. Этот временный source tree не хранится в репозитории; перед повторением workflow нужно отдельно подтвердить установленную версию плагина.
 
 ### Вариант B (быстрый fallback): фреймы со скриншотами + поверх “обводка”
 1. Сделать скриншоты ключевых страниц (желательно full-page).
