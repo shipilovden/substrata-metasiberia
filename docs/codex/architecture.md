@@ -44,7 +44,7 @@
 - SDL entry: `SDLClient.cpp::main()`, `USE_SDL=ON`; Emscripten использует этот/common path.
 - `GUIClient` владеет общей world/network/resource/render orchestration.
 - `MainWindow` — Qt shell, lifetime/actions/docks; `SDLUIInterface` — альтернативный UI boundary.
-- Editors работают с `WorldObject`, materials, parcels, world settings, bots, gear, shaders, particles и WIP scientific objects.
+- Editors работают с `WorldObject`, materials, parcels, world settings, bots, gear, shaders, particles, WIP scientific objects и WIP procedural tree objects.
 - CEF optional; OpenXR native-only и default `OFF`.
 
 ## Scientific Object Editor (WIP)
@@ -84,6 +84,18 @@
 - Scientific marker сейчас распознаёт Qt WIP; server/shared не интерпретируют schema, а SDL/Web UI и специальные tests пока не реализованы. Это текущий статус, не запрет будущей поддержки.
 
 До исправления этих границ нельзя объявлять universal scientific import, shared scientific model или production-ready AI/simulation.
+
+## Procedural Tree Editor (WIP)
+
+Текущая интеграция основана на Qt и переиспользует generic object contract:
+
+```text
+WorldObject::ObjectType_Generic
+  content = "metasiberia_tree_object_v1\n" + JSON seed/TreeParams
+  model_url = generated checksum-addressed .bmesh derivative
+```
+
+`TreeParams`, `TreePresets`, `TreeSerialization`, `TreeGenerator`, `TreeObject` и `TreeEditorPanel` находятся в `gui_client/`. Add Tree создаёт Oak preset с random seed, генерирует OBJ, конвертирует его в `.bmesh` resource URL перед `CreateObject`, а editor пересобирает mesh через обычный `MODEL_URL_CHANGED`/`objectEdited` path. Server сохраняет tree JSON как непрозрачный `WorldObject::content`; отдельного shared/server tree type, protocol message, runtime forest system, GLB export, wind physics и SDL/Web parity пока нет.
 
 ## Client-server protocol
 

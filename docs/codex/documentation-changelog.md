@@ -4,6 +4,14 @@
 
 Формат записи: дата/фаза -> path/группа -> тип -> изменение -> evidence/причина.
 
+## 2026-07-13 — Procedural Tree Editor foundation
+
+| Область | Изменение | Проверка |
+| --- | --- | --- |
+| `gui_client/Tree*.{h,cpp}` | добавлен C++ каркас procedural tree: params, presets, serialization marker, deterministic generator, object adapter and Qt editor panel | `cmake --build C:\programming\substrata_build_qt --config RelWithDebInfo --target gui_client -j 8` exit 0; `--tree_generator_smoke` ok=true |
+| `MainWindow.*`, `gui_client/CMakeLists.txt` | Add Tree action, left editor routing and MOC/source registration | narrow build success |
+| `docs/codex/architecture.md`, `current-state.md` | WIP status зафиксирован как generic `WorldObject` + marker/JSON + generated `.bmesh`; server/shared protocol не менялся | code diff + build |
+
 ## 2026-07-11 — Scientific Object Editor Phase 1.2 information layer
 
 ### Follow-up world-space overlay/image/localisation fix
