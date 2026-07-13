@@ -73,7 +73,7 @@
 ## Другие активные изменения рабочего дерева
 
 - Расширение professional Particle Editor после committed `2ef62fd6`: audio, colour/trail/runtime controls и связанные client changes.
-- Procedural Tree Editor foundation: Qt Add Tree action, `TreeParams`/presets/serialization, seed-driven C++ generator for trunk/branches/billboard leaves, generic `WorldObject` marker `metasiberia_tree_object_v1`, generated `.bmesh` derivative and left editor panel. Narrow `RelWithDebInfo gui_client` build and `--tree_generator_smoke` passed 2026-07-13; full manual server-confirm/reconnect/second-client flow not yet verified.
+- Procedural Tree Editor foundation/follow-up: Qt Add Tree action translated as "Добавить дерево", normal ObjectEditor transform block above `TreeEditorPanel`, `TreeParams`/presets/serialization, seed-driven C++ generator for trunk/branches/billboard leaves, generic `WorldObject` marker `metasiberia_tree_object_v1`, generated `.bmesh` derivative, imported EZ-Tree leaf/bark assets under `resources/tree_assets`, and expanded EZ-Tree-style saved params. Narrow `RelWithDebInfo gui_client` build and `--tree_generator_smoke` passed 2026-07-14; full manual server-confirm/reconnect/second-client flow not yet verified.
 - Documentation/Knowledge System Phase 2/3/5: `docs/codex`, MCOS, AGENTS, glossary и debt register.
 
 Windows/Qt `gui_client` canonical wrapper build подтверждён 2026-07-11 11:41 local time для Release + RelWithDebInfo, XR Auto ON. После follow-up overlay/image/localisation fix узкий `RelWithDebInfo gui_client` target и PubChem apply/molecule-information smokes прошли из RelWithDebInfo runtime; full manual GUI/server/reconnect flow, server runtime, deploy and production не выполнялись.

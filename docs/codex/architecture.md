@@ -95,7 +95,9 @@ WorldObject::ObjectType_Generic
   model_url = generated checksum-addressed .bmesh derivative
 ```
 
-`TreeParams`, `TreePresets`, `TreeSerialization`, `TreeGenerator`, `TreeObject` и `TreeEditorPanel` находятся в `gui_client/`. Add Tree создаёт Oak preset с random seed, генерирует OBJ, конвертирует его в `.bmesh` resource URL перед `CreateObject`, а editor пересобирает mesh через обычный `MODEL_URL_CHANGED`/`objectEdited` path. Server сохраняет tree JSON как непрозрачный `WorldObject::content`; отдельного shared/server tree type, protocol message, runtime forest system, GLB export, wind physics и SDL/Web parity пока нет.
+`TreeParams`, `TreePresets`, `TreeSerialization`, `TreeGenerator`, `TreeObject` и `TreeEditorPanel` находятся в `gui_client/`. Add Tree создаёт Oak preset с random seed, генерирует OBJ, конвертирует его в `.bmesh` resource URL перед `CreateObject`, а editor пересобирает mesh через обычный `MODEL_URL_CHANGED`/`objectEdited` path. При выборе дерева слева сверху остаётся обычный `ObjectEditor` для transform-контролов, ниже открывается `TreeEditorPanel` для seed/генератора. Server сохраняет tree JSON как непрозрачный `WorldObject::content`; отдельного shared/server tree type, protocol message, runtime forest system, GLB export, wind physics и SDL/Web parity пока нет.
+
+Минимальный набор EZ-Tree assets лежит в `resources/tree_assets/`: leaf PNG (`oak`, `aspen`, `ash`, `pine`), два bark texture set (`Bark001`, `Bark006`) и upstream texture attribution/license. В `src/lib` EZ-Tree текстур нет: там находятся `options.js`, `tree.js`, `branch.js`, `rng.js`, `trellis.js`, `enums.js` и JSON presets; текстуры взяты из `src/app/public/textures`.
 
 ## Client-server protocol
 

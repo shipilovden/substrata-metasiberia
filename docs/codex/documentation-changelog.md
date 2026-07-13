@@ -4,6 +4,15 @@
 
 Формат записи: дата/фаза -> path/группа -> тип -> изменение -> evidence/причина.
 
+## 2026-07-14 — Procedural Tree Editor follow-up
+
+| Область | Изменение | Проверка |
+| --- | --- | --- |
+| `MainWindow.cpp`, `TreeEditorPanel.*` | tree selection now shows standard ObjectEditor transform controls above the tree-specific panel; Add Tree seed is clamped to editor-safe range | narrow `RelWithDebInfo gui_client` build exit 0 |
+| `TreeParams`, `TreeSerialization`, `TreeEditorPanel` | added/saved additional EZ-Tree-style params: tree type, bark texture flags/scales, branch taper/curve/twist controls, leaf angle/variance/color/alpha test/rounded normals/start level, trellis settings | `--tree_generator_smoke` ok=true |
+| `resources/tree_assets/` | imported minimal EZ-Tree leaf/bark texture assets and upstream texture attribution/license | source checked against EZ-Tree `src/app/public/textures` |
+| `RuntimeTranslation.cpp` | Russian translations for Add Tree and tree editor controls | runtime translator table updated |
+
 ## 2026-07-13 — Procedural Tree Editor foundation
 
 | Область | Изменение | Проверка |
