@@ -2,6 +2,131 @@
 
 Назначение: постоянный итоговый отчёт крупных documentation/knowledge tasks. Не является текущим architecture source; для current facts использовать профильные документы `docs/codex`.
 
+## 2026-07-14 — Tree + expanded Voxel Editor + Lucide final integration
+
+Scope: сохранить полный native Procedural Tree Editor, расширить уже работающий Voxel Editor недостающими creative tools и настраиваемыми generators, заменить условные glyphs на семантические Lucide icons, затем проверить canonical Windows Qt outputs. Production deploy/server restart/DNS не выполнялись.
+
+### Voxel tools и clipboard
+
+- `VoxelToolType` расширен `Line`, `Fill`, `Select`. Line использует 3D segment + текущий brush stamp/shape/size/hollow/mirror. Fill обходит только 6-связный существующий компонент одного материала активного слоя, не flood-fill-ит пустое пространство и атомарно отказывается при safety cap.
+- Двухкликовый Select сохраняет нормализованные voxel-space bounds. Панель даёт Copy, Paste, Delete, Duplicate и Move с XYZ offset. Clipboard sparse/relative; Delete/Paste/Duplicate/Move создают coordinate deltas. Move объединяет delete + paste в одну undo-команду, проверяет overlap, Add/Replace mode и чужой layer material до изменения.
+- `GUIClient` применяет общую финализацию к tool, clipboard и generator commands: запрет пустого legacy `VoxelGroup`, parcel/write-permission check при расширении AABB, push в per-UID undo, один mesh/physics rebuild и один network update.
+- Undo/redo непосредственно перед применением сверяет compressed/content/material revision; stale remote state очищает delta-history до мутации. Redo повторно проверяет итоговый parcel AABB и при отказе атомарно возвращает voxels и redo entry.
+
+### Процедурные generators и размеры
+
+- Добавлены небольшие clean-room файлы `VoxelProceduralGenerator.h/.cpp`; Goxel GPL-код/tables/noise не копировались.
+- Реализованы `Box`, `Ellipsoid`, `Rock`, `TerrainPatch`, `NoiseVolume`, `Crystal`, `Wall`. Все детерминированы по seed и возвращают одну undoable delta-command; превышение safety cap и `clear + Paint` отклоняются до частичного изменения/очистки.
+- UI больше не создаёт фиксированный около 8³ box. Доступны независимые origin/size X/Y/Z, seed/random seed, wall thickness, hollow, clear-active-layer/merge, noise scale, threshold, density, octaves, detail и safety limit.
+- Панель показывает footprint area/perimeter, bounding volume/surface. UI dimension cap — 128, backend cap — 256 по оси и 1 000 000 generated/changed voxels на операцию. Очистка затрагивает только active material-index layer и входит в ту же атомарную команду.
+
+### Lucide и Qt UI
+
+- В `resources/icons/lucide/` добавлен ограниченный набор из 49 SVG upstream commit `b442632ee6fe6250bf24fef026e44244a33812c9`, полный `LICENSE.txt` (ISC + MIT notice Feather-derived) и provenance `README.md`.
+- Все 16 действий `Правка -> Добавить` получили тематические icons: image/model, hypercard, text, spotlight, particles, voxels, tree, scientific/atom, camera, seat, audio, web, video, decal, portal, bot. Toolbar переиспользует те же QAction icons.
+- Voxel tools, layer actions, selection/clipboard, rebuild, random seed, seven generators и import/export placeholders получили Lucide icons. `LucideIconUtils` tint-ит rendered SVG alpha mask, обходя ненадёжное Qt 5 `currentColor` theme resolution.
+- Runtime translation расширена для Line/Fill/Select, selection clipboard, generator controls/metrics и всех generator names.
+
+### Финальная build/smoke evidence
+
+- Incremental Release `gui_client` build: exit 0.
+- Canonical `powershell -ExecutionPolicy Bypass -File C:\programming\qt_build.ps1`: `build_manifest.json success=true`; Release и RelWithDebInfo `status=success`; Qt 5.15.16, CEF OFF, XR Auto -> ON.
+- Final `--voxel_editor_smoke` из обеих canonical configs: process exit 0, `ok=true`, `data/tools/undo/procedural=ok`, panel round-trip, layer deletion, legacy content, base opacity, shortcuts, procedural controls/metrics, runtime Lucide icons и Greedy/Cubes checks true.
+- Final `--tree_generator_smoke` и `--tree_editor_smoke` из Release/RelWithDebInfo: process exit 0, `ok=true`; 16 presets, deterministic same-seed mesh, Z-up/metre scale, LODs, realistic generator revision 2, placeholder/schema migration и panel reentrancy regressions проходят.
+- Windows `server` RelWithDebInfo compile/link: exit 0; server не запускался и не развёртывался.
+- Runtime-copy audit: в обеих configs 49 Lucide SVG, README и licence; licence SHA-256 совпадает с source `B495047BD93A9B06913511076F504DABA17D5BBEB3E0650F3BB53A4220329C57`. EZ-Tree licence и RGBA leaf assets `ash/aspen/oak/pine` также присутствуют.
+
+### Честные границы
+
+- Автоматические smokes не нажимают реальные menu/buttons, не эмулируют world raycast/mouse ergonomics и не рисуют selection overlay; live create/edit/reconnect/second-client persistence остаётся manual check.
+- Marching Cubes, chunk dirty rebuild, native panel VOX/OBJ export и независимые overlapping layer payloads остаются TODO. Goxel не встроен и не является runtime dependency.
+- Production не менялся. Проверенный Windows `server.exe` не является production Linux `server` и никуда не копировался.
+
+## 2026-07-14 — Native Voxel Editor stage 1
+
+Scope: расширить существующий `VoxelGroup` без замены wire/disk формата, добавить пункт `Правка -> Добавить -> Добавить воксель`, native Qt editor panel и первый устойчивый набор инструментов, используя Goxel только как архитектурный reference без копирования GPL-кода.
+
+### Найденный baseline
+
+- Sparse voxel data уже хранились как список занятых `Voxel { pos, mat_index }` в `VoxelGroup`; RGB задавался через `WorldMaterial`.
+- Существовали Zstd compressed payload, network/world/XML persistence, greedy mesher, MagicaVoxel `.vox` import через общий loader и legacy Ctrl/Alt одиночное добавление/удаление.
+- Не было специализированных layers/palette/tools panel, voxel delta undo, Cubes render mode, selection/clipboard и voxel-specific exporters.
+
+### Реализовано
+
+- Новый marker `metasiberia_voxel_editor_v1` сохраняет schema, active layer, material-index layers, base material opacities, palette/recent colours, render mode и прежний user/legacy content в `WorldObject::content`; существующий compressed voxel payload остаётся авторитетным и server/protocol не меняются. Generic ObjectEditor показывает sidecar content, а legacy object не мигрирует только из-за изменения physics/audio/material.
+- Добавлены Brush, Eraser, Paint, Box, Sphere и Picker; brush size 1–16, Cube/Sphere stamp, Add/Replace/Paint, hollow и mirror XYZ. Операции bounded и проверяют edit/parcel permissions до commit.
+- Добавлены native Qt panel, русская runtime translation, singular menu item и reuse той же toolbar QAction. После подходящего `State_JustCreated` существующий lifecycle условно выбирает новый объект и открывает editor; `State_InitialSend` сам по себе auto-select не делает.
+- Stage-1 layers владеют непересекающимися material indices; locked layer защищён от geometry/structural edits. Удаление слоя удаляет его voxels и немедленно обновляет compressed payload. Палитра использует существующие 24-bit RGB `WorldMaterial` entries; layer opacity умножается на сохранённую per-material base opacity, поэтому hide/show не уничтожает legacy alpha.
+- Геометрические операции записывают coordinate/material deltas в отдельный per-UID undo/redo stack. Remote divergence, object deletion/world clear и обычные metadata/generic/transform edits безопасно инвалидируют эту ветку.
+- Существующий Greedy mesher сохранён; добавлен deterministic Cubes exposed-face mode. Async cache key учитывает render mode и material transparency mask, чтобы hidden/transparent layer boundaries не получали старую topology. Marching Cubes отображён только как disabled TODO.
+- Исходники/tables/exporters/assets/icons/palettes Goxel не копировались. Goxel GPL-3.0-or-later использован только для изучения sparse-block, layer, tool/shape/mode, palette/selection и exporter-registry concepts.
+
+### Build и smoke evidence
+
+- Incremental client: `cmake --build C:\programming\substrata_build_qt --config RelWithDebInfo --target gui_client -j 8`, exit 0.
+- Windows server compile/link: `cmake --build C:\programming\substrata_build_qt --config RelWithDebInfo --target server -j 8`, exit 0; server не запускался и не развёртывался.
+- Canonical wrapper: `powershell -ExecutionPolicy Bypass -File C:\programming\qt_build.ps1`, exit 0; Release и RelWithDebInfo successful, XR Auto ON, CEF OFF, Qt 5.15.16.
+- `--voxel_editor_smoke` из Release и RelWithDebInfo: exit 0, `ok=true`; metadata/tools/direct-command undo-redo/per-UID stack isolation/panel round-trip/layer deletion/legacy-content preservation/base-opacity hide-show/`B`+`]` shortcuts/Greedy-vs-Cubes checks true. `MainWindow` Ctrl+Z/Ctrl+Y flow этим smoke не покрывается.
+- `git diff --check` прошёл. Известное optional SDL2 DLL copy warning не помешало Qt build/runtime-copy.
+
+### Честные границы и manual checklist
+
+- Слои пока являются metadata-группами одного legacy voxel payload: overlapping independent layers невозможны, а hidden/opacity не удаляют voxels из общего mesh/physics.
+- Delta undo не объединён с full-object `UndoBuffer`; metadata/generic edit является chronology barrier и очищает более старую voxel-delta branch.
+- Нет continuous drag interpolation, Line, Fill, Selection/Move/clipboard, chunk dirty rebuild, Marching Cubes, panel import/export и Rock/Terrain/Noise generators.
+- Narrow smoke не проверяет live menu/toolbar -> CreateObject -> server confirmation, mouse/raycast ergonomics, visual render/physics, reconnect, second client или production persistence.
+- Manual follow-up: запустить canonical client; в writable parcel выбрать `Правка -> Добавить -> Добавить воксель`; дождаться выбора и панели; проверить все шесть tools, layers, palette, Greedy/Cubes и undo/redo; затем reconnect и открыть объект вторым клиентом. Production не изменялся, commit/push/deploy не выполнялись.
+
+## 2026-07-14 — Procedural Tree Editor native EZ-Tree integration
+
+Scope: довести существующий Add Tree/TreeEditor foundation до генерации полноценного дерева, подключить upstream EZ-Tree presets/assets к generic resource flow и проверить Windows Qt build без client/server/deploy/commit/push.
+
+### Реализовано
+
+- `TreeGenerator` заменил trunk-with-independent-branches approximation на native port фактического EZ-Tree runtime: Marsaglia RNG, FIFO branch queue, quaternion/Euler orientation, continuous rings, terminal leaders, parent-relative radii, stratified child/leaf placement и final-branch leaves. Внутреннее Y-up пространство один раз переводится в engine Z-up/metres.
+- Add Tree использует imported `ash_medium` preset и random seed; 180 ms debounce пересобирает выбранный object через существующий `MODEL_URL_CHANGED`/`GUIClient::objectEdited()` flow.
+- Bundled bark/leaf paths разрешаются из packaged `data/resources/tree_assets`, копируются в `ResourceManager` и переводятся в checksum URLs до `CreateObject`. Это подготавливает обычный server GetFile/resource path для reconnect и другого клиента.
+- OBJ поддерживает material batches `bark`, `leaves`, `trellis`; `TreeObject` создаёт соответствующие `WorldMaterial` entries.
+- Добавлена локальная MIT license EZ-Tree; bark attribution остаётся CC0/ambientCG.
+
+### Build и smoke evidence
+
+- Narrow build: `cmake --build C:\programming\substrata_build_qt --config RelWithDebInfo --target gui_client -j 8`, exit 0.
+- Canonical build: `powershell -ExecutionPolicy Bypass -File C:\programming\qt_build.ps1`; manifest `C:\programming\substrata_output_qt\build_manifest.json` имеет `success=true`, Release и RelWithDebInfo `status=success`, XR Auto resolved ON, CEF OFF, Qt 5.15.16.
+- Post-canonical smoke: `gui_client.exe --tree_generator_smoke C:\programming\substrata_build_qt\tree_generator_smoke_after_canonical.json`, exit 0, `ok=true`.
+- Final smoke подтвердил: deterministic same seed; changed seed/height/branch/leaf/trellis меняют mesh; exact 16/16 presets survive clamp; Z-up/metre AABB `11.1121 × 12.5114 × 16.1288`; default high mesh 28,399 vertices / 60,000 indices; preset range 3,882–30,104 vertices; LOD1/LOD2 31,947 / 3,873 indices.
+- Runtime copy содержит RGBA8 `ash/aspen/oak/pine.png` (`bitDepth=8`, `colorType=6`, SHA-256 равен source) и `EZ_TREE_LICENSE.txt` в Release/RelWithDebInfo output.
+
+### Runtime failure follow-up
+
+Owner live-world run reproduced an invisible selected tree. The screenshot values `custom`, trunk `0.25 / 0.02 / 0.02` and seed `258866791` matched a local generated OBJ containing only 36 vertices / 30 faces and no leaf material. AppData log also recorded old tiny LOD meshes failing Jolt with `Need triangles to create a mesh shape!`; in the same run the new full 158,040-byte bmesh and four content-addressed textures entered the normal server upload path.
+
+Root cause was Qt signal reentrancy in `TreeEditorPanel::setControlsFromParams()`: widget `valueChanged` signals entered `controlChanged()` while the panel was only partially populated, mutated the aliased `current_params`, switched `ash_medium` to `custom`, and scheduled a rebuild from minimum widget values. The repair path separately used a narrower textual predicate than `fromContent()`, so the new `0.25 / 0.02 / 0.02` placeholder could be repaired in memory without rebuilding its mesh.
+
+Fix and regression evidence:
+
+- `controlChanged()` now exits while `updating`; `setControlsFromParams()` uses a value copy; selection changes stop a pending rebuild timer.
+- `fromContent()` exposes the actual numeric `legacy_repair_out`, and the panel schedules a mesh rebuild from that result.
+- Final `--tree_editor_smoke` passes in RelWithDebInfo and Release: `ash_medium` survives panel population; level aliases synchronise; the placeholder family rebuilds as `ash_medium` with trunk height 9/radius 0.4; schema 1 and custom absolute radii migrate to geometry v2.
+- Final `--tree_generator_smoke` passes in both configurations with 28,399 vertices / 60,000 indices for default high quality and non-empty LOD1/LOD2 at 31,947 / 3,873 indices. The Jolt failures were therefore specific to the previously corrupted tiny meshes, not the repaired generator output.
+- Canonical wrapper rerun after all orientation/algorithm/material/migration fixes: `build_manifest.json success=true`, Release and RelWithDebInfo successful, XR Auto ON, CEF OFF, Qt 5.15.16. Missing optional `C:\programming\SDL\sdl_2.30.9_build\Release\SDL2.dll` remains a wrapper warning; Qt outputs and runtime copies completed successfully.
+
+### Upright/realistic geometry v2 follow-up
+
+- Root cause of lying trees was a double coordinate conversion: generated OBJ was already Z-up/metres, while generic OBJ loading converted `(x,y,z) -> (x,-z,y)` and `scaleMesh()` reduced spans at least 5 m by `0.1`. `metasiberia_tree_*.obj` now bypasses only these two generic import steps; ordinary OBJ behavior is unchanged.
+- The old crown was not an EZ-Tree port: direction-only branches lost roll/twist, terminal leaders were absent, cylinders were disconnected, child radii were absolute and leaves were globally scattered. Generator v2 follows the local upstream queue/orientation/RNG/topology and the website's actual lower-case enum behavior.
+- All 16 preset argument sets were compared with the local upstream JSON with zero remaining value differences. Clamp regression additionally covers Aspen values, Bush 1 root `0.02 m / 0.11586957 m`, Pine Large angle `129.130435°`, Ash Large terminal taper `0`, and Trellis dimensions/engine position.
+- Leaf palette+tRNS PNGs were losslessly converted to RGBA8. Pixel comparison against upstream returned `AE=0`; alpha has both 0 and 1 values. This makes the current Wuffs -> resize -> Basis path retain four channels and an alpha slice. Existing schema-1 trees receive new checksum URLs during the geometry-v2 rebuild.
+- Auto-upgrade is permission-aware and cancelable: it starts only after `setControlsEditable(true)`, stops on selection/editor hide, resumes safely for the same visible tree and preserves exact preset floats instead of rounding through UI widgets.
+- Blender 4.2 headless render of the final generated engine-space OBJ confirmed an upright trunk, naturally separated branch hierarchy, cutout leaf silhouettes and coherent shadow. This is local visual evidence only, not a production-world/reconnect test.
+
+### Не выполнено и manual checklist
+
+- Post-fix client GUI не запускался в production world и production не менялся. Owner run before the fix is diagnostic evidence only.
+- Владелец должен проверить: запустить новый build; выбрать каждое старое schema-1 дерево с edit permissions и дождаться one-time rebuild; в writable parcel выполнить `Добавить -> Добавить дерево`; убедиться, что trunk вертикален, crown естественна, leaf cards прозрачны; изменить seed/preset/branches/leaves/trellis и увидеть update; reconnect; открыть объект вторым клиентом; проверить delete/undo/permissions.
+- SDL/Web editor parity, forest batching/impostors/wind, GLB export, simplified collision proxy и отдельный runtime mapping tree-only `castShadows`/alpha-test/LOD fields остаются WIP.
+
 Разделы до `## Phase 5` сохраняют итог Phase 2/3 migration и post-migration hardening.
 
 Дата: 2026-07-10

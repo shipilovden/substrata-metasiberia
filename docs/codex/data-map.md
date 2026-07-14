@@ -2,7 +2,7 @@
 
 Назначение: определить существующие data types, owners, formats, persistence, sensitivity и change boundaries.
 
-Проверено: 2026-07-11 по models/serializers/runtime docs и current Scientific Object WIP after PubChem Phase 1 build. Secret values не читались и не приводятся; production paths — dated documentation, не live validation.
+Проверено: 2026-07-14 по models/serializers/runtime docs, Scientific Object WIP и Procedural Tree assets/resources. Secret values не читались и не приводятся; production paths — dated documentation, не live validation.
 
 ## Доменные типы в коде
 
@@ -20,6 +20,8 @@
 | Chat messages/history | shared protocol + client app data + server routing | wire + local history | client/server | высокий/privacy |
 | Particle settings | `gui_client/ParticleEmitterSettings.*` | marker/serialized `WorldObject::content` | Qt/client render, generic server storage | WIP/client contract |
 | Scientific settings | `gui_client/ScientificObjectSettings.*` | marker/JSON in `WorldObject::content` | Qt editor, generic server storage | WIP/high, 10 KB bound |
+| Procedural tree settings | `gui_client/TreeParams.h`, `TreeSerialization.*` | marker `metasiberia_tree_object_v1`, current JSON schema 2 in `WorldObject::content` | Qt tree editor/generator, generic server storage | WIP; schema 1 mesh/parameter upgrade is client-side |
+| Voxel editor metadata | `VoxelEditorData.*`; geometry remains shared `VoxelGroup` | marker `metasiberia_voxel_editor_v1` in content + existing compressed sparse payload/materials | Qt tools/layers/palette/clipboard/generators; generic server storage | high compatibility: metadata/client-only, wire payload unchanged |
 
 Repo не содержит подтверждённой SQL schema/ORM для main server. `db_dirty` относится к custom record database.
 
@@ -30,6 +32,7 @@ Repo не содержит подтверждённой SQL schema/ORM для ma
 | Build config | CMake, `cmake/`, `scripts/config*.rb` | build system | менять с affected targets/CI |
 | Protocol/models/versions | `shared/*.h/.cpp` | client/server developers | compatible/versioned change only |
 | Runtime client assets | `resources/`, `shaders/` | asset pipeline | derivative; проверить copy/web/XR |
+| Lucide UI subset | `resources/icons/lucide/*.svg`, `LICENSE.txt`, `README.md` | upstream Lucide commit pinned in provenance | ISC/MIT notices must ship with copied SVGs |
 | Editable asset masters | `source_resources/`, `icons/` | artists/developers | сохранять originals/provenance |
 | Server seed assets | `server_dist_resources/` | unknown staging owner | staging step требует подтверждения |
 | Server Website assets | `webserver_public_files/`, `webserver_fragments/` | web developers | disk deploy отдельно от binary |
@@ -98,6 +101,8 @@ Types shown in combo boxes (protein, GIS, volume, medical, etc.), non-PubChem so
 | Native EXE/DLL/runtime tree | CMake/copy scripts | generated; exclude normal analysis |
 | Web JS/WASM/data/cache-hashed HTML | Emscripten scripts | build output; do not hand-edit |
 | Scientific molecule OBJ/MTL/bmesh | Scientific temp generator + generic model conversion | OBJ/MTL transient; `.bmesh` checksum resource is intended durable derivative, runtime untested |
+| Procedural tree OBJ/bmesh | `TreeGenerator` + generic model conversion | OBJ transient; checksum `.bmesh` and texture URLs are durable generic resources; manual reconnect untested |
+| EZ-Tree presets/textures/licenses | `resources/tree_assets/` copied by runtime pipeline | version-controlled input assets; texture bytes immutable after checksum URL creation |
 | Site captures/Figma inputs | capture tools | may contain auth/user data; scrub |
 | VIVE media/sync state | local helpers | personal/task-only |
 | Map tiles/progress | server/services | separate OSM and rendered-world pipelines |

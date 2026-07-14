@@ -2,7 +2,7 @@
 
 Назначение: найти минимальную область кода и доказательств для задачи без повторного аудита репозитория.
 
-Проверено: 2026-07-10. Применять после корневого/локального `AGENTS.md` и [project-index.md](project-index.md).
+Проверено: 2026-07-14. Применять после корневого/локального `AGENTS.md` и [project-index.md](project-index.md).
 
 ## Четыре уровня исследования
 
@@ -37,6 +37,7 @@
 | Scientific Object WIP | [scientific-object-editor.md](scientific-object-editor.md) | `ScientificObject`, marker, `WorldObject::content` | `MainWindow`, CMake, generic object update/server limits |
 | Scientific providers/API | [scientific-data-providers.md](scientific-data-providers.md) | `searchPubChem`, `loadPubChemCID`, parser/cache symbol only after selected provider | official API docs, cache/storage only if implementation starts |
 | Particles | `ParticleEmitterSettings.*`, `ParticleManager.*` | content marker/field, update loop | resources/audio, Object Editor, GUIClient |
+| Procedural Tree Editor | [architecture.md](architecture.md#procedural-tree-editor-wip) | `TreeParams`, `TreeGenerator`, `TreeObject`, `TreeEditorPanel`, `on_actionAddTree_triggered` | generic model/resource path, runtime copy, server/reconnect only if affected |
 | Protocol | `shared/AGENTS.md`, `Protocol.h` | message ID/name во всех first-party dirs | both peers, bots, compatibility/tests |
 | Private chat | chat plan + `PrivateChatMessageID` | recipient UID send/read/route | UI history/tabs, production server evidence |
 | Persistence | `server/AGENTS.md`, [data-map](data-map.md) | model reader/writer, `db_dirty`, migration | old fixture/backup/runbook |

@@ -2,7 +2,7 @@
 
 Назначение: разделить логические data/control relations и физические build/deployment dependencies.
 
-Проверено: 2026-07-11 по CMake, network handlers, serializers и current WIP PubChem integration.
+Проверено: 2026-07-14 по CMake, network handlers, serializers, current WIP PubChem integration и Procedural Tree resource flow.
 
 ## Логические зависимости
 
@@ -15,6 +15,7 @@
 | Server Website/Admin | Server state | direct in-process C++ access | auth/permissions/locks обязательны |
 | Client editors | `WorldObject`/Parcel/WorldSettings/Bot/Gear | shared models + update messages | editor data зависит от generic/shared contract |
 | Scientific Object Editor WIP | generic WorldObject | marker + JSON in `content`, status/provenance/provider/cache descriptors, materials/model URL, existing physics flags | сейчас интерпретируется Qt client; server opaque storage |
+| Procedural Tree Editor WIP | generic WorldObject + ResourceManager | `metasiberia_tree_object_v1` JSON, generated `.bmesh`, checksum bark/leaf textures | Qt генерирует/редактирует; server хранит opaque JSON и обычные resources |
 | Realtime/HTTP handlers | `ServerAllWorldsState` | world/user/resource/session records | общий authoritative owner |
 | State serializer | `server_state.bin` | versioned binary records | disk compatibility boundary |
 | Resource uploaders | ResourceManager/HTTP handler | checksum URL + bytes | content identity immutable |
@@ -32,6 +33,8 @@
 | `browser_process` | CEF-specific source | conditional target only |
 | `libs` | dependency source aggregation | единственный явный CMake library target |
 | Scientific Object Editor | Qt branch `gui_client`, MOC, `MainWindow`, `WorldObject` | не входит в SDL/Web special UI и не создаёт server target |
+| Procedural Tree Editor | Qt branch `gui_client`, MOC, `MainWindow`, model loader/resource manager | native generator compiled only into `gui_client`; server/shared contract не расширен |
+| Native Voxel Editor | shared `VoxelGroup`/mesher + Qt `VoxelEditorPanel`, `GUIClient`, Lucide runtime assets | protocol payload reused; metadata/tools/generators are client-side; SDL/Web special UI absent |
 | Disabled bot/installer CMake | отдельные subproject definitions | не являются root build baseline |
 
 ## Physical deployment dependencies
@@ -73,6 +76,25 @@ flowchart LR
 
 Server/shared не распознают marker специально. Поэтому изменение JSON не требует нового message ID, но зависит от общего content limit, WorldObject serialization и generic permissions. PubChem provider, lazy section cache, Russian resolver, molecule viewport, atom/bond picking and measurements находятся на стороне Qt client. Native labels/legend/Rotation work as client information overlays; child `ObjectType_Text` lifecycle, SDL/Web parity, separate per-atom scene meshes and solver/trajectory adapters не подключены.
 
+## Procedural Tree data flow (WIP)
+
+```mermaid
+flowchart LR
+    Action[Add Tree] --> Preset[EZ-Tree preset + random seed]
+    Preset --> Generator[C++ EZ-Tree FIFO/quaternion TreeGenerator v2]
+    Generator --> Temp[temporary OBJ]
+    Temp --> Bmesh[checksum bmesh]
+    Assets[bundled bark/leaf assets] --> ResourceManager
+    Bmesh --> ResourceManager
+    ResourceManager --> Generic[generic WorldObject]
+    Editor[TreeEditorPanel debounce] --> Params[marker + TreeParams JSON]
+    Params --> Generator
+    Generic -->|CreateObject / ObjectFullUpdate| Server[generic server handlers]
+    Server --> State[server state + resource store]
+```
+
+Default create переводит local asset paths в checksum URLs до `CreateObject`; subsequent edits используют `GUIClient::objectEdited()` и общий dependency/GetFile flow. Ручная проверка server-confirm/reconnect/second-client остаётся обязательной.
+
 ## Contracts с максимальным радиусом
 
 | Contract | Producers | Consumers | Обязательная проверка при изменении |
@@ -91,6 +113,7 @@ Server/shared не распознают marker специально. Поэто�
 - Server handler/state -> persistence/locks + client behavior + operations if deployed.
 - Website route -> handler + JS/forms + auth + disk asset/deploy stage.
 - Scientific marker/schema -> editor parser/serializer + content bound + compatibility docs; server only if envelope changes.
+- Tree marker/params -> native generator + model/material resource dependencies + generic content bound; server only if envelope changes.
 - Resource path -> upload/download + copy/preload + desktop/web/XR consumers.
 
 Связанные документы: [architecture.md](architecture.md), [data-map.md](data-map.md), [scientific-object-editor.md](scientific-object-editor.md).

@@ -2,9 +2,9 @@
 
 Назначение: разделять committed baseline, active working tree, partial features, планы и неизвестное.
 
-Снимок: 2026-07-11. `master` / `2ef62fd6`, синхронно с `origin/master`; version headers `0.0.21`. Tag `v0.0.21` указывает на более ранний `f010eeb2`, поэтому HEAD содержит unreleased изменения.
+Снимок: 2026-07-14. Базой редакторской интеграции был синхронный `master` / `2377109c`; version headers остаются `0.0.21`. В текущий master-набор входят follow-up Procedural Tree Editor, расширенный Native Voxel Editor, Lucide UI assets и документация; production deploy не выполнялся.
 
-Рабочее дерево dirty: пользовательские изменения client/particle/scientific code, документация Phase 1/2 и новые `AGENTS.md`. Ничего из этого не является committed baseline, но Scientific Object Editor по указанию владельца классифицируется как официальный WIP.
+Scientific Object Editor, Particle Editor, Procedural Tree Editor, Native Voxel Editor и Lucide UI integration входят в committed baseline `master`; production/runtime readiness по-прежнему определяется отдельными evidence ниже, а не фактом commit.
 
 ## Реализовано в committed baseline
 
@@ -29,7 +29,7 @@
 
 ## Официальный WIP: Scientific Object Editor
 
-Подтверждено в текущем dirty tree:
+Подтверждено в текущей реализации:
 
 - Qt editor/settings files зарегистрированы в client CMake/MOC;
 - Add Scientific Object action и переключение editor lifecycle в `MainWindow`;
@@ -70,13 +70,14 @@
 
 Каноническая детализация: [scientific-object-editor.md](scientific-object-editor.md).
 
-## Другие активные изменения рабочего дерева
+## Редакторская интеграция текущего master
 
+- Native Voxel Editor: существующий `VoxelGroup` и network/disk blob сохранены; добавлены marker metadata с legacy-content sidecar/base material opacity, material-index layers, 24-bit RGB palette/recent colours, Brush/Eraser/Paint/Line/Box/Sphere/Fill/Picker/Select, bounded mirror/hollow stamps, clipboard Copy/Paste/Delete/Duplicate/Move, per-UID delta undo/redo, Greedy/Cubes rendering, transparency-aware async cache, Qt panel и русская runtime translation. Процедурный backend создаёт Box/Ellipsoid/Rock/Terrain/Noise/Crystal/Wall с независимыми XYZ dimensions, seed/noise/detail/wall controls, area/perimeter/volume/surface metrics и atomic clear/merge. `Правка -> Добавить` и voxel buttons используют лицензированный Lucide SVG subset. Слои пока не имеют независимых перекрывающихся payloads; hidden/opacity не исключают voxels из общего mesh/physics, а metadata/generic edits служат barrier и очищают отдельную delta-историю. Marching Cubes, chunk rebuild и panel import/export остаются TODO. Расширенный Release smoke прошёл 2026-07-14; canonical Release + RelWithDebInfo wrapper и final smokes фиксируются в [build-and-test.md](build-and-test.md). Live server/reconnect/production deploy не выполнялись. Каноническая детализация: [voxel-editor.md](voxel-editor.md).
 - Расширение professional Particle Editor после committed `2ef62fd6`: audio, colour/trail/runtime controls и связанные client changes.
-- Procedural Tree Editor foundation/follow-up: Qt Add Tree action translated as "Добавить дерево", normal ObjectEditor transform block above `TreeEditorPanel`, `TreeParams`/presets/serialization, seed-driven C++ generator for trunk/branches/billboard leaves, generic `WorldObject` marker `metasiberia_tree_object_v1`, generated `.bmesh` derivative, imported EZ-Tree leaf/bark assets under `resources/tree_assets`, and expanded EZ-Tree-style saved params. Narrow `RelWithDebInfo gui_client` build and `--tree_generator_smoke` passed 2026-07-14; full manual server-confirm/reconnect/second-client flow not yet verified.
+- Procedural Tree Editor follow-up: Add Tree использует default `ash_medium`, random seed и generic marker `metasiberia_tree_object_v1`; JSON schema 2 автоматически перестраивает старые schema-1 meshes только при наличии edit permission. C++ generator повторяет фактический EZ-Tree runtime: exact 16 presets, Marsaglia RNG, quaternion branch orientation, terminal leaders, parent-relative radii, stratified final-branch leaves и engine-space Z-up output без повторного OBJ rotation/scale. Leaf assets перекодированы lossless в RGBA8, поэтому alpha не теряется в Basis path; Ash использует `ash.png`, Aspen — `aspen.png`. Realtime aliases/ranges/engine axes согласованы с сайтом, stale migration timers не переживают смену объекта. `--tree_generator_smoke` и `--tree_editor_smoke` проходят в Release и RelWithDebInfo; canonical Qt wrapper (XR Auto ON) завершился success 2026-07-14. Отдельный Blender render подтвердил вертикальный trunk, natural crown и cutout leaves. Owner runtime до fix воспроизвёл invisible/lying trees; post-fix live-world/reconnect/second-client visual flow ещё не выполнялся.
 - Documentation/Knowledge System Phase 2/3/5: `docs/codex`, MCOS, AGENTS, glossary и debt register.
 
-Windows/Qt `gui_client` canonical wrapper build подтверждён 2026-07-11 11:41 local time для Release + RelWithDebInfo, XR Auto ON. После follow-up overlay/image/localisation fix узкий `RelWithDebInfo gui_client` target и PubChem apply/molecule-information smokes прошли из RelWithDebInfo runtime; full manual GUI/server/reconnect flow, server runtime, deploy and production не выполнялись.
+Windows/Qt `gui_client` canonical wrapper build повторно подтверждён 2026-07-14 для Release + RelWithDebInfo, XR Auto ON. Tree generator/editor и voxel editor smokes прошли из обеих canonical конфигураций; Windows `server` target также компилируется и линкуется. Full manual GUI/server/reconnect flow, Linux server runtime, deploy and production не выполнялись.
 
 ## Экспериментально
 

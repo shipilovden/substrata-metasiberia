@@ -146,6 +146,28 @@
 - Текущее смягчение: WinHTTP timeouts, limited retry on 429/503, query/result matching guard, disabled load button during synchronous load, explicit error statuses and no sample fallback.
 - Предлагаемое решение: вынести providers в async worker/registry with request id, cancel/abort, disabled buttons or progress state, stale-response rejection and UI-safe completion callbacks.
 
+### ED-012 — Procedural Tree остаётся client-generated generic object
+
+- Категория: Engineering Debt / Performance Debt.
+- Приоритет: P2.
+- Подтверждение: [architecture.md](architecture.md), [component-relations.md](component-relations.md), [verification-report.md](verification-report.md).
+- Описание: native Qt client теперь faithfully генерирует EZ-Tree geometry v2 и отдельный checksum resource при realtime edit. Server хранит opaque tree JSON; SDL/Web не имеют editor/generator parity, а forest batching/impostors/wind/collision proxy generation отсутствуют. `castShadows`, alpha-test threshold и LOD intent сериализуются, но не имеют отдельного tree renderer contract; `Trunk Only` и `Simplified` collision пока оба используют generic full-mesh collidable path.
+- Причина: v1 сознательно переиспользует generic `WorldObject` и общий model/resource pipeline без нового protocol/type/runtime forest subsystem.
+- Последствия: одиночные деревья редактируются без server change, но большие леса могут давать лишние mesh uploads, draw calls, physics complexity и platform divergence.
+- Текущее смягчение: generator имеет quality caps/branch queue limit, exact 16-preset checks, schema-1 migration, content-addressed RGBA leaf resources, deterministic seed, debounce 180 ms и Release/RelWithDebInfo smokes.
+- Предлагаемое решение: после manual create/reconnect/second-client проверки отдельно спроектировать derived-mesh cache by parameter fingerprint, simplified trunk collision, impostor/instancing/wind path и renderer mapping для remaining persisted flags.
+
+### ED-013 — Voxel layers и rebuild остаются поверх legacy payload
+
+- Категория: Engineering Debt / Performance Debt.
+- Приоритет: P2.
+- Подтверждение: [voxel-editor.md](voxel-editor.md), [architecture.md](architecture.md), [verification-report.md](verification-report.md).
+- Описание: native Qt tools, selection clipboard, procedural generators, material-index layers и delta undo работают поверх одного существующего sparse `VoxelGroup`. Два слоя не могут независимо занять одну координату; hidden layer остаётся в physics payload; любая команда пересобирает весь mesh/physics object. Expected revision пока хранит только последний hash на UID, поэтому запоздалый echo более ранней из нескольких быстрых локальных команд может безопасно, но излишне очистить undo history. Marching Cubes и panel import/export ещё не реализованы.
+- Причина: интеграция намеренно не меняла shared/network/disk schema и сохранила совместимость с существующим server/clients.
+- Последствия: редактор функционален для bounded объектов, но крупные models дают дорогой rebuild, layer semantics ограничены, а renderer smoothing/export нельзя объявлять готовыми.
+- Текущее смягчение: operation/dimension caps, atomic commands, immediate revision guard перед undo/redo, parcel-AABB rollback для redo, per-UID delta history, Greedy meshing, transparency-aware cache key и clean-room regression smoke в Release/RelWithDebInfo.
+- Предлагаемое решение: очередь подтверждаемых revision/operation IDs, затем отдельный versioned compressed layer/chunk payload с backward-compatible flattening, dirty chunk meshing, selection overlay/manipulator, Marching Cubes и format adapters.
+
 ## Когда обновлять
 
 Обновлять register при появлении нового подтверждённого долга, изменении приоритета, исправлении записи или переносе в отдельный ADR/план. Не использовать этот файл как общий backlog идей.

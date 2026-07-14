@@ -4,14 +4,34 @@
 
 Формат записи: дата/фаза -> path/группа -> тип -> изменение -> evidence/причина.
 
+## 2026-07-14 — Tree/Voxel editors final integration и Lucide UI
+
+- Native Voxel Editor расширен Line/Fill/Select и selection clipboard Copy/Paste/Delete/Duplicate/Move; все изменения остаются sparse delta-командами с per-UID undo.
+- Добавлен clean-room `VoxelProceduralGenerator.*`: Box/Ellipsoid/Rock/Terrain/Noise/Crystal/Wall, независимые X/Y/Z sizes, seed/noise/detail/wall/cap controls и area/perimeter/volume/surface metrics.
+- В `resources/icons/lucide/` добавлены 49 semantic SVG, полный ISC/MIT notice и provenance; `LucideIconUtils` tint-ит Qt 5 SVG mask. Иконки назначены всем `Правка -> Добавить` actions и voxel panel buttons.
+- Обновлены [voxel-editor.md](voxel-editor.md), current state, project map, build/test и verification report; старые TODO Line/Fill/clipboard/generators сняты, оставшиеся ограничения сформулированы явно.
+- Canonical Qt wrapper Release + RelWithDebInfo, оба final voxel smokes, четыре tree smokes, runtime icon/tree resource audit и Windows server compile/link прошли; production не затрагивался.
+
+## 2026-07-14 — Native Voxel Editor stage 1
+
+- Добавлен [voxel-editor.md](voxel-editor.md): baseline-аудит, совместимая metadata/layer architecture, tools/undo/rendering, Goxel GPL boundary, проверки и честные TODO.
+- Voxel Editor добавлен в documentation portal, project map и current working-tree state.
+- Legacy `WorldObject::content` сохраняется в sidecar и остаётся редактируемым; layer opacity использует сохранённый material base alpha, а async mesh cache разделяет разные transparency boundaries.
+- Зафиксированы реальные ограничения: material-index layers одного legacy payload, hidden layers остаются в mesh/physics, отдельная delta-history очищается на metadata/generic barrier, narrow smoke не проверяет live server lifecycle.
+- Canonical Qt Release + RelWithDebInfo wrapper, оба `--voxel_editor_smoke` и Windows `server` target compile/link прошли 2026-07-14. Протокол/server persistence не менялись; runtime server/deploy/production не затрагивались.
+
 ## 2026-07-14 — Procedural Tree Editor follow-up
 
 | Область | Изменение | Проверка |
 | --- | --- | --- |
 | `MainWindow.cpp`, `TreeEditorPanel.*` | tree selection now shows standard ObjectEditor transform controls above the tree-specific panel; Add Tree seed is clamped to editor-safe range | narrow `RelWithDebInfo gui_client` build exit 0 |
-| `TreeParams`, `TreeSerialization`, `TreeEditorPanel` | added/saved additional EZ-Tree-style params: tree type, bark texture flags/scales, branch taper/curve/twist controls, leaf angle/variance/color/alpha test/rounded normals/start level, trellis settings | `--tree_generator_smoke` ok=true |
-| `resources/tree_assets/` | imported minimal EZ-Tree leaf/bark texture assets and upstream texture attribution/license | source checked against EZ-Tree `src/app/public/textures` |
+| `TreeParams`, `TreeSerialization`, `TreeEditorPanel` | added/saved EZ-Tree controls, schema 2 migration, exact source ranges/engine axes, level aliases and permission-safe/cancelable automatic rebuild | `--tree_editor_smoke`: preset/aliases/schema1/custom-radii checks all true |
+| `resources/tree_assets/` | imported EZ-Tree leaf/bark assets and attribution/license; leaf palette+tRNS images losslessly converted to RGBA8 | upstream pixel compare `AE=0`; runtime PNG header/SHA checks pass |
 | `RuntimeTranslation.cpp` | Russian translations for Add Tree and tree editor controls | runtime translator table updated |
+| `TreeGenerator.cpp`, `TreePresets.cpp`, `ModelLoading.cpp` | faithful EZ-Tree RNG/FIFO/quaternion/terminal-branch/final-leaf port, exact 16 presets, one Y-up→Z-up conversion and generated-OBJ import exception; common and level controls affect mesh | post-canonical Release/RelWithDebInfo smoke: exact presets, Z-up/metres, 28,399 vertices / 60,000 indices, ok=true |
+| `TreeObject.*`, `TreeEditorPanel.*`, `MainWindow.cpp` | packaged bark/leaf assets resolve to local paths, enter `ResourceManager` and become checksum URLs before `CreateObject`; realtime edits keep the generic object path | canonical Qt wrapper Release + RelWithDebInfo success |
+| `TreeEditorPanel.*`, `TreeSerialization.*` | blocked Qt reentrancy, migrated schema-1 presets/custom radii to v2, and guarded/canceled migration timers across permission and editor-selection changes | independent race audit + Release/RelWithDebInfo editor smoke |
+| `resources/tree_assets/EZ_TREE_LICENSE.txt` | bundled upstream MIT license; existing texture attribution links to local license copy | compared with `dgreenheck/ez-tree` LICENSE |
 
 ## 2026-07-13 — Procedural Tree Editor foundation
 

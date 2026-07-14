@@ -9,6 +9,7 @@
 | Подсистема | Логическая роль | Физический owner | Entry/contract | Статус | Куда дальше |
 | --- | --- | --- | --- | --- | --- |
 | Scientific Object Editor | создание и редактирование scientific metadata/data/preview | `gui_client/ScientificObjectEditor.*`, `ScientificObjectSettings.*`, `MainWindow.*` | marker `metasiberia_scientific_object_v1` в `WorldObject::content` | официальный WIP; current implementation Qt-based | [data-map](data-map.md#scientific-object-wip), [rules](development-rules.md#scientific-object-editor-wip) |
+| Native Voxel Editor | sparse editing, palette/layers, line/fill/selection clipboard, procedural generation, delta undo, Cubes/Greedy | `gui_client/VoxelEditor*`, `VoxelTools.*`, `VoxelProceduralGenerator.*`, `VoxelUndoStack.*`, `shared/VoxelMeshBuilding.*` | compressed `VoxelGroup` + marker `metasiberia_voxel_editor_v1` | Qt-native; shared payload unchanged; Marching Cubes/import-export TODO | [voxel-editor](voxel-editor.md) |
 | Native Client | 3D UI, world interaction, editors, render/audio/XR/network | `gui_client/` | Qt `MainWindow.cpp::main`, SDL `SDLClient.cpp::main` | основной | `gui_client/AGENTS.md`, [architecture](architecture.md#native-client) |
 | Web Client | browser delivery общей client codebase | `gui_client/` + `webclient/webclient.html` | Emscripten target `gui_client`, WSS | реализован, не отдельный app | `webclient/AGENTS.md` |
 | Public Website | marketing landing | source отсутствует в repo | `metasiberia.com` | внешний/неизвестный | [system overview](system-overview.md#продукты-и-поверхности) |

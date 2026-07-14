@@ -2,7 +2,7 @@
 
 Назначение: каноническое описание логических слоёв, физических границ, contracts и правил расширения.
 
-Проверено: 2026-07-10 по CMake, entry points, protocol/model serializers, server routing/state и текущему Scientific Object WIP. Production topology приведена только как документированный snapshot.
+Проверено: 2026-07-14 по CMake, entry points, protocol/model serializers, server routing/state, Scientific Object WIP и Procedural Tree Editor. Production topology приведена только как документированный snapshot.
 
 ## Архитектурные принципы, наблюдаемые в коде
 
@@ -52,7 +52,7 @@
 ### Физическая интеграция
 
 - Текущая UI-реализация основана на Qt: `ScientificObjectEditor.*`, `ScientificObjectSettings.*`.
-- MOC/source registration: `gui_client/CMakeLists.txt` в текущем dirty tree.
+- MOC/source registration: `gui_client/CMakeLists.txt` в текущей реализации.
 - Owner/lifecycle: `MainWindow` создаёт widget, подключает `objectChanged` и `objectTransformChanged`, переключает его вместо обычного Object Editor.
 - Создание: `MainWindow::on_actionAddScientificObject_triggered()` создаёт generic unit-cube object и отправляет обычный `Protocol::CreateObject`.
 
@@ -95,9 +95,21 @@ WorldObject::ObjectType_Generic
   model_url = generated checksum-addressed .bmesh derivative
 ```
 
-`TreeParams`, `TreePresets`, `TreeSerialization`, `TreeGenerator`, `TreeObject` и `TreeEditorPanel` находятся в `gui_client/`. Add Tree создаёт Oak preset с random seed, генерирует OBJ, конвертирует его в `.bmesh` resource URL перед `CreateObject`, а editor пересобирает mesh через обычный `MODEL_URL_CHANGED`/`objectEdited` path. При выборе дерева слева сверху остаётся обычный `ObjectEditor` для transform-контролов, ниже открывается `TreeEditorPanel` для seed/генератора. Server сохраняет tree JSON как непрозрачный `WorldObject::content`; отдельного shared/server tree type, protocol message, runtime forest system, GLB export, wind physics и SDL/Web parity пока нет.
+`TreeParams`, `TreePresets`, `TreeSerialization`, `TreeGenerator`, `TreeObject` и `TreeEditorPanel` находятся в `gui_client/`. Add Tree создаёт default EZ-Tree preset `ash_medium` с random seed. Generator v2 воспроизводит runtime-алгоритм EZ-Tree: один Marsaglia RNG, FIFO branch queue, quaternion/Euler orientation, непрерывные branch rings, terminal leaders, parent-relative radii, stratified child/leaf placement и листья только на final branches. Математика выполняется в исходном Y-up пространстве EZ-Tree, затем готовый mesh один раз переводится в Metasiberia Z-up/metres; `ModelLoading` не повторяет rotation/auto-scale для `metasiberia_tree_*.obj`. OBJ является временным intermediate и конвертируется в checksum `.bmesh` resource перед `CreateObject`; bundled bark/leaf paths также копируются в `ResourceManager` и переводятся в checksum URLs до отправки объекта. Editor использует debounce 180 ms и пересобирает mesh через обычный `MODEL_URL_CHANGED`/`objectEdited` path. Marker остаётся `metasiberia_tree_object_v1`, текущий JSON `schema_version=2`; schema 1 обновляется при выборе только при наличии edit permissions. При выборе дерева сверху остаётся обычный `ObjectEditor` для transform-контролов, ниже открывается `TreeEditorPanel`.
 
-Минимальный набор EZ-Tree assets лежит в `resources/tree_assets/`: leaf PNG (`oak`, `aspen`, `ash`, `pine`), два bark texture set (`Bark001`, `Bark006`) и upstream texture attribution/license. В `src/lib` EZ-Tree текстур нет: там находятся `options.js`, `tree.js`, `branch.js`, `rng.js`, `trellis.js`, `enums.js` и JSON presets; текстуры взяты из `src/app/public/textures`.
+Server сохраняет tree JSON как непрозрачный `WorldObject::content` и обслуживает mesh/textures через общий resource protocol. Отдельного shared/server tree type, protocol message, runtime forest batching/impostor system, GLB export, wind simulation и SDL/Web editor parity пока нет. `castShadows`, alpha-test threshold и LOD intent сохраняются в tree JSON, но отдельного persisted renderer contract для этих tree-only полей нет; не считать их полностью runtime-подтверждёнными.
+
+Набор EZ-Tree assets лежит в `resources/tree_assets/`: RGBA8 leaf PNG (`oak`, `aspen`, `ash`, `pine`), 11 bark texture sets, 16 JSON presets, CC0 texture attribution и локальная копия MIT license EZ-Tree. RGBA8 conversion сохраняет upstream pixels/alpha, но обходит потерю palette `tRNS` в текущем PNG decoder/Basis pipeline. В upstream `src/lib` находятся generator logic/options/presets, а текстуры взяты из `src/app/public/textures`. C++ реализация является native port/adaptation этих параметров и фактического runtime-поведения, а не встраиванием Three.js runtime.
+
+## Native Voxel Editor
+
+Voxel Editor сохраняет существующий shared contract: `WorldObject::ObjectType_VoxelGroup`, sparse `Voxel { pos, mat_index }`, compressed voxel blob и `WorldMaterial` colours. Qt-only metadata (`metasiberia_voxel_editor_v1`) в `WorldObject::content` описывает material-index layers, active layer, current material, base opacity, palette, render state и legacy-content sidecar; server не интерпретирует JSON и protocol version не менялся.
+
+`VoxelEditorData` владеет metadata, `VoxelTools` — bounded Brush/Eraser/Paint/Line/Box/Sphere/Fill и selection clipboard deltas, `VoxelProceduralGenerator` — Box/Ellipsoid/Rock/Terrain/Noise/Crystal/Wall, `VoxelUndoStack` — отдельные per-UID histories, `VoxelEditorPanel` — Qt controls. `GUIClient` выполняет world raycast, двухкликовые shape/selection bounds, permission/AABB validation, один rebuild/network update на command. Greedy/Cubes topology выбирается через существующий async loading path; render mode и transparency mask входят в cache key.
+
+Слои пока группируют непересекающиеся material indices одного legacy payload: они не поддерживают две независимые ячейки в одной координате, а hidden voxels остаются в physics. Mesh/physics пересобираются полностью, Marching Cubes/import-export остаются TODO. Goxel использовался только как GPL-3.0-or-later reference; код/tables/assets не копировались. Подробности: [voxel-editor.md](voxel-editor.md).
+
+Qt menu/toolbar и voxel buttons используют subset Lucide из `resources/icons/lucide/`; полный ISC/MIT notice включён. `LucideIconUtils` tint-ит SVG alpha mask для Qt 5 вместо зависимости от `currentColor` theme resolution.
 
 ## Client-server protocol
 

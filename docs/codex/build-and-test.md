@@ -2,7 +2,7 @@
 
 Назначение: канонический реестр подтверждённых форм команд, окружения, side effects и минимальной проверки по компонентам.
 
-Проверено по CMake/scripts/CI: 2026-07-10. Windows/Qt wrapper `C:\programming\qt_build.ps1` выполнен 2026-07-11 11:41 local time после Scientific Object Editor Phase 1.2: статус **CONFIRMED** для Release + RelWithDebInfo, XR Auto ON. После follow-up world-space overlay/image/localisation fix узкий `RelWithDebInfo gui_client` target пересобран, PubChem apply и molecule-information smoke выполнены из RelWithDebInfo runtime без server/deploy/production. `build` ниже означает запись generated artifacts, даже если source не меняется.
+Проверено по CMake/scripts/CI: 2026-07-14. Windows/Qt wrapper `C:\programming\qt_build.ps1` после final Procedural Tree geometry-v2, expanded Native Voxel Editor и Lucide integration: статус **CONFIRMED** для Release + RelWithDebInfo, XR Auto ON; tree generator/editor и voxel editor smokes прошли в обеих конфигурациях, runtime tree RGBA/licence и Lucide SVG/licence copy проверены. Windows `server` target compile/link также прошёл; Linux server runtime/deploy/production не выполнялись. Ранее Scientific Object Editor Phase 1.2 и follow-up smokes подтверждены 2026-07-11. `build` ниже означает запись generated artifacts, даже если source не меняется.
 
 Примечание Phase 2: все существовавшие command blocks сохранены без изменения; документационная миграция не выполняла ни одну из этих команд. Для текущей задачи допустимы только static link/path/term/diff checks.
 
@@ -42,7 +42,7 @@ python C:\programming\substrata\scripts\analyze_xr_pose_trace.py [optional-trace
 
 Wrapper находится вне Git repo и проверен чтением на audit host.
 
-Статус последнего подтверждения: **CONFIRMED, 2026-07-11**.
+Статус последнего подтверждения: **CONFIRMED, 2026-07-14**.
 
 Подтверждённая команда из PowerShell:
 
@@ -71,7 +71,7 @@ powershell -ExecutionPolicy Bypass -File C:\programming\qt_build.ps1
 | Jobs | 8 |
 | Qt | 5.15.16 at `C:/programming/Qt/5.15.16-vs2022-64` |
 | CEF | OFF |
-| XR | Auto; on 2026-07-11 resolved to `XR_SUPPORT=ON` with `C:\programming\OpenXR-SDK-1.1.57\install` |
+| XR | Auto; on 2026-07-14 resolved to `XR_SUPPORT=ON` with `C:\programming\OpenXR-SDK-1.1.57\install` |
 | Runtime copy | enabled; wrapper validates required Qt/platform artifacts |
 | Manifest | `C:\programming\substrata_output_qt\build_manifest.json` |
 
@@ -82,7 +82,32 @@ C:\programming\substrata_output_qt\vs2022\cyberspace_x64\Release\gui_client.exe
 C:\programming\substrata_output_qt\vs2022\cyberspace_x64\RelWithDebInfo\gui_client.exe
 ```
 
-Подтверждение build относится к compile/link/runtime-copy artifact validation. Для PubChem есть отдельный narrow runtime smoke ниже; он не заменяет manual editor UI/server/reconnect test.
+Подтверждение build относится к compile/link/runtime-copy artifact validation. Для Tree, Voxel Editor и PubChem есть отдельные narrow runtime smokes ниже; они не заменяют manual editor UI/server/reconnect test.
+
+### Native Voxel Editor smoke
+
+Статус: **CONFIRMED, 2026-07-14** для clean-room metadata/tools/widget/mesher regression path.
+
+После сборки smoke запускается из каждой canonical конфигурации:
+
+```powershell
+C:\programming\substrata_output_qt\vs2022\cyberspace_x64\Release\gui_client.exe `
+  --voxel_editor_smoke C:\programming\voxel_editor_smoke_Release.json
+
+C:\programming\substrata_output_qt\vs2022\cyberspace_x64\RelWithDebInfo\gui_client.exe `
+  --voxel_editor_smoke C:\programming\voxel_editor_smoke_RelWithDebInfo.json
+```
+
+Оба запуска завершились с exit code 0 и `ok=true`. Проверены metadata round-trip/limits и legacy-content escaping; Brush/Paint/Mirror/locked layer; Line; атомарный bounded Fill; selection copy/delete/paste/duplicate/move, overlap/collision rollback; прямые `VoxelEditCommand::undo/redo`; per-UID stack push/isolation/clear; QWidget round-trip; независимые generator sizes и area/perimeter/volume/surface metrics; determinism/hollow/clear/merge/cap всех семи generators; сохранение удаления слоя в compressed payload; legacy content migration; base material alpha после hide/show; shortcuts `B/L/F/S`/`]`; runtime-загрузка Lucide icons для tool/rebuild/generator/selection buttons; 12 Greedy против 20 Cubes triangles для двух соседних voxels.
+
+Дополнительные compile/link проверки:
+
+```powershell
+cmake --build C:\programming\substrata_build_qt --config RelWithDebInfo --target gui_client -j 8
+cmake --build C:\programming\substrata_build_qt --config RelWithDebInfo --target server -j 8
+```
+
+Scope boundary: smoke не вызывает `VoxelUndoStack::undo/redo` и `Ctrl+Z`/`Ctrl+Y` через `MainWindow`, не открывает реальное menu/toolbar действие, не проходит `CreateObject`/server confirmation/auto-selection, не эмулирует live scene mouse input или selection overlay, не проверяет визуальный render/physics, reconnect, second client, network persistence или production. Он также не является SDL/Web build. Canonical wrapper завершился успешно, несмотря на известное предупреждение об отсутствующем optional `C:\programming\SDL\sdl_2.30.9_build\Release\SDL2.dll`; Qt artifacts/runtime copy созданы.
 
 ### Scientific PubChem HTTPS smoke
 
@@ -153,6 +178,26 @@ powershell -ExecutionPolicy Bypass -File C:\programming\qt_build.ps1
 
 Класс: medium/expensive, пишет build/output/runtime files и `build_manifest.json`. `-SkipConfigure` допустим только для уже согласованного tree. `-XR On` обязан падать без SDK.
 
+Narrow Procedural Tree generator smoke после успешной Qt build:
+
+```powershell
+C:\programming\substrata_output_qt\vs2022\cyberspace_x64\RelWithDebInfo\gui_client.exe `
+  --tree_generator_smoke C:\programming\substrata_build_qt\tree_generator_smoke.json
+```
+
+Smoke проверяет determinism, seed/parameter changes, Z-up bounds, сохранение метрического масштаба, branch/leaf/trellis geometry, непустые LOD1/LOD2, точные canonical значения после clamp и непустой base mesh для всех 16 imported EZ-Tree presets. Он не подключается к server и не заменяет manual create/reconnect/second-client check.
+
+Regression smoke для заполнения Tree Editor и восстановления старой невидимой заглушки:
+
+```powershell
+C:\programming\substrata_output_qt\vs2022\cyberspace_x64\RelWithDebInfo\gui_client.exe `
+  --tree_editor_smoke C:\programming\substrata_build_qt\tree_editor_smoke.json
+```
+
+Smoke проверяет, что программное заполнение controls не превращает `ash_medium` в `custom`, level-0/1 aliases синхронизированы, сохранённые placeholder-параметры `0.25 / 0.02 / 0.02` восстанавливаются, schema 1 получает geometry v2, а абсолютные custom radii мигрируют в parent-relative multipliers.
+
+На Windows Release `gui_client.exe` является GUI process, поэтому PowerShell может вернуть управление до окончания smoke. Для строгой проверки использовать `Start-Process -Wait -PassThru` и затем читать report JSON. Не задавать `QT_QPA_PLATFORM=offscreen/minimal`: текущий runtime output не содержит соответствующей platform integration.
+
 Ручная конфигурация Qt path:
 
 ```powershell
@@ -222,6 +267,7 @@ cmake --build build --target server -j 4
 | --- | --- | --- | --- | --- |
 | Qt client/UI/editor | affected symbol/CMake list | `gui_client` target + `--test` | manual UI flow; server при protocol | default client run пишет appdata/может подключаться к production |
 | Scientific Object Editor WIP | marker/schema/CMake/10 KB bound | тот же `gui_client` target после отдельного разрешения | create/edit/reconnect/resource/permission flow | current implementation Qt-based, untracked WIP; Web/SDL parity и adapters/AI execution не считать реализованными |
+| Procedural Tree Editor WIP | marker/params/preset/assets/CMake | `gui_client` target + `--tree_generator_smoke` + `--tree_editor_smoke` | Add Tree, realtime edit, server-confirm, reconnect, second client | Qt-only editor; smokes не проверяют final live-world render/permissions |
 | SDL client | compile guards/search | configure `USE_SDL=ON`, build `gui_client` | manual SDL flow | отдельный current wrapper отсутствует |
 | XR | CMake/guard + target | wrapper `-XR On/Off`, client test | `--desktop` и `--vr`, HMD/runtime | runtime/HMD external; не запускать как generic smoke |
 | Server | affected target | `server` + `--test` | local copy state + client; route smoke | обычный run меняет state/listens ports |
