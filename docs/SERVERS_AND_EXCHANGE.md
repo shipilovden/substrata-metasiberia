@@ -13,6 +13,7 @@
 Новый основной сервер:
 - SSH login: `denshipilov`
 - SSH alias (локально): `metasiberia-server` (в `C:\Users\densh\.ssh\config`)
+- Windows SSH note: если `sudo -S` через OpenSSH pipe сообщает `Authentication failed`, это может быть ошибка TTY/кавычек. Сначала проверить доступ через PuTTY/plink с подтверждённым fingerprint сервера; в ходе production deploy такой способ подтвердил корректность сохранённого пароля. Пароли и токены в этот документ не копировать.
 - LAN IP: `192.168.0.30`
 - Public IP: `87.103.196.229`
 
@@ -95,6 +96,8 @@ REG.RU hosting metasiberia.com (ISPmanager):
   - Telegram screenshot publishing: Telegram credentials присутствуют в server credentials; на 2026-06-22 DNS давал недоступный Telegram IP, поэтому в `/etc/hosts` добавлен override `api.telegram.org -> 149.154.167.220`. `getMe/getChat` проходят для `metasiberia_bot` и канала `metasiberia_channel`.
 
 #### Быстрая сборка и выкладка C++ server на `metasiberia-server`
+
+Это единственный production workflow для игрового сервера: production работает на Ubuntu/Linux. Сборка Windows `server.exe` не обновляет сервер и не заменяет Linux ELF. После любой правки `server/**` или серверной части `shared/**` нужно выполнить этот Linux build/release/restart workflow; если sudo-доступ не работает, остановиться и запросить актуальные полномочия, не переключая `current` вручную.
 
 Обычный быстрый путь не требует пересборки всего проекта и раньше работал именно так:
 

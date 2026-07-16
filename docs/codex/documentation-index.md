@@ -31,7 +31,7 @@
 | B. Архитектура | Current structure, process/data boundaries, dependencies. | [system-overview.md](system-overview.md), [architecture.md](architecture.md), [component-relations.md](component-relations.md) |
 | C. Навигация | Быстрый route к нужному owner, термину или документу. | [project-index.md](project-index.md), [project-map.md](project-map.md), [documentation-index.md](documentation-index.md), [search-guide.md](search-guide.md), [glossary.md](glossary.md) |
 | D. Правила разработки | Практический workflow, token policy, safe change rules. | [development-rules.md](development-rules.md), [token-policy.md](token-policy.md), [build-and-test.md](build-and-test.md) |
-| E. Специализированные знания | Подсистемы и WIP, где нужен отдельный owner. | [data-map.md](data-map.md), [scientific-object-editor.md](scientific-object-editor.md), [scientific-data-providers.md](scientific-data-providers.md), [voxel-editor.md](voxel-editor.md) |
+| E. Специализированные знания | Подсистемы и WIP, где нужен отдельный owner. | [data-map.md](data-map.md), [scientific-object-editor.md](scientific-object-editor.md), [scientific-data-providers.md](scientific-data-providers.md), [voxel-editor.md](voxel-editor.md), [inventory-system.md](inventory-system.md) |
 | F. История и долг | ADR, changelog, verification, audit snapshots, known debt. | [decisions.md](decisions.md), [documentation-changelog.md](documentation-changelog.md), [verification-report.md](verification-report.md), [audit-report.md](audit-report.md), [engineering-debt.md](engineering-debt.md) |
 
 Документы разных уровней не должны смешивать роли: history объясняет почему, current docs объясняют как устроено сейчас, MCOS объясняет как работать.
@@ -50,6 +50,7 @@
 | [scientific-object-editor.md](scientific-object-editor.md) | Что реально реализовано в Scientific Object WIP? | основной WIP |
 | [scientific-data-providers.md](scientific-data-providers.md) | Какие научные источники/API/форматы и provider rules использовать? | provider architecture reference |
 | [voxel-editor.md](voxel-editor.md) | Как устроены native voxel tools/layers/clipboard/generators и какие shared-format границы остаются? | основной WIP |
+| [inventory-system.md](inventory-system.md) | Как устроены native Gear Inventory, avatar attachment/preview и client/server contract? | active working tree; production не развёрнут |
 | [current-state.md](current-state.md) | Что baseline, partial, WIP, plan или unknown? | основной |
 | [decisions.md](decisions.md) | Почему приняты устойчивые architecture/policy decisions? | основной ADR |
 | [engineering-debt.md](engineering-debt.md) | Какие известные проблемы требуют отдельной задачи? | основной debt register |

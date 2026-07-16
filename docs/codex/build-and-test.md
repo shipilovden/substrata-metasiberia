@@ -42,7 +42,57 @@ python C:\programming\substrata\scripts\analyze_xr_pose_trace.py [optional-trace
 
 Wrapper находится вне Git repo и проверен чтением на audit host.
 
-Статус последнего подтверждения: **CONFIRMED, 2026-07-14**.
+Статус последнего подтверждения: **CONFIRMED, 2026-07-16** для `RelWithDebInfo`, `XR Off`; полная `Release` + `RelWithDebInfo`, `XR Auto` проверка остаётся подтверждённой на 2026-07-14.
+
+### Жёсткий инвариант пользовательского runtime
+
+Владелец всегда запускает `RelWithDebInfo` клиент только отсюда:
+
+```text
+C:\programming\substrata_output_qt\vs2022\cyberspace_x64\RelWithDebInfo\gui_client.exe
+```
+
+`C:\programming\substrata_output` — legacy mirror/вспомогательный output. Наличие там более нового EXE не доказывает, что изменение доступно владельцу. Windows Qt build/UI verification считается успешной только если:
+
+1. `C:\programming\substrata_output_qt\build_manifest.json` содержит `success: true` для требуемой конфигурации;
+2. обновился timestamp/размер или SHA-256 именно канонического `RelWithDebInfo\gui_client.exe`;
+3. runtime проверка запускает этот точный путь.
+
+`CYBERSPACE_OUTPUT` применяется во время CMake configure и запекается в Visual Studio project. Поэтому после сомнения в output path нужно запускать `qt_build.ps1` без `-SkipConfigure`; один успешный `cmake --build` может обновить другой output и не завершает пользовательскую задачу.
+
+### Предстартовая проверка wrapper и защита build-tree
+
+`qt_build.ps1` и CMake-конфигурация вызывают `ruby` по имени. На текущем компьютере подтверждён `C:\Ruby34-x64\bin\ruby.exe`, но каталог может отсутствовать в `PATH` нового PowerShell-процесса. Перед wrapper выполнить:
+
+```powershell
+if(-not (Get-Command ruby -ErrorAction SilentlyContinue)) {
+    $rubyDir = 'C:\Ruby34-x64\bin'
+    if(-not (Test-Path -LiteralPath (Join-Path $rubyDir 'ruby.exe'))) {
+        throw 'Ruby is required, but C:\Ruby34-x64\bin\ruby.exe was not found.'
+    }
+    $env:Path = $rubyDir + ';' + $env:Path
+}
+ruby --version
+```
+
+Не интерпретировать ошибку `ruby is not recognized` как проблему C++-исходников или CMake. Не менять системный `PATH` ради одной сборки: достаточно окружения текущего процесса.
+
+В одном `C:\programming\substrata_build_qt` одновременно может работать только одна сборка — включая wrapper, прямой `cmake --build` и диагностический запуск из другого агента/терминала. Если вызов инструмента вернул timeout или перешёл в фоновое ожидание, это не означает, что дочерние `cmake`/`MSBuild`/`cl`/`link` завершились. Нужно дождаться исходного запуска или проверить его process tree; второй build вслепую не запускать.
+
+MSBuild может оставлять idle node-reuse workers после успешного завершения. Процесс `MSBuild.exe` с `/nodemode:` не является сам по себе доказательством продолжающейся сборки, если его coordinator/parent уже завершён и отсутствуют реальные `cmake`/`cl`/`link`. Проверять `Win32_Process.CommandLine` и parent process; такие workers не убивать и не использовать как ложную причину для clean/recovery.
+
+Если после реального прерывания или пересечения сборок линкер сообщает `LNK1136`, сначала проверить конкретный `.obj`. Нулевой размер является признаком оборванной записи. Recovery допустим только для build artifacts:
+
+1. убедиться, что активных compiler/linker процессов больше нет;
+2. получить resolved build root `C:\programming\substrata_build_qt` и проверить, что каждый удаляемый `.obj` находится строго внутри него;
+3. удалить только подтверждённые нулевые `.obj`;
+4. снова запустить канонический `qt_build.ps1` без `-SkipConfigure` и проверить manifest/канонический EXE.
+
+Ненулевой `.obj`, повторный `LNK1136` без истории прерывания или ошибка вне build root требуют отдельной диагностики. Не делать массовый clean и не трогать source/vendor trees как автоматический workaround.
+
+### Разделение build и запуска
+
+Успешные configure/compile/link/runtime-copy не разрешают запуск приложения. `gui_client.exe` — в обычном режиме и с любым runtime-smoke аргументом — запускать только по прямой просьбе пользователя. Без неё итог должен явно говорить: сборка подтверждена, runtime/UI не запускался и оставлен владельцу.
 
 Подтверждённая команда из PowerShell:
 
@@ -83,6 +133,16 @@ C:\programming\substrata_output_qt\vs2022\cyberspace_x64\RelWithDebInfo\gui_clie
 ```
 
 Подтверждение build относится к compile/link/runtime-copy artifact validation. Для Tree, Voxel Editor и PubChem есть отдельные narrow runtime smokes ниже; они не заменяют manual editor UI/server/reconnect test.
+
+Изменения серверного кода не считаются проверенными без сборки сервера. После правок в `server/**`, общего протокола/сериализации или `shared/**`, который читается/пишется сервером, обязательно выполнить локальную сборку:
+
+```powershell
+cmake --build C:\\programming\\substrata_build_qt --config RelWithDebInfo --target server -j 8
+```
+
+Проверить код возврата и время/размер `C:\\programming\\substrata_output_qt\\vs2022\\cyberspace_x64\\RelWithDebInfo\\server.exe`. Эта проверка не запускает сервер; production Linux ELF-сборка, деплой и restart выполняются только после отдельного разрешения пользователя.
+
+Критическое различие: production работает на Ubuntu/Linux `metasiberia-server`. Windows `server.exe` не является production-артефактом. Для серверной правки после локальной проверки обязательно выполнить Linux workflow из `docs/SERVERS_AND_EXCHANGE.md`, собрать `server` в `/srv/metasiberia/build/master`, скопировать ELF в release, переключить `/srv/metasiberia/releases/current` и перезапустить `metasiberia-server.service` только при явном разрешении пользователя.
 
 ### Native Voxel Editor smoke
 

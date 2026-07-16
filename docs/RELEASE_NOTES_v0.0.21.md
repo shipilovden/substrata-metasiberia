@@ -25,9 +25,14 @@
 
 1. Добавлена серверная инфраструктура Gear и интеграция со screenshot-bot pipeline.
 2. Добавлен тип объекта `ObjectType_GearItem` для корректной сериализации/обработки gear item.
-3. Исправлен avatar preview в Gear Inventory: используется прямой FBO render path.
-4. Улучшено кадрирование avatar preview, убрана лишняя floor plane, добавлены scene settings и проверка GL context.
-5. Добавлена локализация Gear Inventory UI.
+3. Gear Inventory перенесён в расширяемый левый Qt editor dock с карточками экипированных и доступных предметов.
+4. Новый `AvatarGearPreviewWidget` наследует `AvatarPreviewWidget`, имеет собственные OpenGL context и engine и использует тот же вид, камеру, управление и grounding, что preview в окне Avatar Settings.
+5. Preview показывает avatar + animated bone attachments независимо от мировой сцены: он не использует world renderer, не переключает third-person и не меняет игровую камеру.
+6. Добавлены orbit/pan/zoom, bone attachment, Move/Rotate/Scale по осям, точные transform-поля и Lucide icons; avatar/gear resources загружаются через существующий optimized/Basis-aware pipeline.
+7. Восстановлены server handlers `QueryUserGear`, `CreateGearItem` и `GearItemUpdate`, authoritative обработка equipped gear в `AvatarFullUpdate`/`CreateAvatar`, owner/transform validation и persistence `gear_ids`/`equipped_gear_ids`.
+8. Добавлен server capability `GEAR_INVENTORY_SUPPORT`: клиент не отправляет gear packets серверу без полного набора handlers и сохраняет соединение с несовместимым сервером.
+9. Login, logout, disconnect, применение новой модели аватара и переход между мирами синхронизируют avatar settings и gear; сервер возвращает отправителю authoritative `AvatarFullUpdate`, чтобы клиент принял отфильтрованное состояние.
+10. Локальные Windows-сборки `gui_client` и `server` прошли compile/link. По требованию владельца GUI не запускался; Linux production deploy и live create/equip/edit/reconnect требуют отдельной проверки и отдельного разрешения.
 
 ## Аудио-плеер
 

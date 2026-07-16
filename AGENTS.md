@@ -85,6 +85,12 @@ git -C C:\programming\substrata branch -vv
 ## Проверка и завершение
 
 - Команды и side effects: [`build-and-test.md`](docs/codex/build-and-test.md).
+- Windows Qt-клиент считается собранным для владельца только когда обновлён канонический `C:\programming\substrata_output_qt\vs2022\cyberspace_x64\RelWithDebInfo\gui_client.exe`; `C:\programming\substrata_output` является legacy output и не подходит для launch/UI verification.
+- Если изменён `server/**`, `shared/**` с серверными читателями/писателями или общий протокол/сериализация, обязательно в той же задаче пересобрать локальную цель `server` (`cmake --build C:\\programming\\substrata_build_qt --config RelWithDebInfo --target server -j 8`) и проверить бинарь. Клиентская сборка без server build не считается завершением такой задачи. Сервер не запускать и не деплоить без прямой просьбы пользователя.
+- Важно: production server — Ubuntu/Linux `metasiberia-server`, а не Windows. Для серверных правок обязательны Linux-сборка и выкладка по [`SERVERS_AND_EXCHANGE.md`](docs/SERVERS_AND_EXCHANGE.md): `/srv/metasiberia/build/master` → `/srv/metasiberia/output/test_builds/server` → release → `/srv/metasiberia/releases/current` → `metasiberia-server.service`. Windows `server.exe` допустим только как локальный compile-check и никогда не обновляет production.
+- SSH/sudo note: ошибка `sudo: Authentication failed` при передаче пароля через Windows OpenSSH pipe может быть вызвана TTY/кавычками, а не неверным паролем. Сначала проверить тот же доступ через PuTTY/plink с подтверждённым host key; не менять секрет и не записывать его в docs. Рабочий plink-доступ уже подтверждён для `metasiberia-server`.
+- Перед Windows Qt build проверить Ruby и отсутствие другой активной сборки в том же build tree; timeout инструмента не считать завершением процесса. Idle MSBuild node-reuse workers с `/nodemode:` и завершившимся coordinator не считать отдельной активной сборкой и не убивать. Точный recovery для `LNK1136` описан в `build-and-test.md`.
+- Не запускать `gui_client.exe`, включая runtime smoke, без прямой просьбы пользователя; compile/link/runtime-copy и ручной UI-запуск — разные разрешения.
 - Docs-only: links, paths, terminology, diff/readback; C++ build не нужен.
 - Итог: результат, изменённые области, проверки, непроверенное/риски и manual follow-up.
 - Не публиковать command transcript и длинные успешные логи.

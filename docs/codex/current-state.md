@@ -6,6 +6,15 @@
 
 Scientific Object Editor, Particle Editor, Procedural Tree Editor, Native Voxel Editor и Lucide UI integration входят в committed baseline `master`; production/runtime readiness по-прежнему определяется отдельными evidence ниже, а не фактом commit.
 
+## Active working tree 2026-07-17: Gear Inventory
+
+- Qt Gear Inventory размещён в общем левом editor dock. `AvatarGearPreviewWidget` наследует `AvatarPreviewWidget`, имеет собственные OpenGL context/engine/scene и повторяет вид, камеру, orbit/pan/zoom и grounding окна Avatar Settings; avatar + animated bone attachments строятся внутри preview и не используют мировой renderer.
+- Preview resource path использует текущие server-provided avatar/gear state, optimized/Basis fallbacks и async `ResourceManager`. Он не переключает third-person, не меняет world camera и не рисует основную сцену повторно.
+- Client sync защищён login/connection/`GEAR_INVENTORY_SUPPORT` guards, проверкой inventory UID и наличия собственного avatar. Server authoritative path валидирует ownership, transforms, duplicates/limit, сохраняет `gear_ids`/`equipped_gear_ids`, восстанавливает gear при login/world transition и возвращает authoritative `AvatarFullUpdate` с настройками аватара и экипировкой.
+- Локальные Windows-сборки `gui_client` и `server` compile/link прошли. По требованию владельца GUI не запускался; live create/equip/edit/reconnect, Linux production deploy и screenshot-bot flow не проверялись. Production не менялся и требует отдельного разрешения.
+
+Каноническая детализация: [inventory-system.md](inventory-system.md).
+
 ## Реализовано в committed baseline
 
 - Native Qt client и alternative SDL path в target `gui_client`.
@@ -78,6 +87,8 @@ Scientific Object Editor, Particle Editor, Procedural Tree Editor, Native Voxel 
 - Documentation/Knowledge System Phase 2/3/5: `docs/codex`, MCOS, AGENTS, glossary и debt register.
 
 Windows/Qt `gui_client` canonical wrapper build повторно подтверждён 2026-07-14 для Release + RelWithDebInfo, XR Auto ON. Tree generator/editor и voxel editor smokes прошли из обеих canonical конфигураций; Windows `server` target также компилируется и линкуется. Full manual GUI/server/reconnect flow, Linux server runtime, deploy and production не выполнялись.
+
+Owner launch invariant зафиксирован 2026-07-15: пользовательский `RelWithDebInfo` runtime всегда берётся из `C:\programming\substrata_output_qt\vs2022\cyberspace_x64\RelWithDebInfo\gui_client.exe`. `C:\programming\substrata_output` остаётся legacy output и не является evidence для UI-проверки.
 
 ## Экспериментально
 

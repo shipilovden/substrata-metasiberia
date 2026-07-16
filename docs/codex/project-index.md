@@ -22,6 +22,7 @@
 | Кто producer/consumer конкретного contract? | [component-relations.md](component-relations.md) | [data-map.md](data-map.md) |
 | Какие данные существуют и где они живут? | [data-map.md](data-map.md) | [architecture.md](architecture.md) |
 | Какие scientific sources/API/providers использовать? | [scientific-data-providers.md](scientific-data-providers.md) | [scientific-object-editor.md](scientific-object-editor.md) |
+| Как устроены инвентарь, экипировка, avatar preview и gear protocol? | [inventory-system.md](inventory-system.md) | [component-relations.md](component-relations.md) |
 | Что означает термин или boundary? | [glossary.md](glossary.md) | профильный документ из глоссария |
 | Что реально реализовано, WIP или запланировано? | [current-state.md](current-state.md) | [audit-report.md](audit-report.md) |
 | Почему архитектура выглядит именно так? | [decisions.md](decisions.md) | [architecture.md](architecture.md) |
@@ -38,6 +39,7 @@
 | --- | --- | --- | --- |
 | Native/Web Client, UI, editors, XR | `gui_client/AGENTS.md` | `gui_client/` | [architecture: Native Client](architecture.md#native-client) |
 | Scientific Object Editor WIP | `gui_client/AGENTS.md` | `ScientificObjectEditor.*`, `ScientificObjectSettings.*`, `MainWindow.*` | [scientific-object-editor.md](scientific-object-editor.md); provider/API reference: [scientific-data-providers.md](scientific-data-providers.md) |
+| Gear Inventory / avatar equipment | `gui_client/AGENTS.md`, `server/AGENTS.md` | `GearInventoryPanel.*`, `AvatarGraphics.*`, `GUIClient.*`, `WorkerThread.cpp` | [inventory-system.md](inventory-system.md) |
 | Realtime Server/state/persistence | `server/AGENTS.md` | `server/` | [architecture: server](architecture.md#realtime-server-и-persistence) |
 | HTTP/WS/Server Website/Admin | `webserver/AGENTS.md` | `webserver/`, assets/fragments | [architecture: web](architecture.md#httpwebsocket-server-server-website-и-admin-panel) |
 | Shared protocol/models | `shared/AGENTS.md` | `shared/` | [relations](component-relations.md#contracts-с-максимальным-радиусом) |

@@ -4,6 +4,24 @@
 
 Формат записи: дата/фаза -> path/группа -> тип -> изменение -> evidence/причина.
 
+## 2026-07-17 — Gear Inventory preview и authoritative synchronization
+
+- [inventory-system.md](inventory-system.md) полностью приведён к фактической реализации: `AvatarGearPreviewWidget` наследует `AvatarPreviewWidget`, использует независимые OpenGL context/engine и тот же вид, camera controls и grounding, что Avatar Settings, не затрагивая world renderer или third-person.
+- Зафиксирован полный client/server contract: capability guards, login/logout caches, authoritative own-avatar echo, ownership/transform validation, deduplication/limit, `gear_ids`/`equipped_gear_ids` persistence и server-owned restoration при login/world transition.
+- Evidence разделено явно: локальные Windows `gui_client` и `server` compile/link прошли; по требованию владельца GUI не запускался; 2026-07-17 production Linux ELF `server` собран, выложен в release `gear-20260716_182028` и перезапущен.
+
+## 2026-07-15 — Canonical Qt runtime path invariant
+
+- В [build-and-test.md](build-and-test.md), root/local AGENTS и `C:\programming\qt_build.ps1` зафиксирован единственный owner launch path: `C:\programming\substrata_output_qt\vs2022\cyberspace_x64\RelWithDebInfo\gui_client.exe`.
+- `C:\programming\substrata_output` явно классифицирован как legacy mirror, не являющийся достаточным build/UI evidence.
+- Причина: inventory implementation сначала была собрана в legacy output, тогда как владелец всегда запускает `substrata_output_qt`; compile/link прошли, но проверялся не пользовательский артефакт.
+
+## 2026-07-15 — Native Gear Inventory и server contract repair
+
+- Добавлен [inventory-system.md](inventory-system.md): Qt dock lifecycle, isolated avatar preview, attachment tools, gear graphics/resource path и protocol/server ownership rules.
+- Старый direct-world FBO path классифицирован как причина рекурсивного preview; canonical preview теперь отдельная `OpenGLScene`.
+- Зафиксирована граница evidence: Windows Qt client/server compile+link успешны; production/Linux deploy и live create/equip/edit/reconnect не выполнялись; Windows Graphics Capture недоступен на текущем драйвере.
+
 ## 2026-07-14 — Tree/Voxel editors final integration и Lucide UI
 
 - Native Voxel Editor расширен Line/Fill/Select и selection clipboard Copy/Paste/Delete/Duplicate/Move; все изменения остаются sparse delta-командами с per-UID undo.
