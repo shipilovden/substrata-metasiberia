@@ -4,6 +4,13 @@
 
 Формат записи: дата/фаза -> path/группа -> тип -> изменение -> evidence/причина.
 
+## 2026-07-18 — Границы первого этапа native-редакторов
+
+- Добавлен [native-editors-stage-status-2026-07-18.md](native-editors-stage-status-2026-07-18.md): code-grounded границы Cultural Object MVP, правых animation/photo panels, document editor и подготовительного MCP handler.
+- [cultural-object-editor-research.md](cultural-object-editor-research.md) оставлен архитектурным proposal и теперь ссылается на отдельный partial/WIP status, чтобы исследование не выглядело доказательством реализации.
+- Явно зафиксированы незавершённые части: museum providers/merge, runtime animation graph, video encoder, world document/resource flow, отсутствующий в canonical Qt 5.15.16 модуль Qt PDF и запрет запуска MCP через wildcard listener.
+- Evidence на этом этапе — source review active working tree; build, ручной runtime и production этим документом не подтверждаются.
+
 ## 2026-07-17 — Gear Inventory preview и authoritative synchronization
 
 - [inventory-system.md](inventory-system.md) полностью приведён к фактической реализации: `AvatarGearPreviewWidget` наследует `AvatarPreviewWidget`, использует независимые OpenGL context/engine и тот же вид, camera controls и grounding, что Avatar Settings, не затрагивая world renderer или third-person.

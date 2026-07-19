@@ -49,6 +49,10 @@
 | [glossary.md](glossary.md) | Что означает cross-component термин? | основной glossary |
 | [scientific-object-editor.md](scientific-object-editor.md) | Что реально реализовано в Scientific Object WIP? | основной WIP |
 | [scientific-data-providers.md](scientific-data-providers.md) | Какие научные источники/API/форматы и provider rules использовать? | provider architecture reference |
+| [cultural-object-editor-research.md](cultural-object-editor-research.md) | Возможно ли и как спроектировать редактор объектов культуры? | research/architecture proposal |
+| [native-editors-stage-status-2026-07-18.md](native-editors-stage-status-2026-07-18.md) | Что уже входит в первый этап Cultural/animation/photo/documents/MCP и где проходят его границы? | partial/WIP implementation status |
+| [единая-игровая-система-план.md](единая-игровая-система-план.md) | План единой игровой, образовательной и экономической системы | research specification |
+| [cad-промышленные-объекты-план.md](cad-промышленные-объекты-план.md) | План CAD, инженерных чертежей и промышленных объектов | research specification |
 | [voxel-editor.md](voxel-editor.md) | Как устроены native voxel tools/layers/clipboard/generators и какие shared-format границы остаются? | основной WIP |
 | [inventory-system.md](inventory-system.md) | Как устроены native Gear Inventory, avatar attachment/preview и client/server contract? | active working tree; production не развёрнут |
 | [current-state.md](current-state.md) | Что baseline, partial, WIP, plan или unknown? | основной |
