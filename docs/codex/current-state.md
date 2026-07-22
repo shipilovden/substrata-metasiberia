@@ -2,7 +2,7 @@
 
 Назначение: разделять committed baseline, active working tree, partial features, планы и неизвестное.
 
-Снимок: 2026-07-14. Базой редакторской интеграции был синхронный `master` / `2377109c`; version headers остаются `0.0.21`. В текущий master-набор входят follow-up Procedural Tree Editor, расширенный Native Voxel Editor, Lucide UI assets и документация; production deploy не выполнялся.
+Снимок: 2026-07-22. Перед текущим CEF workflow patch проверен `master` / `78375f52`; version headers остаются `0.0.21`. В текущий master-набор входят native editors, MCP integration и документация; production deploy не выполнялся.
 
 Scientific Object Editor, Particle Editor, Procedural Tree Editor, Native Voxel Editor и Lucide UI integration входят в committed baseline `master`; production/runtime readiness по-прежнему определяется отдельными evidence ниже, а не фактом commit.
 
@@ -34,7 +34,7 @@ Scientific Object Editor, Particle Editor, Procedural Tree Editor, Native Voxel 
 - Web Client: source/build path есть; current reproducible production deployment не подтверждён.
 - Qt 6: compatibility code присутствует, canonical build остаётся Qt 5.
 - Wiki: первые onboarding pages существуют, roadmap значительно шире реализации.
-- Optional CEF/browser path существует, но canonical local Qt wrapper обычно CEF отключает.
+- CEF/browser path compile-time optional, но canonical Windows Qt wrapper теперь включает CEF по умолчанию. Release + RelWithDebInfo compile/link/runtime-copy с CEF 139.0.40 подтверждены 2026-07-22; фактический 3D WebView/browser UI не запускался и остаётся manual verification.
 
 ## Официальный WIP: Scientific Object Editor
 

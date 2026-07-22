@@ -2,9 +2,9 @@
 
 Назначение: канонический реестр подтверждённых форм команд, окружения, side effects и минимальной проверки по компонентам.
 
-Проверено по CMake/scripts/CI: 2026-07-14. Windows/Qt wrapper `C:\programming\qt_build.ps1` после final Procedural Tree geometry-v2, expanded Native Voxel Editor и Lucide integration: статус **CONFIRMED** для Release + RelWithDebInfo, XR Auto ON; tree generator/editor и voxel editor smokes прошли в обеих конфигурациях, runtime tree RGBA/licence и Lucide SVG/licence copy проверены. Windows `server` target compile/link также прошёл; Linux server runtime/deploy/production не выполнялись. Ранее Scientific Object Editor Phase 1.2 и follow-up smokes подтверждены 2026-07-11. `build` ниже означает запись generated artifacts, даже если source не меняется.
+Проверено по CMake/scripts/CI: 2026-07-22. Windows/Qt wrapper `C:\programming\qt_build.ps1` подтверждён для Release + RelWithDebInfo с CEF ON и XR Auto ON: compile/link/runtime-copy успешны, manifest `success=true`, полный обязательный CEF runtime присутствует в обеих canonical конфигурациях. Предыдущие editor/tree/voxel smokes остаются датированным evidence и новой CEF-сборкой не перезапускались. Windows server, клиентский runtime/UI, Linux server и production в этой проверке не запускались. `build` ниже означает запись generated artifacts, даже если source не меняется.
 
-Примечание Phase 2: все существовавшие command blocks сохранены без изменения; документационная миграция не выполняла ни одну из этих команд. Для текущей задачи допустимы только static link/path/term/diff checks.
+Историческое примечание Phase 2: при документационной миграции существовавшие command blocks сохранялись без изменения и не выполнялись. Это ограничение не относится к последующему датированному build evidence ниже.
 
 ## Требования окружения
 
@@ -21,11 +21,11 @@
 | SDL2 | alternative native и обязательный Emscripten path |
 | LLVM 15, LibreSSL, libjpeg-turbo | root CMake dependencies |
 | Jolt 5.3.0, Luau 0.627 | fetched by `scripts/get_libs.rb` into external dependency root |
-| Optional CEF | browser/webview helper; local wrapper default off |
+| Optional CEF | compile-time browser/webview helper; canonical Windows Qt wrapper default ON |
 | Optional OpenXR SDK | `XR_SUPPORT=ON`; must contain `cmake/OpenXRConfig.cmake` |
 | Emscripten/Ninja | webclient build only; separate SDL/libjpeg Emscripten builds |
 
-Current host has `C:\programming\qt_build.ps1`, `substrata_build_qt`, `substrata_output_qt` and OpenXR SDK. `qt6_build.ps1`/`sdl_build.ps1` are absent.
+Current host has `C:\programming\qt_build.ps1`, `substrata_build_qt`, `substrata_output_qt`, OpenXR SDK and a VS2022-ready CEF 139.0.40 binary distribution at `D:\cef\binary_distrib\cef_binary_139.0.40+g465474a+chromium-139.0.7258.139_windows64`. `qt6_build.ps1`/`sdl_build.ps1` are absent.
 
 ## Быстрые read-only проверки
 
@@ -42,7 +42,7 @@ python C:\programming\substrata\scripts\analyze_xr_pose_trace.py [optional-trace
 
 Wrapper находится вне Git repo и проверен чтением на audit host.
 
-Статус последнего подтверждения: **CONFIRMED, 2026-07-16** для `RelWithDebInfo`, `XR Off`; полная `Release` + `RelWithDebInfo`, `XR Auto` проверка остаётся подтверждённой на 2026-07-14.
+Статус последнего подтверждения: **CONFIRMED, 2026-07-22** для полной `Release` + `RelWithDebInfo`, CEF ON, XR Auto ON сборки.
 
 ### Жёсткий инвариант пользовательского runtime
 
@@ -59,6 +59,8 @@ C:\programming\substrata_output_qt\vs2022\cyberspace_x64\RelWithDebInfo\gui_clie
 3. runtime проверка запускает этот точный путь.
 
 `CYBERSPACE_OUTPUT` применяется во время CMake configure и запекается в Visual Studio project. Поэтому после сомнения в output path нужно запускать `qt_build.ps1` без `-SkipConfigure`; один успешный `cmake --build` может обновить другой output и не завершает пользовательскую задачу.
+
+CEF path должен указывать на leaf binary distribution с `include`, `Release`, `Resources` и собранным `libcef_dll_wrapper`, а не на полный Chromium checkout `D:\cef\chromium_git`. Canonical wrapper включает CEF по умолчанию, передаёт и environment, и CMake cache path, проверяет `/MD`-совместимый wrapper, фактический CMake cache/generated `OutDir`/configure stamp и весь runtime-набор. Qt/CEF/OpenXR и source resource copies сверяются по SHA-256. Явный opt-out: `-CEF Off`.
 
 ### Предстартовая проверка wrapper и защита build-tree
 
@@ -120,9 +122,9 @@ powershell -ExecutionPolicy Bypass -File C:\programming\qt_build.ps1
 | Configs | `Release`, `RelWithDebInfo` |
 | Jobs | 8 |
 | Qt | 5.15.16 at `C:/programming/Qt/5.15.16-vs2022-64` |
-| CEF | OFF |
-| XR | Auto; on 2026-07-14 resolved to `XR_SUPPORT=ON` with `C:\programming\OpenXR-SDK-1.1.57\install` |
-| Runtime copy | enabled; wrapper validates required Qt/platform artifacts |
+| CEF | ON; CEF 139.0.40 at `D:\cef\binary_distrib\cef_binary_139.0.40+g465474a+chromium-139.0.7258.139_windows64` |
+| XR | Auto; on 2026-07-22 resolved to `XR_SUPPORT=ON` with `C:\programming\OpenXR-SDK-1.1.57\install` |
+| Runtime copy | enabled; wrapper validates 28 required Qt/platform, CEF and OpenXR paths and hashes Qt/CEF/OpenXR/resource source-to-output copies |
 | Manifest | `C:\programming\substrata_output_qt\build_manifest.json` |
 
 Confirmed client artifacts:
@@ -131,6 +133,8 @@ Confirmed client artifacts:
 C:\programming\substrata_output_qt\vs2022\cyberspace_x64\Release\gui_client.exe
 C:\programming\substrata_output_qt\vs2022\cyberspace_x64\RelWithDebInfo\gui_client.exe
 ```
+
+CEF runtime evidence in both directories includes `browser_process.exe`, `libcef.dll`, `chrome_elf.dll`, ANGLE/Vulkan/DXC DLLs, context snapshot, pak/resources and `locales/en-US.pak`. On 2026-07-22 the canonical RelWithDebInfo EXE SHA-256 was `73528FDEEC734ABC6E49C77A2995BFD61BDE906521613D2BA9EDCA75C196420C`.
 
 Подтверждение build относится к compile/link/runtime-copy artifact validation. Для Tree, Voxel Editor и PubChem есть отдельные narrow runtime smokes ниже; они не заменяют manual editor UI/server/reconnect test.
 
@@ -232,11 +236,11 @@ Scope boundary: this smoke renders the Qt molecule viewport and tests model/acti
 # Узкая актуальная конфигурация
 powershell -ExecutionPolicy Bypass -File C:\programming\qt_build.ps1 -Configs RelWithDebInfo -XR Off
 
-# Полный default wrapper: Release + RelWithDebInfo, XR Auto, CEF off
+# Полный default wrapper: Release + RelWithDebInfo, XR Auto, CEF on
 powershell -ExecutionPolicy Bypass -File C:\programming\qt_build.ps1
 ```
 
-Класс: medium/expensive, пишет build/output/runtime files и `build_manifest.json`. `-SkipConfigure` допустим только для уже согласованного tree. `-XR On` обязан падать без SDK.
+Класс: medium/expensive, пишет build/output/runtime files и `build_manifest.json`. `-SkipConfigure` допустим только для уже согласованного tree. `-XR On` обязан падать без SDK; default `-CEF On` обязан падать без полного binary distribution/wrapper/runtime.
 
 Narrow Procedural Tree generator smoke после успешной Qt build:
 
@@ -265,11 +269,14 @@ $env:GLARE_CORE_LIBS = "C:/programming"
 $env:WINTER_DIR = "C:/programming/winter"
 $env:GLARE_CORE_TRUNK_DIR = "C:/programming/glare-core"
 $env:CYBERSPACE_OUTPUT = "C:/programming/substrata_output_qt"
+$env:CEF_BINARY_DISTRIB_DIR = "D:/cef/binary_distrib/cef_binary_139.0.40+g465474a+chromium-139.0.7258.139_windows64"
 
 cmake -S C:\programming\substrata `
   -B C:\programming\substrata_build_qt `
   -G "Visual Studio 17 2022" -A x64 `
-  -DUSE_SDL=OFF -DCEF_SUPPORT=OFF -DXR_SUPPORT=OFF
+  -DUSE_SDL=OFF -DCEF_SUPPORT=ON `
+  -DCEF_BINARY_DISTRIB_DIR=D:/cef/binary_distrib/cef_binary_139.0.40+g465474a+chromium-139.0.7258.139_windows64 `
+  -DXR_SUPPORT=OFF
 ```
 
 ## Узкие target builds
@@ -287,10 +294,10 @@ cmake --build C:\programming\substrata_build_qt --config RelWithDebInfo --target
 Runtime staging из `scripts/`:
 
 ```powershell
-ruby copy_files_to_output.rb --no_bugsplat --no_cef --config RelWithDebInfo
+ruby copy_files_to_output.rb --no_bugsplat --config RelWithDebInfo
 ```
 
-Команда пишет runtime output. Запускать только с корректным `CYBERSPACE_OUTPUT`.
+Команда пишет runtime output. Запускать только с корректными `CYBERSPACE_OUTPUT` и `CEF_BINARY_DISTRIB_DIR`; `--no_cef` использовать только для явно сконфигурированного `CEF_SUPPORT=OFF` build.
 
 ## Встроенные tests
 

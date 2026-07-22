@@ -2,6 +2,36 @@
 
 Назначение: постоянный итоговый отчёт крупных documentation/knowledge tasks. Не является текущим architecture source; для current facts использовать профильные документы `docs/codex`.
 
+## 2026-07-22 — Canonical Qt build with CEF/webviews
+
+Scope: сделать CEF рабочей default-зависимостью canonical Windows Qt build, сохранить явный opt-out и подтвердить compile/link/runtime staging без запуска клиента или production mutation.
+
+### Dependency preparation
+
+- Existing `D:\cef\chromium_git` checkout соответствует CEF `139.0.40+g465474a+chromium-139.0.7258.139`, но не содержал `out/Release_GN_x64`, binary distribution или CEF libraries. Полная Chromium source build не выполнялась: на D: было около 54 GiB свободно при documented требовании порядка 200 GB.
+- Использован официальный standard archive той же версии, размер 312,783,959 bytes, SHA-1 `BB2B792BB2DA0AA5FAE5AF599CDFA6CF5E2234E3`. Leaf distribution: `D:\cef\binary_distrib\cef_binary_139.0.40+g465474a+chromium-139.0.7258.139_windows64`.
+- `libcef_dll_wrapper` собран VS2022 для Release и Debug с `CEF_RUNTIME_LIBRARY_FLAG=/MD` и `USE_SANDBOX=OFF`; generated vcxproj содержит `MultiThreadedDLL` и `MultiThreadedDebugDLL`.
+
+### Build workflow
+
+- Root CMake принимает portable cache path `CEF_BINARY_DISTRIB_DIR`, сохраняет env fallback и при `CEF_SUPPORT=ON` fail-fast проверяет header, Release import/runtime libraries и wrapper library.
+- External canonical `C:\programming\qt_build.ps1` теперь default `-CEF On`, путь D:, передаёт env + CMake cache value, проверяет source distribution и `/MD` wrapper до build, сверяет фактический CMake cache/generated `OutDir`/configure stamp и валидирует 28 обязательных Qt/CEF/OpenXR runtime paths после staging. Qt/CEF/OpenXR и source resource copies дополнительно сверяются по SHA-256; manifest phase fields отражают фактическое выполнение; явный opt-out: `-CEF Off`.
+- Historical release helper path приведён к D:-distribution. Public README section `Development Map` удалён по запросу владельца; внутренний `docs/codex` portal сохранён.
+
+### Build evidence
+
+- Command: `powershell -ExecutionPolicy Bypass -File C:\programming\qt_build.ps1`; exit code 0, один configure/build process, без `-SkipConfigure`.
+- CMake cache: `CEF_SUPPORT:BOOL=ON`, `XR_SUPPORT:BOOL=ON`, Visual Studio 17 2022, CEF leaf path D:.
+- Manifest generated 2026-07-22: `success=true`, Release/RelWithDebInfo `status=success`, CEF ON, XR Auto -> ON, Qt 5.15.16.
+- В каждой canonical config присутствуют 28/28 обязательных runtime paths, включая `gui_client.exe`, Qt Gamepad, `openxr_loader.dll`, `browser_process.exe`, `libcef.dll`, CEF GPU/Vulkan/DXC libraries, snapshot, pak/resources и `locales/en-US.pak`; все 55 CEF locale-файлов также прошли source-to-output SHA-256 validation.
+- RelWithDebInfo `gui_client.exe`: 80,896,512 bytes, SHA-256 `73528FDEEC734ABC6E49C77A2995BFD61BDE906521613D2BA9EDCA75C196420C`; `libcef.dll`: 241,343,488 bytes, SHA-256 `EF0E8953D05D4CAB8A1443B479D3D565DD5849A5C92E37B9D809A22E2549E99C`.
+- Runtime copy сохранил известное non-fatal предупреждение об отсутствующем optional SDL2 DLL; `USE_SDL=OFF`, Qt и весь CEF runtime прошли последующую обязательную validation.
+
+### Честные границы
+
+- `gui_client.exe` не запускался: WebView creation, input, media playback, world-object browser interaction, GPU rendering и XR parity не подтверждены этой compile/link проверкой.
+- Server/shared protocol не менялись; server build, deploy, service restart, production URLs и DNS не затрагивались.
+
 ## 2026-07-14 — Tree + expanded Voxel Editor + Lucide final integration
 
 Scope: сохранить полный native Procedural Tree Editor, расширить уже работающий Voxel Editor недостающими creative tools и настраиваемыми generators, заменить условные glyphs на семантические Lucide icons, затем проверить canonical Windows Qt outputs. Production deploy/server restart/DNS не выполнялись.

@@ -4,6 +4,13 @@
 
 Формат записи: дата/фаза -> path/группа -> тип -> изменение -> evidence/причина.
 
+## 2026-07-22 — Canonical CEF/WebView build workflow
+
+- [build-and-test.md](build-and-test.md), [architecture.md](architecture.md) и [current-state.md](current-state.md) обновлены по новому подтверждённому invariant: CEF остаётся optional CMake feature, но canonical Windows Qt wrapper включает его по умолчанию.
+- Зафиксирован готовый CEF 139.0.40 binary distribution на D:, `/MD`-совместимый VS2022 wrapper, portable CMake cache path/fail-fast validation и явный `-CEF Off` opt-out.
+- [verification-report.md](verification-report.md) дополнен build evidence: Release + RelWithDebInfo success, CEF/XR ON, 28/28 обязательных runtime paths, Qt/CEF/OpenXR/resource SHA-256 staging validation и SHA-256 канонического RelWithDebInfo EXE; клиент/UI и production не запускались.
+- Из public `README.md` удалён `Development Map`; внутренний navigation portal `docs/codex` и роли документов не менялись, поэтому `documentation-index.md` не требовал обновления.
+
 ## 2026-07-18 — Границы первого этапа native-редакторов
 
 - Добавлен [native-editors-stage-status-2026-07-18.md](native-editors-stage-status-2026-07-18.md): code-grounded границы Cultural Object MVP, правых animation/photo panels, document editor и подготовительного MCP handler.

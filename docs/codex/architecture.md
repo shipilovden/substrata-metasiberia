@@ -2,7 +2,7 @@
 
 Назначение: каноническое описание логических слоёв, физических границ, contracts и правил расширения.
 
-Проверено: 2026-07-14 по CMake, entry points, protocol/model serializers, server routing/state, Scientific Object WIP и Procedural Tree Editor. Production topology приведена только как документированный snapshot.
+Базовая архитектура проверена 2026-07-14 по entry points, protocol/model serializers и server routing/state; CMake и canonical Windows CEF build workflow дополнительно проверены 2026-07-22. Production topology приведена только как документированный snapshot.
 
 ## Архитектурные принципы, наблюдаемые в коде
 
@@ -45,7 +45,7 @@
 - `GUIClient` владеет общей world/network/resource/render orchestration.
 - `MainWindow` — Qt shell, lifetime/actions/docks; `SDLUIInterface` — альтернативный UI boundary.
 - Editors работают с `WorldObject`, materials, parcels, world settings, bots, gear, shaders, particles, WIP scientific objects и WIP procedural tree objects.
-- CEF optional; OpenXR native-only и default `OFF`.
+- CEF остаётся compile-time optional и добавляет `browser_process`, но canonical Windows Qt wrapper включает его по умолчанию для 3D WebView/browser path; OpenXR native-only и root-CMake default `OFF`.
 
 ## Scientific Object Editor (WIP)
 
@@ -158,7 +158,7 @@ Qt menu/toolbar и voxel buttons используют subset Lucide из `resour
 - Project-owned contracts/models: `shared/`.
 - Project-owned reusable modules: `audio/`, `qt/`, `ethereum/`.
 - External engine/source trees: `glare-core`, `winter`; не патчить локально как скрытый prerequisite.
-- Основные dependencies: Qt 5 canonical, SDL, LLVM, LibreSSL, libjpeg-turbo, Jolt, Luau; CEF/OpenXR/Indigo optional.
+- Основные dependencies: Qt 5 canonical, SDL, LLVM, LibreSSL, libjpeg-turbo, Jolt, Luau; CEF/OpenXR/Indigo optional на уровне CMake. Canonical Windows Qt workflow выбирает CEF ON и XR Auto.
 
 ## Pipeline
 
