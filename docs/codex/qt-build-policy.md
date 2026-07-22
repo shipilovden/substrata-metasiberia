@@ -35,4 +35,4 @@ Qt 6 wrapper обязан явно проверить Qt 6 MSVC 2022 и заве
 
 ## Статус Qt 6
 
-После синхронизации `qt6-integration` с `master` добавлены отдельные Qt 6 CMake link/runtime selection и wrapper. Preflight 2026-07-22 проверил обязательные Qt 6 headers/tools/libs/plugins, но Qt 6 MSVC 2022 на этом компьютере не найден; wrapper корректно завершился до CMake configure и Qt 6 artifacts не созданы. Наличие `#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)` в исходниках само по себе не доказывает совместимую Qt 6 сборку. После установки Qt 6 повторить ровно команду «Собираем Qt 6».
+После синхронизации `qt6-integration` добавлены отдельные Qt 6 CMake link/runtime selection и wrapper. На компьютере найден Qt 6.11.1 MinGW (`C:\Qt\6.11.1\mingw_64`), но Windows workflow требует Qt 6 MSVC 2022 64-bit для ABI-совместимости с CEF и native dependencies. Wrapper корректно завершился до CMake configure; Qt 6 artifacts не созданы. После установки MSVC-комплекта повторить ровно команду «Собираем Qt 6».
