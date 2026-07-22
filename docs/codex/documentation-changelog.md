@@ -4,6 +4,12 @@
 
 Формат записи: дата/фаза -> path/группа -> тип -> изменение -> evidence/причина.
 
+## 2026-07-22 — Qt 5/Qt 6 branch build policy
+
+- Добавлен [qt-build-policy.md](qt-build-policy.md): `master` закреплён за Qt 5 wrapper/build tree/output, `qt6-integration` — за отдельным Qt 6 workflow без смешения CMake cache.
+- [AGENTS.md](../../AGENTS.md), [build-and-test.md](build-and-test.md), [current-state.md](current-state.md) и [documentation-index.md](documentation-index.md) теперь явно различают команды «собираем Qt 5» и «собираем Qt 6».
+- Текущая Qt 6 проверка остаётся dependency-gated: локальный Qt 6 MSVC 2022 не найден; наличие conditional compilation guards не считается build evidence.
+
 ## 2026-07-22 — Canonical CEF/WebView build workflow
 
 - [build-and-test.md](build-and-test.md), [architecture.md](architecture.md) и [current-state.md](current-state.md) обновлены по новому подтверждённому invariant: CEF остаётся optional CMake feature, но canonical Windows Qt wrapper включает его по умолчанию.

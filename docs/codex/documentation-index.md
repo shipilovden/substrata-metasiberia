@@ -62,6 +62,7 @@
 | [search-guide.md](search-guide.md) | Как найти минимальную область? | основной |
 | [token-policy.md](token-policy.md) | Как выбирать глубину и переиспользовать знания? | основной |
 | [build-and-test.md](build-and-test.md) | Какие команды/проверки подтверждены и рискованны? | основной; команды не исполнялись в Phase 2 |
+| [qt-build-policy.md](qt-build-policy.md) | Как различать Qt 5 `master` и Qt 6 `qt6-integration` workflow? | основной policy |
 | [audit-report.md](audit-report.md) | Что проверено и какие gaps остались? | основной snapshot |
 | [documentation-index.md](documentation-index.md) | Где находится единый portal документации? | основной portal |
 | [documentation-changelog.md](documentation-changelog.md) | Что менялось в knowledge system? | основной журнал |

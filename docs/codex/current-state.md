@@ -32,7 +32,7 @@ Scientific Object Editor, Particle Editor, Procedural Tree Editor, Native Voxel 
 - Chat redesign: private messages и часть UI/attachments существуют; groups, delivery/history/reactions/voice и другие plan stages неполны.
 - Bot editor: extensive UI/data path есть, field/runtime coverage требует отдельной проверки.
 - Web Client: source/build path есть; current reproducible production deployment не подтверждён.
-- Qt 6: compatibility code присутствует, canonical build остаётся Qt 5.
+- Qt 6: compatibility code присутствует; policy разделяет `master`/Qt 5 и `qt6-integration`/Qt 6, но Qt 6 configure/compile/link после синхронизации ветки ещё требует отдельного подтверждения.
 - Wiki: первые onboarding pages существуют, roadmap значительно шире реализации.
 - CEF/browser path compile-time optional, но canonical Windows Qt wrapper теперь включает CEF по умолчанию. Release + RelWithDebInfo compile/link/runtime-copy с CEF 139.0.40 подтверждены 2026-07-22; фактический 3D WebView/browser UI не запускался и остаётся manual verification.
 
