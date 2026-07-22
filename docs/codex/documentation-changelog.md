@@ -8,7 +8,8 @@
 
 - Добавлен [qt-build-policy.md](qt-build-policy.md): `master` закреплён за Qt 5 wrapper/build tree/output, `qt6-integration` — за отдельным Qt 6 workflow без смешения CMake cache.
 - [AGENTS.md](../../AGENTS.md), [build-and-test.md](build-and-test.md), [current-state.md](current-state.md) и [documentation-index.md](documentation-index.md) теперь явно различают команды «собираем Qt 5» и «собираем Qt 6».
-- Текущая Qt 6 проверка остаётся dependency-gated: локальный Qt 6 MSVC 2022 не найден; наличие conditional compilation guards не считается build evidence.
+- Ветка `qt6-integration` синхронизирована с актуальным `master`; старый указатель сохранён в локальной backup-ветке. Добавлены Qt6-specific CMake/runtime selection и tracked wrapper `scripts/qt6_build.ps1`.
+- Текущая Qt 6 проверка остаётся dependency-gated: локальный Qt 6 MSVC 2022 не найден; wrapper останавливается до configure, и наличие conditional compilation guards не считается build evidence.
 
 ## 2026-07-22 — Canonical CEF/WebView build workflow
 

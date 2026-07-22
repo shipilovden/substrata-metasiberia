@@ -2,6 +2,15 @@
 
 Назначение: постоянный итоговый отчёт крупных documentation/knowledge tasks. Не является текущим architecture source; для current facts использовать профильные документы `docs/codex`.
 
+## 2026-07-22 — Qt6 branch synchronization and compatibility gate
+
+Scope: сделать `qt6-integration` продолжением актуального `master`, отделить Qt 6 workflow от canonical Qt 5 workflow и проверить доступность Qt 6 dependency без запуска клиента.
+
+- Старое состояние Qt6 `3495cfbb` сохранено локально в `backup/qt6-integration-before-master-sync-20260722`; рабочая ветка `qt6-integration` синхронизирована с `master` на `54440e1e` до Qt6-specific commit.
+- Добавлены `SUBSTRATA_QT_DIR`/Qt6 selection в CMake, Qt6 Windows link libraries, Qt6 runtime-copy prefixes и изолированный `scripts/qt6_build.ps1` с `substrata_build_qt6`/`substrata_output_qt6`.
+- Qt 6 MSVC 2022 distribution (headers, tools, libraries, plugins) не найден на host. Wrapper остановился на dependency preflight с явным запретом Qt5 fallback; CMake configure/compile/link и Qt6 runtime staging поэтому не подтверждены.
+- CEF/WebView остаётся включённым default для Qt6 wrapper через ту же готовую distribution `D:\cef`; `gui_client.exe`, браузер и production не запускались.
+
 ## 2026-07-22 — Canonical Qt build with CEF/webviews
 
 Scope: сделать CEF рабочей default-зависимостью canonical Windows Qt build, сохранить явный opt-out и подтвердить compile/link/runtime staging без запуска клиента или production mutation.
