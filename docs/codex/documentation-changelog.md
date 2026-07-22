@@ -9,13 +9,13 @@
 - Добавлен [qt-build-policy.md](qt-build-policy.md): `master` закреплён за Qt 5 wrapper/build tree/output, `qt6-integration` — за отдельным Qt 6 workflow без смешения CMake cache.
 - [AGENTS.md](../../AGENTS.md), [build-and-test.md](build-and-test.md), [current-state.md](current-state.md) и [documentation-index.md](documentation-index.md) теперь явно различают команды «собираем Qt 5» и «собираем Qt 6».
 - Ветка `qt6-integration` синхронизирована с актуальным `master`; старый указатель сохранён в локальной backup-ветке. Добавлены Qt6-specific CMake/runtime selection и tracked wrapper `scripts/qt6_build.ps1`.
-- Текущая Qt 6 проверка остаётся dependency-gated: локальный Qt 6 MSVC 2022 не найден; wrapper останавливается до configure, и наличие conditional compilation guards не считается build evidence.
+- Qt 6 MSVC 2022 теперь установлен в `C:\Qt\6.11.1\msvc2022_64`; отдельный wrapper завершил Release + RelWithDebInfo сборку и runtime staging с `success=true`.
 
 ## 2026-07-22 — Canonical CEF/WebView build workflow
 
 - [build-and-test.md](build-and-test.md), [architecture.md](architecture.md) и [current-state.md](current-state.md) обновлены по новому подтверждённому invariant: CEF остаётся optional CMake feature, но canonical Windows Qt wrapper включает его по умолчанию.
 - Зафиксирован готовый CEF 139.0.40 binary distribution на D:, `/MD`-совместимый VS2022 wrapper, portable CMake cache path/fail-fast validation и явный `-CEF Off` opt-out.
-- [verification-report.md](verification-report.md) дополнен build evidence: Release + RelWithDebInfo success, CEF/XR ON, 28/28 обязательных runtime paths, Qt/CEF/OpenXR/resource SHA-256 staging validation и SHA-256 канонического RelWithDebInfo EXE; клиент/UI и production не запускались.
+- [verification-report.md](verification-report.md) дополнен build evidence: Release + RelWithDebInfo success, CEF/XR ON, 28/28 обязательных runtime paths, Qt/CEF/OpenXR/resource SHA-256 staging validation и SHA-256 канонического RelWithDebInfo EXE. После Qt6-совместимого исправления выполнен startup smoke с `--desktop` и CEF disabled; браузер и production не запускались.
 - Из public `README.md` удалён `Development Map`; внутренний navigation portal `docs/codex` и роли документов не менялись, поэтому `documentation-index.md` не требовал обновления.
 
 ## 2026-07-18 — Границы первого этапа native-редакторов

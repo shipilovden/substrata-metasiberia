@@ -2,7 +2,7 @@
 
 Назначение: канонический реестр подтверждённых форм команд, окружения, side effects и минимальной проверки по компонентам.
 
-Проверено по CMake/scripts/CI: 2026-07-22. Windows/Qt wrapper `C:\programming\qt_build.ps1` подтверждён для Release + RelWithDebInfo с CEF ON и XR Auto ON: compile/link/runtime-copy успешны, manifest `success=true`, полный обязательный CEF runtime присутствует в обеих canonical конфигурациях. Предыдущие editor/tree/voxel smokes остаются датированным evidence и новой CEF-сборкой не перезапускались. Windows server, клиентский runtime/UI, Linux server и production в этой проверке не запускались. `build` ниже означает запись generated artifacts, даже если source не меняется.
+Проверено по CMake/scripts/CI: 2026-07-22. Qt 5 wrapper `C:\programming\qt_build.ps1` и отдельный Qt 6 wrapper `C:\programming\qt6_build.ps1` подтверждены для Release + RelWithDebInfo с CEF ON и XR Auto ON: compile/link/runtime-copy успешны, manifest `success=true`, полный обязательный CEF runtime присутствует в обеих canonical конфигурациях. Qt 6 startup smoke выполнен с `--desktop` и `SUBSTRATA_ENABLE_CEF=false`; браузер не запускался. Windows server, Linux server и production не запускались. `build` ниже означает запись generated artifacts, даже если source не меняется.
 
 Историческое примечание Phase 2: при документационной миграции существовавшие command blocks сохранялись без изменения и не выполнялись. Это ограничение не относится к последующему датированному build evidence ниже.
 
@@ -25,9 +25,9 @@
 | Optional OpenXR SDK | `XR_SUPPORT=ON`; must contain `cmake/OpenXRConfig.cmake` |
 | Emscripten/Ninja | webclient build only; separate SDL/libjpeg Emscripten builds |
 
-Current host has `C:\programming\qt_build.ps1`, `substrata_build_qt`, `substrata_output_qt`, OpenXR SDK and a VS2022-ready CEF 139.0.40 binary distribution at `D:\cef\binary_distrib\cef_binary_139.0.40+g465474a+chromium-139.0.7258.139_windows64`. The Qt 6 launcher `C:\programming\qt6_build.ps1` delegates to the tracked `scripts/qt6_build.ps1`; its isolated tree/output are `substrata_build_qt6`/`substrata_output_qt6`. Qt 6.11.1 MinGW was found at `C:\Qt\6.11.1\mingw_64`, but this workflow requires the Qt 6 MSVC 2022 64-bit component to match CEF and native dependencies; preflight therefore stops before CMake configure. `sdl_build.ps1` is absent.
+Current host has `C:\programming\qt_build.ps1`, `substrata_build_qt`, `substrata_output_qt`, OpenXR SDK and a VS2022-ready CEF 139.0.40 binary distribution at `D:\cef\binary_distrib\cef_binary_139.0.40+g465474a+chromium-139.0.7258.139_windows64`. The Qt 6 launcher `C:\programming\qt6_build.ps1` delegates to the tracked `scripts/qt6_build.ps1`; its isolated tree/output are `substrata_build_qt6`/`substrata_output_qt6`. Qt 6.11.1 MSVC 2022 is installed at `C:\Qt\6.11.1\msvc2022_64` and matches the CEF/native ABI. The Qt 6 full build and CEF runtime staging are confirmed; `sdl_build.ps1` is absent.
 
-Разделение веток и output зафиксировано в [qt-build-policy.md](qt-build-policy.md): `master` всегда Qt 5 через `qt_build.ps1`, `qt6-integration` всегда Qt 6 через отдельный `qt6_build.ps1` и `substrata_build_qt6`. До появления подтверждённого Qt 6 MSVC 2022 на этом хосте Qt 6 build считается blocked dependency, а Qt 5 workflow не переключается на Qt 6 автоматически.
+Разделение веток и output зафиксировано в [qt-build-policy.md](qt-build-policy.md): `master` всегда Qt 5 через `qt_build.ps1`, `qt6-integration` всегда Qt 6 через отдельный `qt6_build.ps1` и `substrata_build_qt6`. Qt 5 workflow не переключается на Qt 6 автоматически.
 
 ## Быстрые read-only проверки
 

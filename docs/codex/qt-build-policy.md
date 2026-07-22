@@ -35,4 +35,4 @@ Qt 6 wrapper обязан явно проверить Qt 6 MSVC 2022 и заве
 
 ## Статус Qt 6
 
-После синхронизации `qt6-integration` добавлены отдельные Qt 6 CMake link/runtime selection и wrapper. На компьютере найден Qt 6.11.1 MinGW (`C:\Qt\6.11.1\mingw_64`), но Windows workflow требует Qt 6 MSVC 2022 64-bit для ABI-совместимости с CEF и native dependencies. Wrapper корректно завершился до CMake configure; Qt 6 artifacts не созданы. После установки MSVC-комплекта повторить ровно команду «Собираем Qt 6».
+На компьютере установлен Qt 6.11.1 MSVC 2022 (`C:\Qt\6.11.1\msvc2022_64`). Полная сборка `qt6-integration` через отдельные `substrata_build_qt6`/`substrata_output_qt6` прошла для `Release` и `RelWithDebInfo`; `build_manifest.json` содержит `success=true`, CEF включён, XR Auto обнаружил OpenXR SDK. Клиентский startup smoke после Qt 6-совместимого исправления также прошёл с `--desktop` и `SUBSTRATA_ENABLE_CEF=false`; встроенный браузер намеренно не запускался.

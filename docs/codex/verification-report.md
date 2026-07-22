@@ -8,8 +8,14 @@ Scope: сделать `qt6-integration` продолжением актуаль�
 
 - Старое состояние Qt6 `3495cfbb` сохранено локально в `backup/qt6-integration-before-master-sync-20260722`; рабочая ветка `qt6-integration` синхронизирована с `master` на `54440e1e` до Qt6-specific commit.
 - Добавлены `SUBSTRATA_QT_DIR`/Qt6 selection в CMake, Qt6 Windows link libraries, Qt6 runtime-copy prefixes и изолированный `scripts/qt6_build.ps1` с `substrata_build_qt6`/`substrata_output_qt6`.
-- Qt 6.11.1 MinGW найден в `C:\Qt\6.11.1\mingw_64`, но Qt 6 MSVC 2022 distribution (headers, tools, `.lib` libraries, plugins) отсутствует. Wrapper остановился на dependency preflight с явным объяснением ABI-несовместимости MinGW с MSVC-built CEF и запретом Qt5 fallback; CMake configure/compile/link и Qt6 runtime staging поэтому не подтверждены.
+- Qt 6.11.1 MSVC 2022 установлен в `C:\Qt\6.11.1\msvc2022_64`; отдельный Qt6 wrapper прошёл CMake configure, Release + RelWithDebInfo compile/link и runtime staging.
 - CEF/WebView остаётся включённым default для Qt6 wrapper через ту же готовую distribution `D:\cef`; `gui_client.exe`, браузер и production не запускались.
+
+## 2026-07-22 — Qt 6 startup crash fix
+
+- Диагностический запуск canonical `substrata_output_qt6\...\RelWithDebInfo\gui_client.exe --desktop` с `SUBSTRATA_ENABLE_CEF=false` первоначально завершался Qt fatal assertion: `Qt::UniqueConnection` не поддерживает lambda-слоты в Qt 6.
+- В `MainWindow::initialiseLanguageMenu()` удалён неподдерживаемый `Qt::UniqueConnection` для двух lambda-подключений; Qt-сообщения теперь немедленно flush-ятся в `Cyberspace/log.txt`, чтобы следующий fatal не терял причину.
+- После пересборки `gui_client` и runtime copy startup smoke оставался живым не менее 10 секунд с CEF отключённым; браузер намеренно не запускался.
 
 ## 2026-07-22 — Canonical Qt build with CEF/webviews
 
