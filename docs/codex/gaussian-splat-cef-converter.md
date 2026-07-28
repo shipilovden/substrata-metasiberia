@@ -4,17 +4,17 @@
 Gaussian containers that `GaussianSplatDecoder` does not decode directly.
 It does not open a browser window and it does not create a world WebView.
 It runs the self-hosted `@playcanvas/splat-transform` bundle in a 1×1
-off-screen CEF browser, normalises the source to an ordinary
-`binary_little_endian` PLY and returns both its temporary path and bytes.
+off-screen CEF browser and normalises the source to an ordinary
+`binary_little_endian` temporary PLY.
 
 The canonical direct path remains:
 
 - standard 3DGS binary PLY -> `GaussianSplatDecoder`;
 - 32-byte `.splat` -> `GaussianSplatDecoder`;
-- `.spz` -> `GaussianSplatDecoder`.
+- SPZ v4 -> `GaussianSplatDecoder`.
 
-Use the hidden converter for compressed PLY, KSPLAT, SOG, LCC and LCC2,
-then pass `outputBytes()` to:
+Use the hidden converter for compressed PLY, KSPLAT, non-v4 SPZ, SOG, LCC and LCC2,
+then memory-map `outputPath()` and pass its bytes to:
 
 ```cpp
 GaussianSplatDecoder::decode("metasiberia-runtime.ply", ArrayRef<uint8>(...));
@@ -42,14 +42,19 @@ The normal GUI tick calls `converter->think()`.  While it is running,
 `progressStage()` (`read`, `convert`, `ready`) and `progressValue()` can drive
 the dialog's progress text/bar. When `isFinished()` becomes true:
 
-- `State_Succeeded`: decode `outputBytes()` (or mmap `outputPath()`), then
-  release the converter;
+- `State_Succeeded`: memory-map and decode `outputPath()`, then release the
+  converter;
 - `State_Failed`: show `errorMessage()`, delete any caller-owned partial
   temporary output and release the converter.
 
 `CEF::doMessageLoopWork()` is already pumped by the client. Do not call it
 from this class or from a worker thread. Conversion start, `think()`, result
 inspection and destruction must stay on that same UI thread.
+
+The bridge asks the bundle for its byte-only URL result and creates a single
+transient Blob solely for CEF's download hand-off. Native validation reads at
+most the first 1 MiB; it does not duplicate the complete converted payload in
+RAM.
 
 If built with `CEF_SUPPORT=0`, `start()` moves to `State_Failed` with a clear
 diagnostic and performs no browser work.
