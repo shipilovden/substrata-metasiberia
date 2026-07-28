@@ -1,0 +1,1 @@
+[Home](Home) | [Install](01-Install-Windows) | [Registration](02-Registration-and-Login) | [First Launch](03-First-Launch-and-Connection) | [Wiki Plan](WIKI-PAGES-PLAN-RU) | [Releases](https://github.com/shipilovden/sub-metasiberia/releases) | [Signup](https://vr.metasiberia.com/signup)
