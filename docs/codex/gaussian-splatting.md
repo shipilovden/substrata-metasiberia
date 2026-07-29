@@ -9,7 +9,7 @@ Metasiberia now treats Gaussian splats as first-class world objects, not as a br
 - Native Qt5 client loads and renders Gaussian splats in the normal 3D scene.
 - Web/Emscripten client has an ImGui "Gaussian splats" upload panel.
 - Uploaded splats become ordinary editable world objects: select them, then use the existing transform controls for position, rotation and scale.
-- Native Qt5 selection opens a dedicated **Редактор GaussianSplats** panel with Gaussian-specific density/opacity, brightness and splat radius controls.
+- Native Qt5 selection opens a dedicated **Редактор GaussianSplats** panel with Gaussian-specific presets, density/opacity, brightness, splat radius, saturation, contrast and edge-cutoff controls.
 - Server/shared resource validation preserves Gaussian splat resources and SOG metadata entry points.
 - Existing OBJ/GLTF/GLB/VOX/STL/IGMESH/image loading remains on the old path.
 
@@ -39,12 +39,21 @@ Gaussian render tuning is stored in `WorldObject::content` as:
 
 ```text
 gaussian_splat_settings_v1
-opacity_multiplier=1.35
+opacity_multiplier=2.25
 brightness=1
 radius_multiplier=1
+saturation=1
+contrast=1
+alpha_cutoff=0.00392157
 ```
 
 This keeps Gaussian splats compatible with the existing server protocol: the object remains a normal generic world object, but the native client recognises the Gaussian model URL and applies the specialised editor/render settings.
+
+Rendering notes:
+
+- Gaussian objects must use the transparent/OIT render path only. Do not also put them in the ordinary `alpha_blend` queue.
+- Density is applied as optical density (`1-exp(-opacity*density)`), not as a simple linear alpha multiply.
+- `alpha_cutoff` removes low-alpha haze around splats; it is useful on bright Metasiberia backgrounds.
 
 The CEF converter is not a visible browser and does not create a WebView object. It loads the packaged converter from:
 
