@@ -70,6 +70,11 @@ data/resources/gaussian_splat/gaussian_splat_converter.js
 data/resources/gaussian_splat/webp.wasm
 ```
 
+On Windows, derive the converter's input directory from the already canonical
+input-file path. Do not call `FileUtils::getCanonicalPath()` on that directory:
+its regular-file handle path produces `ERROR_ACCESS_DENIED (5)` without
+`FILE_FLAG_BACKUP_SEMANTICS`, even when the directory ACL is valid.
+
 ## Web Client Path
 
 Primary files:
@@ -107,10 +112,11 @@ Verified on 2026-07-29:
 
 - `C:\programming\substrata_output_qt\build_manifest.json`: `success=true`, `runtime_ready=true`;
 - branch `feature/gaussian-splat-native-web`;
-- `gui_client.exe` SHA-256: `D5C79F7C0D71E4675A3AA2A58188F6004CD0DF0EFA162A1018829295627AEF5E`;
+- `gui_client.exe` SHA-256: `5A2B4DCE0626B6ABE35F2357D9CD993302B7F537B6A01D336FA016AE088B4014`;
 - local Windows `server` target SHA-256: `07E7EC80CEF19F39D726B9798F3858E2257440E7E6761F05CA63ACB830C53628`;
 - Emscripten output: `C:\programming\substrata_output_emscripten_gaussian\test_builds\gui_client.js/.wasm/.data`.
 - `GaussianSplatDecoder::test()` passed in the local server test run. A later, unrelated legacy Basis test still expects a hard-coded `D:\files\...` output path and stops the complete suite.
+- The packaged Gaussian vertex/fragment shaders compiled and linked successfully through the local NVIDIA GeForce GTX 1650 OpenGL 4.3 driver.
 
 ## Production Rule
 
