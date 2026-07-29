@@ -9,6 +9,7 @@ Metasiberia now treats Gaussian splats as first-class world objects, not as a br
 - Native Qt5 client loads and renders Gaussian splats in the normal 3D scene.
 - Web/Emscripten client has an ImGui "Gaussian splats" upload panel.
 - Uploaded splats become ordinary editable world objects: select them, then use the existing transform controls for position, rotation and scale.
+- Native Qt5 selection opens a dedicated **Редактор GaussianSplats** panel with Gaussian-specific density/opacity, brightness and splat radius controls.
 - Server/shared resource validation preserves Gaussian splat resources and SOG metadata entry points.
 - Existing OBJ/GLTF/GLB/VOX/STL/IGMESH/image loading remains on the old path.
 
@@ -30,6 +31,20 @@ Primary files:
 - `gui_client/GaussianSplatCEFConverter.*`: hidden 1x1 off-screen CEF converter for all other supported containers.
 - `gui_client/GaussianSplatRenderer.*`: OpenGL instanced splat rendering.
 - `gui_client/AddObjectDialog.*`: Add Object dialog integration and progress UI.
+- `gui_client/ObjectEditor.*` and `gui_client/MainWindow.cpp`: standard transform editor plus the dedicated **Редактор GaussianSplats** panel.
+
+Gaussian colour data in `GaussianSplatData` is linear RGB. PLY/SPZ DC colour terms are converted from display RGB to linear RGB during decode; otherwise splats look washed out/milky in the native renderer, especially on Metasiberia's bright world background.
+
+Gaussian render tuning is stored in `WorldObject::content` as:
+
+```text
+gaussian_splat_settings_v1
+opacity_multiplier=1.35
+brightness=1
+radius_multiplier=1
+```
+
+This keeps Gaussian splats compatible with the existing server protocol: the object remains a normal generic world object, but the native client recognises the Gaussian model URL and applies the specialised editor/render settings.
 
 The CEF converter is not a visible browser and does not create a WebView object. It loads the packaged converter from:
 
@@ -74,8 +89,9 @@ C:\programming\substrata_output_qt\vs2022\cyberspace_x64\RelWithDebInfo\gui_clie
 Verified on 2026-07-29:
 
 - `C:\programming\substrata_output_qt\build_manifest.json`: `success=true`, `runtime_ready=true`;
-- `gui_client.exe` SHA-256: `FFFDA9AD1A235BD2FA4D1303E9258B73DC00FBFB26D7F5701E21BA5B6BE73AA6`;
-- local Windows `server` target SHA-256: `7EF6BA0ADFF8264A94B1B4586231797B1D5E02D25236E930E25A2872BA371BCE`;
+- branch `feature/gaussian-splat-native-web`, commit message `feat(client): add Gaussian splat editor tuning`;
+- `gui_client.exe` SHA-256: `7BE29116C9D35DD2730C44DBF667CA7AF4EA0067C50ED56B44F622DB1D30404F`;
+- local Windows `server` target SHA-256: `715E5B0FEB77E641DA08653B86D3D33C047E36C3160C13BD55836FE9C4FB0823`;
 - Emscripten output: `C:\programming\substrata_output_emscripten_gaussian\test_builds\gui_client.js/.wasm/.data`.
 
 ## Production Rule
