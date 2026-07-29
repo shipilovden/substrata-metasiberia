@@ -113,13 +113,50 @@ Verified on 2026-07-29:
 - `C:\programming\substrata_output_qt\build_manifest.json`: `success=true`, `runtime_ready=true`;
 - branch `feature/gaussian-splat-native-web`;
 - `gui_client.exe` SHA-256: `5A2B4DCE0626B6ABE35F2357D9CD993302B7F537B6A01D336FA016AE088B4014`;
-- local Windows `server` target SHA-256: `07E7EC80CEF19F39D726B9798F3858E2257440E7E6761F05CA63ACB830C53628`;
+- local Windows `server` target SHA-256: `B78911D99879961D47E6D651E1EEF2A305876B7EAB205438C4298B21196263B9`;
 - Emscripten output: `C:\programming\substrata_output_emscripten_gaussian\test_builds\gui_client.js/.wasm/.data`.
 - `GaussianSplatDecoder::test()` passed in the local server test run. A later, unrelated legacy Basis test still expects a hard-coded `D:\files\...` output path and stops the complete suite.
 - The packaged Gaussian vertex/fragment shaders compiled and linked successfully through the local NVIDIA GeForce GTX 1650 OpenGL 4.3 driver.
 
 ## Production Rule
 
-Production Metasiberia runs a Linux ELF `server` on `metasiberia-server`, not Windows `server.exe`. This branch has only been built locally. Do not deploy or restart production services without an explicit current confirmation from the owner.
+Production Metasiberia runs a Linux ELF `server` on `metasiberia-server`, not Windows `server.exe`. Do not deploy or restart production services without an explicit current confirmation from the owner.
 
-For production rollout, first build Linux `server` using the documented `/srv/metasiberia/build/master` workflow, stage a release directory, then restart and verify `7600/8080/8443`.
+The Linux server must compile `shared/GaussianSplatAsset.*` and
+`FileTypes::hasSupportedExtension()` must delegate to
+`GaussianSplatAsset::hasSupportedExtension()`. The server does not need the
+full `GaussianSplatData` decoder merely to accept and preserve uploaded
+resources.
+
+If a Gaussian object is visible in the native client but absent in the web
+client, check its exact resource URL before changing the renderer:
+
+```bash
+curl -k -o /dev/null -w '%{http_code} %{size_download}\n' \
+  https://127.0.0.1:8443/resource/<resource-url>
+journalctl -u metasiberia-server.service --since '10 minutes ago' | \
+  grep -E 'Streaming upload|Received file|InvalidFileType'
+```
+
+`404` together with an object whose resource is `State_NotPresent` means the
+web client never received bytes and therefore never reached its decoder or
+WebGL shader. A server binary without the Gaussian allow-list rejects `.ply`
+as `Protocol::InvalidFileType` before streaming begins. Deploy the compatible
+Linux server first, then repeat the upload through the normal resource upload
+protocol. Success requires all of the following:
+
+- `Streaming upload` and `Received file` in the server journal;
+- `/resource/<resource-url>` returns `200`;
+- HTTP size and SHA-256 match the source;
+- service remains active with `NRestarts=0`.
+
+Production rollout verified on 2026-07-29:
+
+- release: `/srv/metasiberia/releases/gaussian-upload-599ed719-20260729_153445`;
+- Linux ELF SHA-256: `24B5FD0B3EEB58EDF6ECE56CFC6BE6744B9251457FF0934A8A8CAA5888068B3C`;
+- `scene_ply_8952469191225266736.ply`: HTTP `200`,
+  `12,853,714` bytes, `application/octet-stream`;
+- source/server SHA-256:
+  `DEA72C3933A05F9845EC4CE8B14B052B1942961DFAD148E9F42112C647339458`;
+- ports `7600/8080/8443`, `/world/map`, and service health verified after
+  deployment.
