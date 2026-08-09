@@ -6,8 +6,8 @@
 
 ## Как пользоваться порталом
 
-1. Новая сессия начинает с [корневого AGENTS.md](../../AGENTS.md).
-2. Инженерная задача выбирает маршрут в [project-index.md](project-index.md).
+1. Новая сессия начинает с [корневого AGENTS.md](../../AGENTS.md), затем открывает [Codex guide](README.md).
+2. Инженерная задача выбирает маршрут в [project-index.md](project-index.md) и при необходимости использует [orchestration](ORCHESTRATION.md).
 3. Факты берутся из профильного документа и при необходимости проверяются минимальным source range.
 4. MCOS определяет стандарт знаний, но не заменяет факты: [MCOS.md](MCOS.md).
 
@@ -30,7 +30,7 @@
 | A. Конституция | Универсальные инженерные правила и поведение Codex. | [MCOS.md](MCOS.md) |
 | B. Архитектура | Current structure, process/data boundaries, dependencies. | [system-overview.md](system-overview.md), [architecture.md](architecture.md), [component-relations.md](component-relations.md) |
 | C. Навигация | Быстрый route к нужному owner, термину или документу. | [project-index.md](project-index.md), [project-map.md](project-map.md), [documentation-index.md](documentation-index.md), [search-guide.md](search-guide.md), [glossary.md](glossary.md) |
-| D. Правила разработки | Практический workflow, token policy, safe change rules. | [development-rules.md](development-rules.md), [token-policy.md](token-policy.md), [build-and-test.md](build-and-test.md) |
+| D. Правила разработки | Практический workflow, token policy, orchestration и safe change rules. | [development-rules.md](development-rules.md), [token-policy.md](token-policy.md), [ORCHESTRATION.md](ORCHESTRATION.md), [TESTING_AND_ACCEPTANCE.md](TESTING_AND_ACCEPTANCE.md), [build-and-test.md](build-and-test.md) |
 | E. Специализированные знания | Подсистемы и WIP, где нужен отдельный owner. | [data-map.md](data-map.md), [scientific-object-editor.md](scientific-object-editor.md), [scientific-data-providers.md](scientific-data-providers.md), [voxel-editor.md](voxel-editor.md), [inventory-system.md](inventory-system.md) |
 | F. История и долг | ADR, changelog, verification, audit snapshots, known debt. | [decisions.md](decisions.md), [documentation-changelog.md](documentation-changelog.md), [verification-report.md](verification-report.md), [audit-report.md](audit-report.md), [engineering-debt.md](engineering-debt.md) |
 
@@ -68,6 +68,16 @@
 | [documentation-changelog.md](documentation-changelog.md) | Что менялось в knowledge system? | основной журнал |
 | [verification-report.md](verification-report.md) | Чем завершались крупные knowledge/documentation tasks? | основной отчёт |
 | [MCOS.md](MCOS.md) | Как организуются знания и работа Codex? | MCOS, canonical engineering constitution |
+
+## Оркестрация и acceptance
+
+| Документ | Главный вопрос | Статус |
+| --- | --- | --- |
+| [README.md](README.md) | С чего начать и какие документы открыть по задаче? | основной entry |
+| [ORCHESTRATION.md](ORCHESTRATION.md) | Когда и как Orchestrator использует логические роли и параллелизм? | основной policy |
+| [DELEGATION_CONTRACT.md](DELEGATION_CONTRACT.md) | Как поставить дочернему агенту ограниченную и проверяемую задачу? | основной template |
+| [REVIEW_PROTOCOL.md](REVIEW_PROTOCOL.md) | Когда нужен review и как сообщать findings? | основной gate |
+| [TESTING_AND_ACCEPTANCE.md](TESTING_AND_ACCEPTANCE.md) | Как выбирать verification и считать задачу готовой? | основной gate |
 
 ## AGENTS loaders
 
@@ -165,3 +175,6 @@ Third-party/vendored documentation (например `secp256k1-master/README.md
 - Не заменять relative links absolute local paths.
 - Plans/historical docs не удалять без анализа references; помечать current replacement.
 - Runtime/production facts датировать и не считать вечными.
+# Product identity
+
+- [Substrata → Metasiberia migration matrix](PRODUCT_IDENTITY_MIGRATION.md)

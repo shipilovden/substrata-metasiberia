@@ -4,17 +4,25 @@
 
 Формат записи: дата/фаза -> path/группа -> тип -> изменение -> evidence/причина.
 
+## 2026-08-09 — Codex orchestration and instruction scope
+
+- Верхний `C:\programming\AGENTS.md` сокращён до универсальных правил workspace; Metasiberia-specific архитектура, production и build details больше не распространяются на остальные проекты.
+- Repository loader [AGENTS.md](../../AGENTS.md) теперь задаёт только проектные границы, маршрутизацию, risk gates и ссылки на подтверждённые commands, без энциклопедии инфраструктуры.
+- Добавлены [README.md](README.md), [ORCHESTRATION.md](ORCHESTRATION.md), [DELEGATION_CONTRACT.md](DELEGATION_CONTRACT.md), [REVIEW_PROTOCOL.md](REVIEW_PROTOCOL.md) и [TESTING_AND_ACCEPTANCE.md](TESTING_AND_ACCEPTANCE.md). Они описывают roles, decision to delegate, conflict-safe parallelism, review gate и acceptance без вымышленных Codex config keys.
+- Evidence: локальный Codex CLI `0.146.0-alpha.9.2`; `multi_agent` указан как stable/effective feature, но public CLI/help не документирует named roles, per-role models/reasoning, limits или clean-context controls.
+
 ## 2026-07-22 — Qt 5/Qt 6 branch build policy
 
 - Добавлен [qt-build-policy.md](qt-build-policy.md): `master` закреплён за Qt 5 wrapper/build tree/output, `qt6-integration` — за отдельным Qt 6 workflow без смешения CMake cache.
 - [AGENTS.md](../../AGENTS.md), [build-and-test.md](build-and-test.md), [current-state.md](current-state.md) и [documentation-index.md](documentation-index.md) теперь явно различают команды «собираем Qt 5» и «собираем Qt 6».
-- Текущая Qt 6 проверка остаётся dependency-gated: локальный Qt 6 MSVC 2022 не найден; наличие conditional compilation guards не считается build evidence.
+- Ветка `qt6-integration` синхронизирована с актуальным `master`; старый указатель сохранён в локальной backup-ветке. Добавлены Qt6-specific CMake/runtime selection и tracked wrapper `scripts/qt6_build.ps1`.
+- Qt 6 MSVC 2022 теперь установлен в `C:\Qt\6.11.1\msvc2022_64`; отдельный wrapper завершил Release + RelWithDebInfo сборку и runtime staging с `success=true`.
 
 ## 2026-07-22 — Canonical CEF/WebView build workflow
 
 - [build-and-test.md](build-and-test.md), [architecture.md](architecture.md) и [current-state.md](current-state.md) обновлены по новому подтверждённому invariant: CEF остаётся optional CMake feature, но canonical Windows Qt wrapper включает его по умолчанию.
 - Зафиксирован готовый CEF 139.0.40 binary distribution на D:, `/MD`-совместимый VS2022 wrapper, portable CMake cache path/fail-fast validation и явный `-CEF Off` opt-out.
-- [verification-report.md](verification-report.md) дополнен build evidence: Release + RelWithDebInfo success, CEF/XR ON, 28/28 обязательных runtime paths, Qt/CEF/OpenXR/resource SHA-256 staging validation и SHA-256 канонического RelWithDebInfo EXE; клиент/UI и production не запускались.
+- [verification-report.md](verification-report.md) дополнен build evidence: Release + RelWithDebInfo success, CEF/XR ON, 28/28 обязательных runtime paths, Qt/CEF/OpenXR/resource SHA-256 staging validation и SHA-256 канонического RelWithDebInfo EXE. После Qt6-совместимого исправления выполнен startup smoke с `--desktop` и CEF disabled; браузер и production не запускались.
 - Из public `README.md` удалён `Development Map`; внутренний navigation portal `docs/codex` и роли документов не менялись, поэтому `documentation-index.md` не требовал обновления.
 
 ## 2026-07-18 — Границы первого этапа native-редакторов
@@ -308,3 +316,6 @@ Full manual UI/server/reconnect, SDL/Web parity, deploy, commit and push were no
 | `verification-report.md` | Добавлен crash follow-up: stale measurements при замене молекулы, fix и результаты smoke |
 | `scientific-object-editor.md` | Зафиксировано правило очистки/валидации atom-index-dependent measurements при structure replacement |
 | `build-and-test.md` | Добавлен regression smoke для replacement path после distance/angle/torsion |
+# 2026-08-09
+
+- Added the compatibility-first Substrata → Metasiberia identity migration matrix.
