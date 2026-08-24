@@ -128,7 +128,7 @@ Metasiberia Beta v0.0.22 — крупный релиз инструментов 
 
 - Версия клиента обновлена до `0.0.22` в `shared/Version.h` и `shared/MetasiberiaVersion.h`.
 - Source state, из которого собран installer до добавления этого файла release notes: `62d4fae63ddbdba2eec15866f74e5c211fdd86a9`.
-- Внешняя зависимость `glare-core`: `d4586dc78451f28f4ec773126f707ca0bd3099c3`.
+- Внешняя зависимость `glare-core`: `8142cd63403532726c068d18551383c54b8d7f66`.
 - Платформа: Windows x64.
 - Toolchain: Qt `5.15.16`, Visual Studio 2022, CEF и OpenXR.
 - Windows installer создан локально существующим Qt Release pipeline и NSIS installer pipeline.

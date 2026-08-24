@@ -191,7 +191,7 @@ CEF runtime evidence in both directories includes `browser_process.exe`, `libcef
    Get-FileHash -Algorithm SHA256 -LiteralPath @($releaseExe, $installer)
    ```
 
-Для воспроизводимой сборки Metasiberia Beta v0.0.22 внешний `glare-core` должен быть на commit `d4586dc78451f28f4ec773126f707ca0bd3099c3`, а его tracked worktree — чистым. `glare-core` подключается через `GLARE_CORE_TRUNK_DIR` и не является submodule этого репозитория, поэтому SHA зависимости нужно проверять отдельно до configure/build.
+Для воспроизводимой сборки Metasiberia Beta v0.0.22 внешний `glare-core` должен быть на commit `8142cd63403532726c068d18551383c54b8d7f66`, а его tracked worktree — чистым. `glare-core` подключается через `GLARE_CORE_TRUNK_DIR` и не является submodule этого репозитория, поэтому SHA зависимости нужно проверять отдельно до configure/build.
 
 Изменения серверного кода не считаются проверенными без сборки сервера. После правок в `server/**`, общего протокола/сериализации или `shared/**`, который читается/пишется сервером, обязательно выполнить локальную сборку:
 
