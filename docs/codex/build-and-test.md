@@ -140,6 +140,59 @@ CEF runtime evidence in both directories includes `browser_process.exe`, `libcef
 
 Подтверждение build относится к compile/link/runtime-copy artifact validation. Для Tree, Voxel Editor и PubChem есть отдельные narrow runtime smokes ниже; они не заменяют manual editor UI/server/reconnect test.
 
+### Локальная Windows Release + NSIS installer без публикации
+
+Этот workflow создаёт локальный Windows installer существующими scripts. Он не выполняет commit, tag, push, GitHub Release, установку или запуск клиента. `scripts/publish_update.ps1` для локальной упаковки не использовать: у него нет build-only режима, он требует clean worktree, меняет версию и выполняет Git/publish операции.
+
+1. Установить целевую версию в строке `cyberspace_version` файла `shared/Version.h` и синхронно обновить `metasiberia_version` в `shared/MetasiberiaVersion.h`. До сборки проверить `git status --short --branch` и убедиться, что нет другой активной сборки в `C:\programming\substrata_build_qt`.
+2. Проверить Ruby и NSIS:
+
+   ```powershell
+   ruby --version
+   & "C:\Program Files (x86)\NSIS\makensis.exe" /VERSION
+   ```
+
+3. Собрать и подготовить полный Release runtime каноническим Qt 5 wrapper без `-SkipConfigure` и без `-SkipRuntimeCopy`:
+
+   ```powershell
+   powershell -NoProfile -ExecutionPolicy Bypass `
+     -File C:\programming\qt_build.ps1 `
+     -Configs Release `
+     -Jobs 8
+   ```
+
+   Если wrapper сообщает о dirty worktree, продолжать только после ручной проверки перечисленных изменений. Готовый runtime должен находиться в `C:\programming\substrata_output_qt\vs2022\cyberspace_x64\Release`, а `C:\programming\substrata_output_qt\build_manifest.json` должен содержать `status: success`, `success: true` и `runtime_ready: true` для `Release`.
+
+4. Прочитать версию из того же header и создать installer существующим NSIS pipeline:
+
+   ```powershell
+   $versionMatch = Select-String `
+     -LiteralPath C:\programming\substrata\shared\Version.h `
+     -Pattern 'cyberspace_version\s*=\s*"([^"]+)"' |
+     Select-Object -First 1
+   $releaseVersion = $versionMatch.Matches[0].Groups[1].Value
+
+   powershell -NoProfile -ExecutionPolicy Bypass `
+     -File C:\programming\substrata\scripts\create_simple_installer.ps1 `
+     -SourceDir C:\programming\substrata_output_qt\vs2022\cyberspace_x64\Release `
+     -OutputDir C:\programming\substrata_output\installers `
+     -AppName "Metasiberia Beta" `
+     -Version $releaseVersion `
+     -Config Release
+   ```
+
+   Script должен вывести `Backend: NSIS`. Не использовать IExpress fallback для release: он не сохраняет полный набор вложенных runtime-файлов. Script перезаписывает одноимённый installer, если он уже существует.
+
+5. Не запуская installer, проверить итоговые SHA-256:
+
+   ```powershell
+   $releaseExe = 'C:\programming\substrata_output_qt\vs2022\cyberspace_x64\Release\gui_client.exe'
+   $installer = Join-Path 'C:\programming\substrata_output\installers' ("MetasiberiaBeta-Setup-v{0}.exe" -f $releaseVersion)
+   Get-FileHash -Algorithm SHA256 -LiteralPath @($releaseExe, $installer)
+   ```
+
+Для воспроизводимой сборки Metasiberia Beta v0.0.22 внешний `glare-core` должен быть на commit `d4586dc78451f28f4ec773126f707ca0bd3099c3`, а его tracked worktree — чистым. `glare-core` подключается через `GLARE_CORE_TRUNK_DIR` и не является submodule этого репозитория, поэтому SHA зависимости нужно проверять отдельно до configure/build.
+
 Изменения серверного кода не считаются проверенными без сборки сервера. После правок в `server/**`, общего протокола/сериализации или `shared/**`, который читается/пишется сервером, обязательно выполнить локальную сборку:
 
 ```powershell
