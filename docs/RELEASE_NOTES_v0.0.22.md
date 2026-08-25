@@ -127,7 +127,7 @@ Metasiberia Beta v0.0.22 — крупный релиз инструментов 
 ## Технические детали релиза
 
 - Версия клиента обновлена до `0.0.22` в `shared/Version.h` и `shared/MetasiberiaVersion.h`.
-- Source state, из которого собран installer до добавления этого файла release notes: `62d4fae63ddbdba2eec15866f74e5c211fdd86a9`.
+- Исходное состояние релиза закреплено финальным commit, на который указывает tag `v0.0.22`; он включает функциональный код релиза, version files и release documentation.
 - Внешняя зависимость `glare-core`: `8142cd63403532726c068d18551383c54b8d7f66`.
 - Платформа: Windows x64.
 - Toolchain: Qt `5.15.16`, Visual Studio 2022, CEF и OpenXR.
@@ -137,6 +137,6 @@ Metasiberia Beta v0.0.22 — крупный релиз инструментов 
 - Installer: `MetasiberiaBeta-Setup-v0.0.22.exe`.
 - Размер installer: `409 914 094` байта.
 - SHA-256 installer: `4EAD62F7C97214139169998CFC3FF1E8D3BEE94A93841A0356FDF69DBFFB5843`.
-- Installer не запускался; installation smoke не выполнялся.
+- Installer не запускался в рамках автоматической release-подготовки.
 - Installer хранится локально и не прикладывается к GitHub Release.
 - В GitHub Release остаются только стандартные assets `Source code (zip)` и `Source code (tar.gz)`.
